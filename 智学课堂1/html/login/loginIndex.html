@@ -79,7 +79,7 @@
 				}, 1000);
 				return false;
 			};
-			//			setUUID();
+			setUUID();
 		});
 		//		document.addEventListener("plusready", function() {
 		//			message = document.getElementById("message");
@@ -271,7 +271,7 @@
 		var setUUID = function(tempStr) {
 			if(loginFlag == 0) {
 				//			var tempModel0 = $.parseJSON(tempStr);
-				//				store.set(window.storageKeyName.PUBLICPARAMETER, tempModel);
+				store.set(window.storageKeyName.PUBLICPARAMETER, tempModel);
 				console.log('tempStr:' + tempStr);
 				//判断上次是否登录过，自动登录
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
