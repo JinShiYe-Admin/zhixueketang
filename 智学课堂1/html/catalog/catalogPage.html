@@ -1,0 +1,342 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>切换目录</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../js/swiper/swiper.min.css">
+		<link href="http://www.jq22.com/jquery/bootstrap-3.3.4.css" rel="stylesheet">
+		<style type="text/css">
+			.catalogs{
+				margin-top: 18px;
+			}
+			.names{
+				padding-left: 15px;
+				width: 70px;
+				position: absolute;
+				background: white;
+				z-index: 2;
+			}
+			.swiper-container{
+				margin-left: 70px !important;
+			}
+			.fontcolor{
+				color: #00CFBD;
+			}
+			.swiper-slide{
+				height: 40px;
+			}
+		</style>
+	</head>
+
+	<body style="background: white;">
+		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;">
+			<a  class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">切换目录</h1>
+			<a @click="sure" class="mui-pull-right" style="color: white;font-size: 15px;margin-top: 10px;">确定</a>
+		</header>
+		<div class="mui-content" style="background: white;">
+			<div id="catalog">
+				<!--顶部滑动菜单-->
+				<div class="names">学段：</div>
+				<div class="swiper-container catalogs" id="xueduan">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide" :class="xd.ischeck==1?'fontcolor':''" v-for="(xd,index) in xueduan" @tap="catalogItemClick(xueduan,xd)">{{xd.name}}</div>
+					</div>
+				</div>
+				<div class="names">科目：</div>
+				<div class="swiper-container" id="kemu">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide" :class="km.ischeck==1?'fontcolor':''" v-for="(km,index) in kemu"  @tap="catalogItemClick(kemu,km)">{{km.name}}</div>
+					</div>
+				</div>
+				<div class="names">教版：</div>
+				<div class="swiper-container" id="jiaoban">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide" :class="jb.ischeck==1?'fontcolor':''" v-for="(jb,index) in jiaoban"  @tap="catalogItemClick(jiaoban,jb)">{{jb.name}}</div>
+					</div>
+				</div> 
+				<div class="names">分册：</div>
+				<div class="swiper-container" id="fence">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide" :class="fc.ischeck==1?'fontcolor':''" v-for="(fc,index) in fence"  @tap="catalogItemClick(fence,fc)">{{fc.name}}</div>
+					</div>
+				</div>
+				<!--底部目录列表-->
+				<div id="treeview1"></div>    
+			</div>
+		</div>
+		<script type="text/javascript" src="../../js/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/utils/vue.js"></script>
+		<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+		<script type="text/javascript" src="../../js/swiper/swiper.js"></script>
+		<script type="text/javascript" src="../../js/swiper/bootstrap-treeview.js"></script>
+		<!--<script src="https://cdn.bootcss.com/bootstrap-treeview/1.2.0/bootstrap-treeview.min.js"></script>-->
+		<!--加密-->
+		<script src="../../js/libs/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/libs/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/libs/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<!---->
+		<script type="text/javascript" src="../../js/utils/vconsole.min.js"></script>
+		<script src='../../js/libs/crypto-js/require.js'></script>
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		
+		<script src="../../js/publicProtocolNew.js"></script>
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src="../../js/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/storageutil.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/events.js"></script>
+		<script src="../../js/mui/mui.picker.js"></script>
+		<script src="../../js/mui/mui.poppicker.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			
+			mui.plusReady(function() {
+				var wv = plus.webview.currentWebview(); 
+				// 关闭侧滑返回功能
+				wv.setStyle({
+					'popGesture': 'none'
+				});
+			});
+			
+			
+			var catalog=new Vue({
+				el:'#catalog',
+				data:{
+					xueduan:[{ischeck:1,name:"初中"},{ischeck:0,name:"高中"}],
+					kemu:[{ischeck:1,name:"语文"},{ischeck:0,name:"数学"},{ischeck:0,name:"英语"},{ischeck:0,name:"物理"},{ischeck:0,name:"化学"},{ischeck:0,name:"生物"},{ischeck:0,name:"政治"},{ischeck:0,name:"历史"},{ischeck:0,name:"地理"}],
+					jiaoban:[{ischeck:1,name:"人教版"},{ischeck:0,name:"苏教版"}],
+					fence:[{ischeck:1,name:"七年级"},{ischeck:0,name:"八年级"}],
+					expandData:[{
+									id:'1',
+									text: '上册',
+									nodes:[
+										{id:'1',text: '第一章 字音字形',nodes: [
+								                {id:'1',text: '第一课 字音',nodes: [
+								                	 {id:'1',text: '第一节 AAA'},
+								                	 {id:'2',text: '第二节 BBB'}
+								                ]},
+								                {id:'2',text: '第二课 字形'}
+					                		]
+										},
+					             		{id:'2',text: '第二章 多音字'},
+					             		{id:'3',text: '第三章 易误读常见字'},
+					             		{id:'4',text: '第四章 语言基础知识'}
+					             	],
+						            state: {expanded: false,}
+		          				},
+		          				{
+									id:'1',
+									text: '上册',
+									nodes:[
+										{id:'1',text: '第一章 字音字形',nodes: [
+								                {id:'1',text: '第一课 字音',nodes: [
+								                	 {id:'1',text: '第一节 AAA'},
+								                	 {id:'2',text: '第二节 BBB'}
+								                ]},
+								                {id:'2',text: '第二课 字形'}
+					                		]
+										},
+					             		{id:'2',text: '第二章 多音字'},
+					             		{id:'3',text: '第三章 易误读常见字'},
+					             		{id:'4',text: '第四章 语言基础知识'}
+					             	],
+						            state: {expanded: false,}
+		          				},
+		          				{
+									id:'1',
+									text: '上册',
+									nodes:[
+										{id:'1',text: '第一章 字音字形',nodes: [
+								                {id:'1',text: '第一课 字音',nodes: [
+								                	 {id:'1',text: '第一节 AAA'},
+								                	 {id:'2',text: '第二节 BBB'}
+								                ]},
+								                {id:'2',text: '第二课 字形'}
+					                		]
+										},
+					             		{id:'2',text: '第二章 多音字'},
+					             		{id:'3',text: '第三章 易误读常见字'},
+					             		{id:'4',text: '第四章 语言基础知识'}
+					             	],
+						            state: {expanded: false,}
+		          				},
+		          				{
+									id:'1',
+									text: '上册',
+									nodes:[
+										{id:'1',text: '第一章 字音字形',nodes: [
+								                {id:'1',text: '第一课 字音',nodes: [
+								                	 {id:'1',text: '第一节 AAA'},
+								                	 {id:'2',text: '第二节 BBB'}
+								                ]},
+								                {id:'2',text: '第二课 字形'}
+					                		]
+										},
+					             		{id:'2',text: '第二章 多音字'},
+					             		{id:'3',text: '第三章 易误读常见字'},
+					             		{id:'4',text: '第四章 语言基础知识'}
+					             	],
+						            state: {expanded: false,}
+		          				},
+		          				{
+									id:'1',
+									text: '上册',
+									nodes:[
+										{id:'1',text: '第一章 字音字形',nodes: [
+								                {id:'1',text: '第一课 字音',nodes: [
+								                	 {id:'1',text: '第一节 AAA'},
+								                	 {id:'2',text: '第二节 BBB'}
+								                ]},
+								                {id:'2',text: '第二课 字形'}
+					                		]
+										},
+					             		{id:'2',text: '第二章 多音字'},
+					             		{id:'3',text: '第三章 易误读常见字'},
+					             		{id:'4',text: '第四章 语言基础知识'}
+					             	],
+						            state: {expanded: false,}
+		          				},
+		          				{
+									id:'1',
+									text: '上册',
+									nodes:[
+										{id:'1',text: '第一章 字音字形',nodes: [
+								                {id:'1',text: '第一课 字音',nodes: [
+								                	 {id:'1',text: '第一节 AAA'},
+								                	 {id:'2',text: '第二节 BBB'}
+								                ]},
+								                {id:'2',text: '第二课 字形'}
+					                		]
+										},
+					             		{id:'2',text: '第二章 多音字'},
+					             		{id:'3',text: '第三章 易误读常见字'},
+					             		{id:'4',text: '第四章 语言基础知识'}
+					             	],
+						            state: {expanded: false,}
+		          				},
+		          				{
+									id:'1',
+									text: '上册',
+									nodes:[
+										{id:'1',text: '第一章 字音字形',nodes: [
+								                {id:'1',text: '第一课 字音',nodes: [
+								                	 {id:'1',text: '第一节 AAA'},
+								                	 {id:'2',text: '第二节 BBB'}
+								                ]},
+								                {id:'2',text: '第二课 字形'}
+					                		]
+										},
+					             		{id:'2',text: '第二章 多音字'},
+					             		{id:'3',text: '第三章 易误读常见字'},
+					             		{id:'4',text: '第四章 语言基础知识'}
+					             	],
+						            state: {expanded: false,}
+		          				},
+						        {
+						        	id:'2',
+						        	text: '下册',
+						            nodes:[
+										{id:'1',text: '第一章 英语'},
+					             		{id:'2',text: '第二章 德语'}
+					             	],
+						            state: {expanded: false,}
+						        },
+						        {
+						        	id:'3',
+						        	text: '中册',
+						            state: {expanded: false,}
+						        }]
+				},
+				methods:{
+					catalogItemClick:function(parent,item){
+						for(var i=0;i<parent.length;i++){
+							var child=parent[i];
+							child.ischeck=0;
+						}
+						item.ischeck=1;
+						console.log("选择的是这个:"+JSON.stringify(item));
+						/*底部目录列表 数据重载*/
+						catalog.expandData=[{
+									id:'1',
+									text: '上册',
+									nodes:[
+										{id:'1',text: '第一章 字音字形',nodes: [
+								                {id:'1',text: '第一课 字音',nodes: [
+								                	 {id:'1',text: '第一节 AAA'},
+								                	 {id:'2',text: '第二节 BBB'}
+								                ]},
+								                {id:'2',text: '第二课 字形'}
+					                		]
+										},
+					             		{id:'2',text: '第二章 多音字'},
+					             		{id:'3',text: '第三章 易误读常见字'},
+					             		{id:'4',text: '第四章 语言基础知识'}
+					             	],
+						            state: {expanded: false,}
+		          				}];
+				         $('#treeview1').treeview({
+					          color: "#717171",
+					          expandIcon: 'glyphicon glyphicon-chevron-right',
+					          collapseIcon: 'glyphicon glyphicon-chevron-down',
+					          data: catalog.expandData,
+					          highlightSearchResults: false,
+					          onNodeSelected: function(event, node) {
+					           	console.log('<p>' + node.id+","+node.text + ' was selected</p>');
+					          },
+					          onNodeUnselected: function (event, node) {
+	//				            	console.log('<p>' + node.text + ' was unselected</p>');
+					          }
+					     });
+					}
+				},
+				mounted: function () {
+					var swiper = new Swiper('.swiper-container', {
+					  	slidesPerView: 5,//菜单可见个数
+					  	spaceBetween: 10,//间隔
+					  	freeMode: true,//自由滑动模式
+					  	noSwiping : true,//禁止滑动
+					});
+		             /*底部目录列表 初始化*/
+			        $('#treeview1').treeview({
+				          color: "#717171",
+				          expandIcon: 'glyphicon glyphicon-chevron-right',
+				          collapseIcon: 'glyphicon glyphicon-chevron-down',
+				          data: this.expandData,
+				          highlightSearchResults: false,
+				          onNodeSelected: function(event, node) {
+				           	console.log('<p>' + node.id+","+node.text + ' was selected</p>');
+				          },
+				          onNodeUnselected: function (event, node) {
+//				            	console.log('<p>' + node.text + ' was unselected</p>');
+				          }
+				     });
+		        },
+			});
+			
+	        
+			/*列表点击事件*/
+		    function itemOnclick(target){
+				//找到当前节点id
+				var nodeid = $(target).attr('data-nodeid');
+				var tree = $('#treeview1');
+				//获取当前节点对象
+				var node = tree.treeview('getNode', nodeid);
+				
+				if(node.state.expanded){ 
+				    //处于展开状态则折叠
+				    tree.treeview('collapseNode', node.nodeId);  
+				} else {
+				    //展开
+				    tree.treeview('expandNode', node.nodeId);
+				}
+			}
+		</script>
+	</body>
+
+</html>
