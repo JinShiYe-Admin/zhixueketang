@@ -210,7 +210,7 @@
 				<div class="names">科目：</div>
 				<div class="swiper-container" id="kemu">
 					<div class="swiper-wrapper">
-						<div class="swiper-slide" :class="km.ischeck==1?'fontcolor':''" v-for="(km,index) in kemu"  @tap="catalogItemClick(kemu,km)">{{km.name}}</div>
+						<div class="swiper-slide" :class="km.ischeck==1?'fontcolor':''" v-for="(km,index) in kemu"  @tap="catalogItemClick(kemu,km)">{{km.subname}}</div>
 					</div>
 				</div>
 				<div class="names">教版：</div>
@@ -263,13 +263,18 @@
 		
 		<script type="text/javascript">
 			mui.init();
-			
+			//获取个人信息
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			console.log('personal:' + JSON.stringify(personal));
+			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 			mui.plusReady(function() {
 				var wv = plus.webview.currentWebview(); 
 				// 关闭侧滑返回功能
 				wv.setStyle({
 					'popGesture': 'none'
 				});
+				//获取科目
+				getSchSubThread();
 			});
 			
 			
@@ -277,7 +282,7 @@
 				el:'#catalog',
 				data:{
 					xueduan:[{ischeck:1,name:"初中"},{ischeck:0,name:"高中"}],
-					kemu:[{ischeck:1,name:"语文"},{ischeck:0,name:"数学"},{ischeck:0,name:"英语"},{ischeck:0,name:"物理"},{ischeck:0,name:"化学"},{ischeck:0,name:"生物"},{ischeck:0,name:"政治"},{ischeck:0,name:"历史"},{ischeck:0,name:"地理"}],
+					kemu:[],//科目
 					jiaoban:[{ischeck:1,name:"人教版"},{ischeck:0,name:"苏教版"}],
 					fence:[{ischeck:1,name:"七年级"},{ischeck:0,name:"八年级"}],
 					menu: [],
@@ -310,6 +315,36 @@
 			
 			catalog.menu = rdata.catalogs||[];
 			catalog.isLoaded = true;
+			
+			//获取科目
+			var getSchSubThread = function() {
+				var enData1 = {};
+				//不需要加密的数据
+				var comData1 = {
+					uuid: publicParameter.uuid, //用户设备号
+					utoken: personal.utoken, //用户令牌
+					appid: publicParameter.appid //系统所分配的应用ID
+				};
+				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
+					if(data1.RspCode == 0) {
+						console.log("data1:" + data1.RspTxt);
+						if(data1.RspData) {
+							mui('.mui-scroll-wrapper').scroll();
+							for(var i = 0; i < data1.RspData.subs.length; i++) {
+								var temp =  data1.RspData.subs[i];
+								if (i == 0) {
+									temp.ischeck = 1;
+								}else{
+									temp.ischeck = 0;
+								}
+							}
+							catalog.kemu = data1.RspData.subs;
+						}
+					} else {
+						console.log("data1:" + data1.RspTxt);
+					}
+				});
+			}
 		</script>
 	</body>
 
