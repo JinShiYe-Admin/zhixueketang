@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>资源包内页</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../../css/mui.min.css">
+		<style type="text/css">
+			[v-cloak] {
+				display: none;
+			}
+			
+			.mui-table-view .mui-media-object {
+				max-width: 100px;
+			}
+			
+			.mui-table-view .mui-media-object.mui-pull-left {
+				margin-right: 15px;
+			}
+			
+			.mui-ellipsis-title {
+				font-size: 18px;
+				color: #000;
+				overflow: hidden;
+				word-break: break-all;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				white-space: normal;
+			}
+			.mui-media-body{
+				margin: 2px 0 0 0;
+			}
+			.mui-ellipsis {
+				margin: 13px 0 0 0;
+				height: 20px;
+				overflow: hidden;
+				word-break: break-all;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				white-space: normal;
+			}
+			
+			.ul-btn {
+				display: inline;
+				vertical-align: middle;
+				float: right;
+				height: 24px;
+				padding: 2px 12px;
+				background: #33CCFF;
+				color: #fff;
+				border: none;
+			}
+			
+			.ul-p {
+				width: 30%;
+				display: inline;
+				vertical-align: middle;
+				font-size: 12px;
+			}
+			.page-img{
+				width: 60px !important;
+				height: 60px !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;">
+			<a id="returnBtn" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#ffffff"></a>
+			<h1 class="mui-title" style="color: white;">3.2.3这是一个标题</h1>
+		</header>
+		<div id='scroll' class="mui-content">
+			<div id='pages'>
+				<!--<div v-if="orderList.length == 0" v-cloak style="text-align: center;margin:40% auto;">
+					<img src="../../img/homeSchool/noData.png" style="width: 200px;" />
+				</div>-->
+				<div v-cloak class="mui-scroll">
+					<ul class="mui-table-view">
+						<li v-for="item in pageList" @click="toMealDetails($event,item)" class="mui-table-view-cell mui-media">
+							<a href="javascript:;">
+								<template v-if="item.lx =='pdf'">
+									<img class="mui-media-object mui-pull-left page-img" src="../../img/swiper/pdf.png">
+								</template>
+								<template v-else-if="item.lx =='word'">
+									<img class="mui-media-object mui-pull-left page-img" src="../../img/swiper/word.png">
+								</template>
+								<template v-else-if="item.lx =='mp4'">
+									<img class="mui-media-object mui-pull-left page-img" src="../../img/swiper/mp4.png">
+								</template>
+								<div class="mui-media-body">
+									<div class="mui-media-body">
+										{{item.title}}
+										<p class='mui-ellipsis'>{{item.time}}|{{personal.utname}}</p>
+									</div>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../../js/mui.min.js"></script>
+		<script type="text/javascript" src="../../js/utils/vue.js"></script>
+		<!--加密-->
+		<script src="../../js/libs/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/libs/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/libs/RSA/RSA.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/RSAEncrypt.js" type="text/javascript" charset="utf-8"></script>
+		<!---->
+		<script type="text/javascript" src="../../js/utils/vconsole.min.js"></script>
+		<script src='../../js/libs/crypto-js/require.js'></script>
+		<script src='../../js/utils/signHmacSHA1.js'></script>
+		<script src='../../js/libs/jquery.js'></script>
+		<script src="../../js/publicProtocolNew.js"></script>
+		<script src='../../js/utils/sortSign.js'></script>
+		<script src="../../js/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/storageutil.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/utils/events.js"></script>
+		<script>
+			
+			mui.init({
+				pullRefresh: {
+					container: '#scroll',
+					down: {
+						style: 'circle', //必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+						color: '#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+						height: '50px', //可选,默认50px.下拉刷新控件的高度,
+						range: '100px', //可选 默认100px,控件可下拉拖拽的范围
+						offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
+						auto: false, //可选,默认false.首次加载自动上拉刷新一次
+						callback: pulldownRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+					}
+				}
+			});
+			document.getElementById('returnBtn').addEventListener('tap',function () {
+			    mui.back();
+			});
+			
+			//下拉刷新
+			function pulldownRefresh() {
+				getPageList();
+			}
+			var personal;
+			var publicParameter;
+			mui.plusReady(function() {
+				//获取个人信息
+				personal = store.get(window.storageKeyName.PERSONALINFO);
+				console.log('personal:' + JSON.stringify(personal));
+				publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+				getPageList();
+			});
+			var pages = new Vue({
+				el: '#pages',
+				data: {
+					pageList: [],
+					flag: 0, //0刷新，1加载更多
+					pageIndex: 1, //当前页数
+					personal:""
+				},
+				methods: {
+					toMealDetails: function(event, item) {
+						var _event = event.target;
+//							utils.mOpenWithData("../../html/order/packageDetails_order.html", item);
+						console.log(JSON.stringify(item))
+					}
+				}
+			});
+			//3.12.获取内页列表
+			function getPageList() {
+//				var enData1 = {};
+//				//不需要加密的数据
+//				var comData1 = {
+//					uuid: publicParameter.uuid, //用户设备号
+//					bustp: '2', //套餐类型,0全部,1基本套餐,2CP套餐
+//					utoken: personal.utoken, //用户令牌
+//					appid: publicParameter.appid //系统所分配的应用ID
+//				};
+//				events.showWaiting();
+//				//获取验证码
+//				//发送网络请求，data为网络返回值
+//				postDataEncry('SysBus', enData1, comData1, 0, function(data1) {
+//					console.log('SysBus:' + JSON.stringify(data1));
+//					events.closeWaiting();
+//					if(data1.RspCode == 0) {
+//						//主动添加是否订购字段
+//						for(var i = 0; i < data1.RspData.sysbus.length; i++) {
+//							var tempModel = data1.RspData.sysbus[i];
+//							tempModel.orderFlag = 0;
+//							tempModel.busimg = setImg(tempModel.busimg,1);
+//						}
+//						orders.orderList = [].concat(data1.RspData.sysbus);
+//						//用户已订购套餐及功能扩展栏目
+//						getUserBusFunc();
+//					} else {
+//						mui.toast(data1.RspTxt);
+//					}
+//				});
+				pages.pageList=[
+					{lx:'pdf',title:'山东济南市天桥区XXX高级中学啥啥啥到底是个啥',time:'2019年1月19日 11:04:06'},
+					{lx:'word',title:'山东济南市历城区XXX高级中学啥啥啥到底是个啥',time:'2019年1月19日 11:05:02'},
+					{lx:'mp4',title:'山东济南市高新区XXX高级中学啥啥啥到底是个啥',time:'2019年1月19日 11:05:04'},
+					{lx:'word',title:'山东济南市历下区XXX高级中学啥啥啥到底是个啥',time:'2019年1月19日 11:05:06'}
+				];
+				pages.personal=personal;
+				 
+//				mui('#scroll').pullRefresh().endPulldownToRefresh(); //参数为true代表没有更多数据了。
+			}
+		</script>
+	</body>
+
+</html>
