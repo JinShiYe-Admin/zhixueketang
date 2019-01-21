@@ -105,45 +105,45 @@
 			getNode: $.proxy(this.getNode, this),
 			getParent: $.proxy(this.getParent, this),
 			getSiblings: $.proxy(this.getSiblings, this),
-			getSelected: $.proxy(this.getSelected, this),
-			getUnselected: $.proxy(this.getUnselected, this),
+//			getSelected: $.proxy(this.getSelected, this),
+//			getUnselected: $.proxy(this.getUnselected, this),
 			getExpanded: $.proxy(this.getExpanded, this),
 			getCollapsed: $.proxy(this.getCollapsed, this),
-			getChecked: $.proxy(this.getChecked, this),
-			getUnchecked: $.proxy(this.getUnchecked, this),
+//			getChecked: $.proxy(this.getChecked, this),
+//			getUnchecked: $.proxy(this.getUnchecked, this),
 			getDisabled: $.proxy(this.getDisabled, this),
 			getEnabled: $.proxy(this.getEnabled, this),
 
-			// Select methods
-			selectNode: $.proxy(this.selectNode, this),
-			unselectNode: $.proxy(this.unselectNode, this),
-			toggleNodeSelected: $.proxy(this.toggleNodeSelected, this),
-
-			// Expand / collapse methods
+//			// Select methods
+//			selectNode: $.proxy(this.selectNode, this),
+//			unselectNode: $.proxy(this.unselectNode, this),
+//			toggleNodeSelected: $.proxy(this.toggleNodeSelected, this),
+//
+//			// Expand / collapse methods
 			collapseAll: $.proxy(this.collapseAll, this),
 			collapseNode: $.proxy(this.collapseNode, this),
 			expandAll: $.proxy(this.expandAll, this),
 			expandNode: $.proxy(this.expandNode, this),
 			toggleNodeExpanded: $.proxy(this.toggleNodeExpanded, this),
 			revealNode: $.proxy(this.revealNode, this),
-
-			// Expand / collapse methods
-			checkAll: $.proxy(this.checkAll, this),
-			checkNode: $.proxy(this.checkNode, this),
-			uncheckAll: $.proxy(this.uncheckAll, this),
-			uncheckNode: $.proxy(this.uncheckNode, this),
-			toggleNodeChecked: $.proxy(this.toggleNodeChecked, this),
-
-			// Disable / enable methods
-			disableAll: $.proxy(this.disableAll, this),
-			disableNode: $.proxy(this.disableNode, this),
-			enableAll: $.proxy(this.enableAll, this),
-			enableNode: $.proxy(this.enableNode, this),
-			toggleNodeDisabled: $.proxy(this.toggleNodeDisabled, this),
-
-			// Search methods
-			search: $.proxy(this.search, this),
-			clearSearch: $.proxy(this.clearSearch, this)
+//
+//			// Expand / collapse methods
+//			checkAll: $.proxy(this.checkAll, this),
+//			checkNode: $.proxy(this.checkNode, this),
+//			uncheckAll: $.proxy(this.uncheckAll, this),
+//			uncheckNode: $.proxy(this.uncheckNode, this),
+//			toggleNodeChecked: $.proxy(this.toggleNodeChecked, this),
+//
+//			// Disable / enable methods
+//			disableAll: $.proxy(this.disableAll, this),
+//			disableNode: $.proxy(this.disableNode, this),
+//			enableAll: $.proxy(this.enableAll, this),
+//			enableNode: $.proxy(this.enableNode, this),
+//			toggleNodeDisabled: $.proxy(this.toggleNodeDisabled, this),
+//
+//			// Search methods
+//			search: $.proxy(this.search, this),
+//			clearSearch: $.proxy(this.clearSearch, this)
 		};
 	};
 

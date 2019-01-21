@@ -7,7 +7,7 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../js/swiper/swiper.min.css">
-		<link href="http://www.jq22.com/jquery/bootstrap-3.3.4.css" rel="stylesheet">
+		<link rel="stylesheet" href="../../js/swiper/more-catalogs.css">
 		<style type="text/css">
 			.catalogs{
 				margin-top: 18px;
@@ -65,14 +65,75 @@
 					</div>
 				</div>
 				<!--底部目录列表-->
-				<div id="treeview1"></div>    
+				<div class="catalogs-card">  
+					<ul class="mui-table-view">
+	                    <li class="mui-table-view-cell mui-collapse-3">
+	                        <a class="mui-navigate-left" href="#">一级菜单1</a>
+	                        <ul class="mui-table-view">
+	                            <li class="mui-table-view-cell mui-collapse-3">
+	                                <a class="mui-navigate-left" href="#">二级菜单1-1</a>
+	                                <ul class="mui-table-view">
+	                                    <li class="mui-table-view-cell">
+	                                    	<a class="mui-navigate-left" href="#">3级菜单1-1</a>
+	                                        <ul class="mui-table-view">
+			                                    <li class="mui-table-view-cell">
+			                                    	<a class="mui-navigate-left" href="#">4级菜单1-1</a>
+			                                         <ul class="mui-table-view">
+					                                    <li class="mui-table-view-cell">
+					                                        <div class="mui-collapse-content">
+					                                            <div class="mui-input-row">5内容1-1-1</div>
+					                                            <div class="mui-input-row">5内容1-1-2</div>
+					                                        </div>
+					                                    </li>
+					                                </ul>
+			                                    </li>
+			                                </ul>
+	                                    </li>
+	                                </ul>
+	                            </li>
+	                            <li class="mui-table-view-cell mui-collapse-3">
+	                                <a class="mui-navigate-left" href="#">二级菜单1-2</a>
+	                                <ul class="mui-table-view">
+	                                    <li class="mui-table-view-cell">
+	                                        <div class="mui-collapse-content">
+	                                            <div class="mui-input-row">内容1-2-1</div>
+	                                            <div class="mui-input-row">内容1-2-2</div>
+	                                        </div>
+	                                    </li>
+	                                </ul>
+	                            </li>
+	                        </ul>
+	                    </li>
+	                    <li class="mui-table-view-cell mui-collapse-3">
+	                        <a class="mui-navigate-left" href="#">一级菜单2</a>
+	                        <ul class="mui-table-view">
+	                            <li class="mui-table-view-cell mui-collapse-3">
+	                                <a class="mui-navigate-left" href="#">二级菜单2-1</a>
+	                                <ul class="mui-table-view">
+	                                    <li class="mui-table-view-cell">
+	                                        <div class="mui-collapse-content">
+	                                            <div class="mui-input-row">内容2-1-1</div>
+	                                            <div class="mui-input-row">内容2-1-2</div>
+	                                        </div>
+	                                    </li>
+	                                </ul>
+	                            </li>
+	                            <li class="mui-table-view-cell mui-collapse-3">
+	                                <a href="#">二级菜单2-2</a>
+	                            </li>
+	                        </ul>
+	                    </li>
+	                    <li class="mui-table-view-cell mui-collapse-3">
+	                        <a href="#">一级菜单3</a>
+	                    </li>
+	                </ul>
+                </div>
 			</div>
 		</div>
 		<script type="text/javascript" src="../../js/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/utils/vue.js"></script>
 		<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
 		<script type="text/javascript" src="../../js/swiper/swiper.js"></script>
-		<script type="text/javascript" src="../../js/swiper/bootstrap-treeview.js"></script>
 		<!--加密-->
 		<script src="../../js/libs/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/libs/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
@@ -92,6 +153,8 @@
 		<script src="../../js/utils/events.js"></script>
 		<script src="../../js/mui/mui.picker.js"></script>
 		<script src="../../js/mui/mui.poppicker.js"></script>
+		<script src="../../js/swiper/more-catalogs.js"></script>
+		
 		<script type="text/javascript">
 			mui.init();
 			
@@ -114,9 +177,9 @@
 					expandData:[{
 									id:'1',
 									text: '上册',
-									nodes:[
-										{id:'1',text: '第一章 字音字形',nodes: [
-								                {id:'1',text: '第一课 字音',nodes: [
+									children:[
+										{id:'1',text: '第一章 字音字形',children: [
+								                {id:'1',text: '第一课 字音',children: [
 								                	 {id:'1',text: '第一节 AAA'},
 								                	 {id:'2',text: '第二节 BBB'}
 								                ]},
@@ -125,16 +188,28 @@
 										},
 					             		{id:'2',text: '第二章 多音字'},
 					             		{id:'3',text: '第三章 易误读常见字'},
-					             		{id:'4',text: '第四章 语言基础知识'}
-					             	],
-						            state: {expanded: false,}
+					             		{id:'4',text: '第四章 语言基础知识'},
+					             		{id:'5',text: '一级菜单',children: [
+								                {id:'1',text: '二级菜单1',children: [
+								                	 {id:'1',text: '三级菜单1',children: [
+									                	 {id:'1',text: '四级菜单1',children: [
+										                	 {id:'1',text: '五级菜单1'},
+										                	 {id:'2',text: '五级菜单2'}
+										                ]},
+									                	 {id:'2',text: '四级菜单2'}
+									                ]},
+								                	 {id:'2',text: '三级菜单1'}
+								                ]},
+								                {id:'2',text: '二级菜单2'}
+					                	]},
+					             	]
 		          				},
 		          				{
 									id:'1',
 									text: '上册',
-									nodes:[
-										{id:'1',text: '第一章 字音字形',nodes: [
-								                {id:'1',text: '第一课 字音',nodes: [
+									children:[
+										{id:'1',text: '第一章 字音字形',children: [
+								                {id:'1',text: '第一课 字音',children: [
 								                	 {id:'1',text: '第一节 AAA'},
 								                	 {id:'2',text: '第二节 BBB'}
 								                ]},
@@ -144,22 +219,19 @@
 					             		{id:'2',text: '第二章 多音字'},
 					             		{id:'3',text: '第三章 易误读常见字'},
 					             		{id:'4',text: '第四章 语言基础知识'}
-					             	],
-						            state: {expanded: false,}
+					             	]
 		          				},
 						        {
 						        	id:'2',
 						        	text: '下册',
-						            nodes:[
+						            children:[
 										{id:'1',text: '第一章 英语'},
 					             		{id:'2',text: '第二章 德语'}
-					             	],
-						            state: {expanded: false,}
+					             	]
 						        },
 						        {
 						        	id:'3',
-						        	text: '中册',
-						            state: {expanded: false,}
+						        	text: '中册'
 						        }]
 				},
 				methods:{
@@ -170,38 +242,6 @@
 						}
 						item.ischeck=1;
 						console.log("选择的是这个:"+JSON.stringify(item));
-						/*底部目录列表 数据重载*/
-						catalog.expandData=[{
-									id:'1',
-									text: '上册',
-									nodes:[
-										{id:'1',text: '第一章 字音字形',nodes: [
-								                {id:'1',text: '第一课 字音',nodes: [
-								                	 {id:'1',text: '第一节 AAA'},
-								                	 {id:'2',text: '第二节 BBB'}
-								                ]},
-								                {id:'2',text: '第二课 字形'}
-					                		]
-										},
-					             		{id:'2',text: '第二章 多音字'},
-					             		{id:'3',text: '第三章 易误读常见字'},
-					             		{id:'4',text: '第四章 语言基础知识'}
-					             	],
-						            state: {expanded: false,}
-		          				}];
-				         $('#treeview1').treeview({
-					          color: "#717171",
-					          expandIcon: 'glyphicon glyphicon-chevron-right',
-					          collapseIcon: 'glyphicon glyphicon-chevron-down',
-					          data: catalog.expandData,
-					          highlightSearchResults: false,
-					          onNodeSelected: function(event, node) {
-					           	console.log('<p>' + node.id+","+node.text + ' was selected</p>');
-					          },
-					          onNodeUnselected: function (event, node) {
-	//				            	console.log('<p>' + node.text + ' was unselected</p>');
-					          }
-					     });
 					}
 				},
 				mounted: function () {
@@ -211,40 +251,10 @@
 					  	freeMode: true,//自由滑动模式
 					  	noSwiping : true,//禁止滑动
 					});
-		             /*底部目录列表 初始化*/
-			        $('#treeview1').treeview({
-				          color: "#717171",
-				          expandIcon: 'glyphicon glyphicon-chevron-right',
-				          collapseIcon: 'glyphicon glyphicon-chevron-down',
-				          data: this.expandData,
-				          highlightSearchResults: false,
-				          onNodeSelected: function(event, node) {
-				           	console.log('<p>' + node.id+","+node.text + ' was selected</p>');
-				          },
-				          onNodeUnselected: function (event, node) {
-//				            	console.log('<p>' + node.text + ' was unselected</p>');
-				          }
-				     });
+					/*初始化多级菜单*/
+					initLinstening();
 		        },
 			});
-			
-	        
-			/*列表点击事件*/
-		    function itemOnclick(target){
-				//找到当前节点id
-				var nodeid = $(target).attr('data-nodeid');
-				var tree = $('#treeview1');
-				//获取当前节点对象
-				var node = tree.treeview('getNode', nodeid);
-				
-				if(node.state.expanded){ 
-				    //处于展开状态则折叠
-				    tree.treeview('collapseNode', node.nodeId);  
-				} else {
-				    //展开
-				    tree.treeview('expandNode', node.nodeId);
-				}
-			}
 		</script>
 	</body>
 
