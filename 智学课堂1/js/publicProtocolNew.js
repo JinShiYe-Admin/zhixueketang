@@ -1,13 +1,11 @@
 //
-//document.write('<script src="../js/lib/RSA/Barrett.js"><\/script>');
-//document.write('<script src="../js/lib/RSA/BigInt.js"><\/script>');
-//document.write('<script src="../js/lib/RSA/RSA.js"><\/script>');
-//document.write('<script src="../js/utils/RSAEncrypt.js"><\/script>');
-//document.write('<script src="../js/lib/crypto-js/require.js"><\/script>');
-//document.write('<script src="../js/utils/signHmacSHA1.js"><\/script>');
-//document.write('<script src="../js/lib/jquery.js"><\/script>');
-//document.write('<script src="../js/utils/sortSign.js"><\/script>');
-//document.write('<script src="../../js/storageKeyName.js"><\/script>');
+document.write('<script src="../../js/libs/RSA/Barrett.js"><\/script>');
+document.write('<script src="../../js/libs/RSA/BigInt.js"><\/script>');
+document.write('<script src="../../js/libs/RSA/RSA.js"><\/script>');
+document.write('<script src="../../js/utils/RSAEncrypt.js"><\/script>');
+document.write('<script src="../../js/libs/crypto-js/require.js"><\/script>');
+document.write('<script src="../../js/utils/signHmacSHA1.js"><\/script>');
+document.write('<script src="../../js/utils/sortSign.js"><\/script>');
 
 function generateUUID() {
 	var d = new Date().getTime();

@@ -179,82 +179,81 @@
 					postDataEncry('Login', enData1, comData1, 0, function(data1) {
 						events.closeWaiting();
 						if(data1.RspCode == 0) {
-							if(data1.RspData.dpts == null) {
-								data1.RspData.dpts = [];
-							}
-							if(data1.RspData.grds == null) {
-								data1.RspData.grds = [];
-							}
-							if(data1.RspData.clss == null) {
-								data1.RspData.clss = [];
-							}
-							if(data1.RspData.subs == null) {
-								data1.RspData.subs = [];
-							}
-							//									if (data1.RspData.clss.length>0) {
-							//										data1.RspData.grds = data1.RspData.grds.concat(data1.RspData.clss);
-							//									}
-							if(data1.RspData.urolestr == null) {
-								data1.RspData.urolestr = '00000000000000000000000000000';
-							}
-							//							if (data1.RspData.imgurl==null||data1.RspData.imgurl.length==0) {
-							//								data1.RspData.imgurl = '../../img/login/headImg.png';
-							//							}
-							data1.RspData.userName0 = tempName;
-							data1.RspData.password0 = tempPW;
-							var model_area = {
-								procode: '00', //省份code，自己添加的参数
-								proname: '全国', //省份名称，自己添加的参数
-								acode: '000000', //节点代码,通用6位,前两位为省份编码,中间两位为城市编码,后两位为区县编码--城市代码
-								aname: '全国', //节点名称--城市名称
-								atype: '' //节点类型,0省1城市2区县
-							}
-							data1.RspData.uarea = model_area; //用户区域,省代码 市代码|省名称 市名称
-							store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
-							var personal = store.get(window.storageKeyName.PERSONALINFO);
-							console.log('personal000:' + JSON.stringify(personal));
+							if(data1.RspData.utp == 2) {
+								if(data1.RspData.dpts == null) {
+									data1.RspData.dpts = [];
+								}
+								if(data1.RspData.grds == null) {
+									data1.RspData.grds = [];
+								}
+								if(data1.RspData.clss == null) {
+									data1.RspData.clss = [];
+								}
+								if(data1.RspData.subs == null) {
+									data1.RspData.subs = [];
+								}
+								if(data1.RspData.urolestr == null) {
+									data1.RspData.urolestr = '00000000000000000000000000000';
+								}
+								data1.RspData.userName0 = tempName;
+								data1.RspData.password0 = tempPW;
+								var model_area = {
+									procode: '00', //省份code，自己添加的参数
+									proname: '全国', //省份名称，自己添加的参数
+									acode: '000000', //节点代码,通用6位,前两位为省份编码,中间两位为城市编码,后两位为区县编码--城市代码
+									aname: '全国', //节点名称--城市名称
+									atype: '' //节点类型,0省1城市2区县
+								}
+								data1.RspData.uarea = model_area; //用户区域,省代码 市代码|省名称 市名称
+								store.set(window.storageKeyName.PERSONALINFO, data1.RspData);
+								var personal = store.get(window.storageKeyName.PERSONALINFO);
+								console.log('personal000:' + JSON.stringify(personal));
 
-							var info = plus.push.getClientInfo();
-							var tempBindData = {
-								appId: info.appid,
-								alias: data1.RspData.utid,
-								cid: info.clientid
-							}
-							bindPro(tempBindData, function function_name(data) {
-								//									events.closeWaiting();
-								if(data.RspCode == 0) {
-									//										utils.mOpenWithData("../../index.html", {});
-								} else {
-									//											mui.toast(data.RspTxt);
+								var info = plus.push.getClientInfo();
+								var tempBindData = {
+									appId: info.appid,
+									alias: data1.RspData.utid,
+									cid: info.clientid
 								}
-							});
-
-							//如果密码为1--6，让修改密码后，进入主界面
-							if(personal.password0 == '123456') {
-								var tempModel = {
-									flag: 1 //0是主动修改密码，1是判断是默认密码，自动让修改
-								}
-								utils.mOpenWithData("../../html/mine/modifyPassword.html", tempModel);
-							} else {
-								//判断权限  
-								var permission = true;
-								if(personal.utid == '0') {
-									permission = false;
-								}
-								if(permission) {
-									plus.webview.open('../../html/login/index.html');
-								}
-								var wvs = plus.webview.all();
-								for(var i = 0, len = wvs.length; i < len; i++) {
-									if(wvs[i].getURL().indexOf('homeSchoolIndex.html') != -1 ||
-										wvs[i].getURL().indexOf('sciedu_home.html') != -1 ||
-										wvs[i].getURL().indexOf('courseIndex.html') != -1) {
-										continue;
+								bindPro(tempBindData, function function_name(data) {
+									//									events.closeWaiting();
+									if(data.RspCode == 0) {
+										//										utils.mOpenWithData("../../index.html", {});
+									} else {
+										//											mui.toast(data.RspTxt);
 									}
-									plus.webview.close(wvs[i]);
+								});
+
+								//如果密码为1--6，让修改密码后，进入主界面
+								if(personal.password0 == '123456') {
+									var tempModel = {
+										flag: 1 //0是主动修改密码，1是判断是默认密码，自动让修改
+									}
+									utils.mOpenWithData("../../html/mine/modifyPassword.html", tempModel);
+								} else {
+									//判断权限  
+									var permission = true;
+									if(personal.utid == '0') {
+										permission = false;
+									}
+									if(permission) {
+										plus.webview.open('../../html/login/index.html');
+									}
+									var wvs = plus.webview.all();
+									for(var i = 0, len = wvs.length; i < len; i++) {
+										if(wvs[i].getURL().indexOf('homeSchoolIndex.html') != -1 ||
+											wvs[i].getURL().indexOf('sciedu_home.html') != -1 ||
+											wvs[i].getURL().indexOf('courseIndex.html') != -1) {
+											continue;
+										}
+										plus.webview.close(wvs[i]);
+									}
+									var curr = plus.webview.currentWebview();
+									curr.close();
 								}
-								var curr = plus.webview.currentWebview();
-								curr.close();
+
+							} else {
+								mui.toast('此app需要学生身份的账号才可使用');
 							}
 						} else {
 							mui.toast(data1.RspTxt);
