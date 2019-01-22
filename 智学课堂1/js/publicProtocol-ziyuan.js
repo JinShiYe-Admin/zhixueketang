@@ -154,7 +154,7 @@ var xhrPost = function(url, commonData, callback) {
 		var xhr = new XMLHttpRequest();
 		xhr.open("post", url, true);
 		xhr.timeout = 10000; //10秒超时
-		xhr.contentType = 'application/json;';
+		xhr.setRequestHeader('Content-Type', 'application/json');
 		xhr.onload = function(e) {
 			console.log("XHRP:onload:", JSON.stringify(e));
 			console.log('this.readyState:', this.readyState);
