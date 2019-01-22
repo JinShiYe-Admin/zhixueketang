@@ -73,6 +73,11 @@ var storageKeyName = (function(mod) {
 		default:
 			break;
 	}
+	mod.SUBJECTLIST = 'subjectList';//科目列表
+	mod.SYSPERLIST = 'SysPerList';//系统学段列表
+	mod.SYSFASCLIST = 'SysFascList';//系统分册列表
+	mod.SYSMATERLIST = 'SysMaterList';//系统教版列表
+	
 	mod.BADGENUMBER = 'badgeNumber'//app角标
 	mod.PUBLICPARAMETER = 'publicParameter'//共用参数
 	mod.ISFIRST = 'isFitst'; //是否是第一次登陆
