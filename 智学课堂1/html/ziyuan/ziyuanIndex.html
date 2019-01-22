@@ -104,7 +104,7 @@
 		<script src='../../js/utils/sortSign.js'></script>
 		<script src="../../js/storageKeyName.js"></script>
 		<script src="../../js/utils/store.js"></script>
-		<script src="../../js/publicProtocolNew.js"></script>
+		<script src="../../js/publicProtocol-ziyuan.js"></script>
 		<script src="../../js/utils/events.js"></script>
 		<script src="../../js/libs/jquery.js"></script>
 		<script src="../../js/utils/pushPermission.js"></script>
@@ -284,7 +284,29 @@
 				//					} else if(personal.urolestrxxt > 1) { //授权用户
 				//						contentData.showFlag = 0;
 				//					}
+				//获取教材
+				getTextBook();
 			});
+			
+			//获取教材
+			var getTextBook = function(){
+				var comData = {
+//					percode: '',//学段代码 可选
+//					subcode: '',//科目代码 可选
+//					matercode: '',//教材代码 可选
+//					fasccode: ''//分册代码 可选
+				}
+				var wd = events.showWaiting();
+				getZiYuanTextbook(comData, function(data) {
+					wd.close();
+					console.log('获取教材:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						
+					} else {
+						mui.toast(data.msg);
+					}
+				});
+			}
 			//4.1.用户已订购套餐及功能扩展栏目
 			//				function getUserBusFunc() {
 			//					personal = store.get(window.storageKeyName.PERSONALINFO);
