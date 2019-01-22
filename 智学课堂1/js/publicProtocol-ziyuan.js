@@ -382,8 +382,6 @@ var extendParameter1 = function(data0) {
 	var tempData = {
 		uuid: publicPar.uuid,
 		utid: personal.utid,
-		utname: personal.utname,
-		schid: personal.schid,
 		token: personal.utoken
 	}
 	return $.extend(data0, tempData);
