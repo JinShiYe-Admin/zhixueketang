@@ -8,6 +8,7 @@
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" href="../../js/swiper/swiper.min.css">
 		<link href="http://www.jq22.com/jquery/bootstrap-3.3.4.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css"/>
 		<style type="text/css">
 			.catalogs{
 				margin-top: 18px;
@@ -28,6 +29,170 @@
 			.swiper-slide{
 				height: 40px;
 			}
+			
+			.mui-bar-nav {
+				z-index: 999;
+			}
+			#header:after {
+				content: "";
+				position: absolute;
+				z-index: -1;
+				left: 0;
+			    right: 0;
+			    top: 0;
+			    bottom: 0;
+			}
+			.mui-bar-tab {
+				height: 1rem;
+				background-color: #F9F9F4;
+			}
+			.mui-bar-tab .mui-tab-item {
+				height: 1rem;
+			}
+			.mui-bar-tab .mui-tab-item .mui-icon {
+				font-size: 0.44rem;
+				top: 0;
+    			margin-bottom: 0.04rem;
+			}
+			.mui-bar-tab .mui-tab-item .mui-icon~.mui-tab-label {
+				font-size: 0.24rem;
+			}
+			.kn-menu .label-wrapper {
+				padding: 0.3rem 1rem 0.3rem 0.2rem;
+				border-bottom: 1px solid #ECECEC;
+				position: relative;
+			}
+			.kn-menu .label-icon {
+				margin-right: -0.3rem;
+				vertical-align: middle;
+			}
+			.kn-menu .label-name {
+				vertical-align: middle;
+			}
+			.kn-menu .label-icon + .label-name {
+				padding-left: 0.4rem;
+			}
+			.label-wrapper .done-box {
+				display: inline-block;
+				width: 0.32rem;
+				height: 0.32rem;
+				border: 1px solid #4AC058;
+				border-radius: 2px;
+				text-align: center;
+				line-height: 0.22rem;
+				position: absolute;
+				right: 0.6rem;
+				top: 50%;
+				margin-top: -0.16rem;
+			}
+			.options-pannel {
+				position: absolute;
+				left: 0;
+				top: 100%;
+				min-width: 100%;
+				background-color: #FFFFFF;
+				margin-right: -0.26rem;
+				padding: 0.5rem 0.2rem 0.4rem;
+				color: #222222;
+				z-index: -1;
+			}
+			.options-pannel label input[type="radio"] {
+				display: none;
+			}
+			.options-pannel .radio-wrap {
+				display: block;
+				float: left;
+				width: 1.58rem;
+				height: 0.63rem;
+				line-height: 0.63rem;
+				margin-right: 0.26rem;
+				margin-bottom: 0.2rem;
+				text-align: center;
+			}
+			.options-pannel label {
+				display: block;
+				border: 1px solid #D0D0D0;
+				border-radius: 0.05rem;
+				background-color: #F5F5F5;
+				font-size: 0.24rem;
+			}
+			.options-pannel label.selected {
+				background-color: #3C9DFB;
+				color: #FFFFFF;
+				border-color: #3C9DFB;
+			}
+			.als-title {
+				padding: 0.4rem 0.2rem 0;
+				font-size: 0.3rem;
+				color: #222222;
+			}
+			.als-title:after {
+				display: block;
+				content: "";
+				border-bottom: 1px solid #DDDDDD;
+				padding-bottom: 0.4rem;
+			}
+			.als-list:before {
+				display: none;
+			}
+			.als-list li {
+				display: flex;
+				justify-content: space-between;
+				padding: 0.3rem 0.6rem 0.3rem 0.2rem;
+				line-height: 0.64rem;
+			}
+			.als-list li:first-child {
+				padding-bottom: 0.15rem;
+			}
+			ul.als-list li .sub {
+				padding-left: 1.1rem;
+				vertical-align: middle;
+			}
+			ul.als-list li .sub .label {
+				display: inline-block;
+				text-align: center;
+				border: 1px solid #25AE38;
+				color: #25AE38;
+				border-radius: 4px;
+				vertical-align: middle;
+				margin-top: -3px;
+				width: 1.2rem;
+				height: .64rem;
+				line-height: .64rem;
+				font-size: 150%;
+				margin-left: -1.6rem;
+				margin-right: 0.4rem;
+				transform: scale(0.5);
+				transform-origin: 150% 50%;
+			}
+			ul.als-list li .sub .label.bad {
+				color: #DB4848;
+				border-color: #DB4848;
+			}
+			ul.als-list li .score {
+				width: 30%;
+				text-align: center;
+			}
+			.als-list li .sub {
+				width: 35%;
+			}
+			.als-list li .times {
+				width: 28%;
+				text-align: center;
+			}
+			#subRadar {
+				min-height: 205px;
+				max-height: 440px;
+				margin-bottom: .6rem;
+			}
+			#analysis {
+				max-height: 100%;
+				overflow-y: auto;
+			}
+			
+			.swiper-slide {
+				width: 20.6%;  
+			} 
 		</style>
 	</head>
 
@@ -49,7 +214,7 @@
 				<div class="names">科目：</div>
 				<div class="swiper-container" id="kemu">
 					<div class="swiper-wrapper">
-						<div class="swiper-slide" :class="km.ischeck==1?'fontcolor':''" v-for="(km,index) in kemu"  @tap="catalogItemClick(kemu,km)">{{km.name}}</div>
+						<div class="swiper-slide" :class="km.ischeck==1?'fontcolor':''" v-for="(km,index) in kemu"  @tap="catalogItemClick(kemu,km)">{{km.subname}}</div>
 					</div>
 				</div>
 				<div class="names">教版：</div>
@@ -65,14 +230,21 @@
 					</div>
 				</div>
 				<!--底部目录列表-->
-				<div id="treeview1"></div>    
+				<div id="test-menu" class="mui-control-content mui-active">
+					<div id="testMenu" class="mui-content vue-tree">
+						<div class="kn-menu" v-cloak>
+							<tree-menu v-for="(model, i) in menu" :model="model" :key="i" :depth="0" @tap="selectNode(model)"></tree-menu>
+							<p v-if="!menu.length&&isLoaded"  style="padding: 0.3rem;">暂无目录</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<script type="text/javascript" src="../../js/mui.min.js"></script>
 		<script type="text/javascript" src="../../js/utils/vue.js"></script>
 		<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
 		<script type="text/javascript" src="../../js/swiper/swiper.js"></script>
-		<script type="text/javascript" src="../../js/swiper/bootstrap-treeview.js"></script>
+		<script type="text/javascript" src="../../js/btlearn/common.js"></script>
 		<!--加密-->
 		<script src="../../js/libs/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/libs/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
@@ -92,75 +264,32 @@
 		<script src="../../js/utils/events.js"></script>
 		<script src="../../js/mui/mui.picker.js"></script>
 		<script src="../../js/mui/mui.poppicker.js"></script>
+		
 		<script type="text/javascript">
+			
 			mui.init();
-			
-			mui.plusReady(function() {
-				var wv = plus.webview.currentWebview(); 
-				// 关闭侧滑返回功能
-				wv.setStyle({
-					'popGesture': 'none'
-				});
-			});
-			
-			
+			//获取个人信息
+			var personal = store.get(window.storageKeyName.PERSONALINFO);
+			console.log('personal:' + JSON.stringify(personal));
+			//获取共用参数
+			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+			var subjectList = store.get(window.storageKeyName.SUBJECTLIST);//科目列表
+			var SysPerList = store.get(window.storageKeyName.SYSPERLIST);//系统学段列表
+			var SysFascList = store.get(window.storageKeyName.SYSFASCLIST);//系统分册列表
+			var SysMaterList = store.get(window.storageKeyName.SYSMATERLIST);//系统教版列表
+			console.log('personal:' + JSON.stringify(subjectList));
+			console.log('personal:' + JSON.stringify(SysPerList));
+			console.log('personal:' + JSON.stringify(SysFascList));
+			console.log('personal:' + JSON.stringify(SysMaterList));
 			var catalog=new Vue({
 				el:'#catalog',
 				data:{
-					xueduan:[{ischeck:1,name:"初中"},{ischeck:0,name:"高中"}],
-					kemu:[{ischeck:1,name:"语文"},{ischeck:0,name:"数学"},{ischeck:0,name:"英语"},{ischeck:0,name:"物理"},{ischeck:0,name:"化学"},{ischeck:0,name:"生物"},{ischeck:0,name:"政治"},{ischeck:0,name:"历史"},{ischeck:0,name:"地理"}],
-					jiaoban:[{ischeck:1,name:"人教版"},{ischeck:0,name:"苏教版"}],
-					fence:[{ischeck:1,name:"七年级"},{ischeck:0,name:"八年级"}],
-					expandData:[{
-									id:'1',
-									text: '上册',
-									nodes:[
-										{id:'1',text: '第一章 字音字形',nodes: [
-								                {id:'1',text: '第一课 字音',nodes: [
-								                	 {id:'1',text: '第一节 AAA'},
-								                	 {id:'2',text: '第二节 BBB'}
-								                ]},
-								                {id:'2',text: '第二课 字形'}
-					                		]
-										},
-					             		{id:'2',text: '第二章 多音字'},
-					             		{id:'3',text: '第三章 易误读常见字'},
-					             		{id:'4',text: '第四章 语言基础知识'}
-					             	],
-						            state: {expanded: false,}
-		          				},
-		          				{
-									id:'1',
-									text: '上册',
-									nodes:[
-										{id:'1',text: '第一章 字音字形',nodes: [
-								                {id:'1',text: '第一课 字音',nodes: [
-								                	 {id:'1',text: '第一节 AAA'},
-								                	 {id:'2',text: '第二节 BBB'}
-								                ]},
-								                {id:'2',text: '第二课 字形'}
-					                		]
-										},
-					             		{id:'2',text: '第二章 多音字'},
-					             		{id:'3',text: '第三章 易误读常见字'},
-					             		{id:'4',text: '第四章 语言基础知识'}
-					             	],
-						            state: {expanded: false,}
-		          				},
-						        {
-						        	id:'2',
-						        	text: '下册',
-						            nodes:[
-										{id:'1',text: '第一章 英语'},
-					             		{id:'2',text: '第二章 德语'}
-					             	],
-						            state: {expanded: false,}
-						        },
-						        {
-						        	id:'3',
-						        	text: '中册',
-						            state: {expanded: false,}
-						        }]
+					xueduan:SysPerList,
+					kemu:subjectList,//科目
+					jiaoban:SysMaterList,
+					fence:SysFascList,
+					menu: [],
+					isLoaded: false,
 				},
 				methods:{
 					catalogItemClick:function(parent,item){
@@ -170,38 +299,9 @@
 						}
 						item.ischeck=1;
 						console.log("选择的是这个:"+JSON.stringify(item));
-						/*底部目录列表 数据重载*/
-						catalog.expandData=[{
-									id:'1',
-									text: '上册',
-									nodes:[
-										{id:'1',text: '第一章 字音字形',nodes: [
-								                {id:'1',text: '第一课 字音',nodes: [
-								                	 {id:'1',text: '第一节 AAA'},
-								                	 {id:'2',text: '第二节 BBB'}
-								                ]},
-								                {id:'2',text: '第二课 字形'}
-					                		]
-										},
-					             		{id:'2',text: '第二章 多音字'},
-					             		{id:'3',text: '第三章 易误读常见字'},
-					             		{id:'4',text: '第四章 语言基础知识'}
-					             	],
-						            state: {expanded: false,}
-		          				}];
-				         $('#treeview1').treeview({
-					          color: "#717171",
-					          expandIcon: 'glyphicon glyphicon-chevron-right',
-					          collapseIcon: 'glyphicon glyphicon-chevron-down',
-					          data: catalog.expandData,
-					          highlightSearchResults: false,
-					          onNodeSelected: function(event, node) {
-					           	console.log('<p>' + node.id+","+node.text + ' was selected</p>');
-					          },
-					          onNodeUnselected: function (event, node) {
-	//				            	console.log('<p>' + node.text + ' was unselected</p>');
-					          }
-					     });
+					},
+					selectNode: function(model) {
+						 console.log(JSON.stringify(model))
 					}
 				},
 				mounted: function () {
@@ -211,40 +311,71 @@
 					  	freeMode: true,//自由滑动模式
 					  	noSwiping : true,//禁止滑动
 					});
-		             /*底部目录列表 初始化*/
-			        $('#treeview1').treeview({
-				          color: "#717171",
-				          expandIcon: 'glyphicon glyphicon-chevron-right',
-				          collapseIcon: 'glyphicon glyphicon-chevron-down',
-				          data: this.expandData,
-				          highlightSearchResults: false,
-				          onNodeSelected: function(event, node) {
-				           	console.log('<p>' + node.id+","+node.text + ' was selected</p>');
-				          },
-				          onNodeUnselected: function (event, node) {
-//				            	console.log('<p>' + node.text + ' was unselected</p>');
-				          }
-				     });
-		        },
+		        },   
+		        computed: {
+			      getKm() {
+			        return this.kemu;
+			      }
+			    },
+			    watch: {
+			      getKm(val) {
+//			      	setTimeout(function(){
+//			      		var swiper = new Swiper('.swiper-container', {
+//						  	slidesPerView: 5,//菜单可见个数
+//						  	spaceBetween: 10,//间隔
+//						  	freeMode: true,//自由滑动模式
+//						  	noSwiping : true,//禁止滑动
+//						});
+//			      	},500);
+			      }
+			    }
 			});
 			
-	        
-			/*列表点击事件*/
-		    function itemOnclick(target){
-				//找到当前节点id
-				var nodeid = $(target).attr('data-nodeid');
-				var tree = $('#treeview1');
-				//获取当前节点对象
-				var node = tree.treeview('getNode', nodeid);
-				
-				if(node.state.expanded){ 
-				    //处于展开状态则折叠
-				    tree.treeview('collapseNode', node.nodeId);  
-				} else {
-				    //展开
-				    tree.treeview('expandNode', node.nodeId);
-				}
-			}
+			
+			
+			//获取科目
+			mui.plusReady(function() {
+				var wv = plus.webview.currentWebview(); 
+				// 关闭侧滑返回功能
+				wv.setStyle({
+					'popGesture': 'none'
+				});
+			});
+			
+			var data='{"pers": [{"percode": "1","pername": "幼儿园"},{"percode": "2","pername": "小学"},{"percode": "3","pername": "初中"},{"percode": "4","pername": "高中"}],"percode": "1","subs": [{"subname": "语文","subcode": "01"}],"catalogs": [{"children": [{"name": "太阳花知识点6","pid": 20468,"is_finish": 0,"id": 20474,"children": [{"name": "太阳花知识点7","pid": 20468,"is_finish": 0,"id": 20474,"children": [{"name": "太阳花知识点11","pid": 20468,"is_finish": 0,"id": 20474},{"name": "太阳花知识点12","pid": 20468,"is_finish": 0,"id": 20475},{"name": "太阳花知识点13","pid": 20468,"is_finish": 0,"id": 20476}]},{"name": "太阳花知识点8","pid": 20468,"is_finish": 0,"id": 20475}]},{"name": "太阳花知识点4","pid": 20468,"is_finish": 0,"id": 20475},{"name": "太阳花知识点5","pid": 20468,"is_finish": 0,"id": 20476}],"name": "上学堂知识点1","pid": 0,"is_finish": 0,"id": 20468},{"name": "上学堂知识点2","pid": 0,"is_finish": 0,"id": 20469},{"name": "上学堂知识点3","pid": 0,"is_finish": 0,"id": 20470}],"subcode": "01"}';
+			var rdata = JSON.parse(data);
+			
+			catalog.menu = rdata.catalogs||[];
+			catalog.isLoaded = true;
+//			var getSchSubThread = function() {
+//				var enData1 = {};
+//				//不需要加密的数据
+//				var comData1 = {
+//					uuid: publicParameter.uuid, //用户设备号
+//					utoken: personal.utoken, //用户令牌
+//					appid: publicParameter.appid //系统所分配的应用ID
+//				};
+//				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
+//					if(data1.RspCode == 0) {
+//						console.log("data1:" + data1.RspTxt);
+//						if(data1.RspData) {
+//							mui('.mui-scroll-wrapper').scroll();
+//							for(var i = 0; i < data1.RspData.subs.length; i++) {
+//								var temp =  data1.RspData.subs[i];
+//								if (i == 0) {
+//									temp.ischeck = 1;
+//								}else{
+//									temp.ischeck = 0;
+//								}
+//							}
+//							catalog.kemu = data1.RspData.subs;
+//						}
+//					} else {
+//						console.log("data1:" + data1.RspTxt);
+//					}
+//				});
+//			}
+
 		</script>
 	</body>
 
