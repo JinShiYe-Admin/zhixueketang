@@ -2,7 +2,7 @@
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 1; //0,开发;1,部署外网
+	mod.key = 1; //0,开发;1,云测试
 	mod.pay = 0; //0,单个商家接口;1,多商家接口
 	var exLog = console.log;
 	console.log = function(hint, object) {
@@ -41,7 +41,7 @@ var storageKeyName = (function(mod) {
 			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
 			//	---七牛空间和接口---开发---end---
 			break;
-		case 1: //部署外网
+		case 1: //云测试
 			mod.SCHOOLID = 0;//学校ID
 //			mod.SCHOOLID = 100008;
 			mod.USERTYPE = 2;//用户类型，0老师,1家长,2学生
@@ -69,6 +69,8 @@ var storageKeyName = (function(mod) {
 			//	---七牛空间和接口---开发---end---
 			//益测益学服务端地址
 			mod.YCYXHOST = "http://zhxyx.jiaobaowang.net/yiceyixue";
+			//资源
+			mod.ZIYUANURL = "https://gxkf.jiaobaowang.net:9443/zxzyapi/api/";
 			break;
 		default:
 			break;
