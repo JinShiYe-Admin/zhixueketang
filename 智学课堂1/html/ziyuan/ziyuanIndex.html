@@ -64,29 +64,26 @@
 			</h1>
 		</header>
 		<div class="mui-content mui-scroll-wrapper mui-fullscreen" style="background: white;" id="contentData">
-			<template v-if="showFlag==0">
-				<div v-if="showNoDataFlag>0" class="">
-					<div class="mui-scroll">
-						<ul class="mui-table-view">
-							<li class="mui-table-view-cell mui-media" v-for="(resourceModel,index) in resourceArray" @click="clickResourceModel(resourceModel,index)">
-								<a href="javascript:;">
-									<img class="mui-media-object mui-pull-left" src="http://placehold.it/40x30">
-									<div class="mui-media-body">
-										{{resourceModel.tempText}}
-										<p class="mui-ellipsis">{{resourceModel.tempTime}} | {{resourceModel.tempPeople}}</p>
-									</div>
-								</a>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div v-else-if="showNoDataFlag==0">
-					<p style="text-align: center;margin-top: 5px;">暂无资源</p>
-					<div v-cloak style="text-align: center;margin:10% auto;">
-						<img src="../../img/noData.png" style="width: 250px;" />
-					</div>
-				</div>
-			</template>
+			<div class="mui-scroll">
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell mui-media" v-for="(resourceModel,index) in resourceArray" @click="clickResourceModel(resourceModel,index)">
+						<a href="javascript:;">
+							<div v-if="resourceModel.is_pack">
+								<img class="mui-media-object mui-pull-left" src="../../img/ziyuan/ziyuanPack.png" />
+							</div>
+							<div v-else="">
+								<img v-if="resourceModel.file_ext == 'mp4'" class="mui-media-object mui-pull-left" src="../../img/ziyuan/mp4.png">
+								<img v-else-if="resourceModel.file_ext == 'word'" class="mui-media-object mui-pull-left" src="../../img/ziyuan/word.png">
+								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/ziyuan/ppt.png">
+							</div>
+							<div class="mui-media-body">
+								{{resourceModel.name}}
+								<p class="mui-ellipsis">{{resourceModel.create_time}} | {{resourceModel.owner_name}}</p>
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
 		</div>
 
 		<script src="../../js/mui.min.js"></script>
@@ -118,31 +115,31 @@
 				statusBarBackground: '#00CFBD',
 				swipeBack: false,
 				beforeback: back,
-				//					pullRefresh: {
-				//						container: '#contentData',
-				//						down: {
-				//							style: 'circle', //必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
-				//							color: '#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
-				//							height: '50px', //可选,默认50px.下拉刷新控件的高度,
-				//							range: '100px', //可选 默认100px,控件可下拉拖拽的范围
-				//							offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
-				//							auto: true, //可选,默认false.首次加载自动上拉刷新一次
-				//							callback: pulldownRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
-				//						},
-				//						up: {
-				//							height: 50, //可选.默认50.触发上拉加载拖动距离
-				//							auto: true, //可选,默认false.自动上拉加载一次
-				//							contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
-				//							contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
-				//							callback: pullupRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
-				//						}
-				//					}
+				pullRefresh: {
+					container: '#contentData',
+					down: {
+						style: 'circle', //必选，下拉刷新样式，目前支持原生5+ ‘circle’ 样式
+						color: '#2BD009', //可选，默认“#2BD009” 下拉刷新控件颜色
+						height: '50px', //可选,默认50px.下拉刷新控件的高度,
+						range: '100px', //可选 默认100px,控件可下拉拖拽的范围
+						offset: '0px', //可选 默认0px,下拉刷新控件的起始位置
+						auto: false, //可选,默认false.首次加载自动上拉刷新一次
+						callback: pulldownRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+					},
+					up: {
+						height: 50, //可选.默认50.触发上拉加载拖动距离
+						auto: false, //可选,默认false.自动上拉加载一次
+						contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+						contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: pullupRefresh //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+					}
+				}
 			});
 			//加载更多
 			function pullupRefresh() {
 				contentData.flag = 1;
 				//4.获取学校通知列表
-				//					getNoticesList();
+				getZiYuanList();
 			}
 
 			/**
@@ -152,7 +149,7 @@
 				contentData.flag = 0;
 				contentData.pageIndex = 1;
 				//4.获取学校通知列表
-				//					getNoticesList();
+				getZiYuanList();
 			}
 
 			function back() {
@@ -177,32 +174,6 @@
 			//							left: '-70%'
 			//						});
 			mui.plusReady(function() {
-
-				//推送绑定
-				//					var tempInfo00 = store.get(window.storageKeyName.PERSONALINFO);
-				//					var info = plus.push.getClientInfo();
-				//					var tempBindData = {
-				//						appId: info.appid,
-				//						alias: tempInfo00.utid,
-				//						cid: info.clientid
-				//					}
-				//					console.log('tempBindData:' + JSON.stringify(tempBindData));
-				//					bindPro(tempBindData, function function_name(data) {
-				//						console.log('bindpro返回值:' + JSON.stringify(data));
-				//						if(data.RspCode == 0) {
-				//							var info = plus.push.getClientInfo();
-				//							console.log('bindpro:' + JSON.stringify(info));
-				//						} else {
-				//
-				//						}
-				//					});
-				//					if(personal.utp == 1 || personal.utp == 2) { //0老师，2学生，1家长
-				//4.1.用户已订购套餐及功能扩展栏目
-				//						getUserBusFunc();
-				//					}
-
-				//安卓的连续点击两次退出程序
-				//				alert('Hbuildr版本：8.8.3，运行版本:'+plus.runtime.version)
 				var backButtonPress = 0;
 				//重写返回键
 				mui.back = function(event) {
@@ -249,121 +220,40 @@
 							console.log('indexweeeeeeeeee:');
 							openMenu();
 						},
-						clickTitle:function(){
+						clickTitle: function() {
 							console.log('点击标题');
 							utils.mOpenWithData("../../html/catalog/catalogPage.html", {});
-//							utils.mOpenWithData("../../html/catalog/inside_page.html", {});
+							//							utils.mOpenWithData("../../html/catalog/inside_page.html", {});
 						}
 					}
 				});
 
-				//学校通知
-				//判断权限,学生、家长
-				//					if(personal.utp == 1 || personal.utp == 2) {
-				//
-				//					} else if(personal.urolestrxxt == null || personal.urolestrxxt == 0) { //不是授权用户
-				//						if(personal.grds.length > 0) { //年级领导
-				//							contentData.showFlag = 0;
-				//						} else {
-				//							//判断是不是班主任
-				//							var tempFlag = 0;
-				//							for(var i = 0; i < personal.clss.length; i++) {
-				//								var classModel = personal.clss[i];
-				//								if(classModel.isms == 1) {
-				//									tempFlag++;
-				//								}
-				//							}
-				//							//如果是班主任
-				//							if(tempFlag > 0) {
-				//								contentData.showFlag = 0;
-				//							} else {
-				//								contentData.showFlag = 1;
-				//								mui.toast('无权限');
-				//							}
-				//						}
-				//					} else if(personal.urolestrxxt > 1) { //授权用户
-				//						contentData.showFlag = 0;
-				//					}
 				//获取教材
 				getTextBook();
 			});
-			
+
 			//获取教材
-			var getTextBook = function(){
+			var getTextBook = function() {
 				var comData = {
-//					percode: '',//学段代码 可选
-//					subcode: '',//科目代码 可选
-//					matercode: '',//教材代码 可选
-//					fasccode: ''//分册代码 可选
+					percode: '', //学段代码 可选
+					subcode: '', //科目代码 可选
+					matercode: '', //教材代码 可选
+					fasccode: '' //分册代码 可选
 				}
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {
 					wd.close();
 					console.log('获取教材:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						
+						contentData.textBookDetail = data.RspData;
+						//获取资源(分页) 
+						getZiYuanList();
 					} else {
-						mui.toast(data.msg);
+						mui.toast(data.RspTxt);
 					}
 				});
 			}
-			//4.1.用户已订购套餐及功能扩展栏目
-			//				function getUserBusFunc() {
-			//					personal = store.get(window.storageKeyName.PERSONALINFO);
-			//					var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-			//					var enData1 = {};
-			//					//不需要加密的数据
-			//					var comData1 = {
-			//						uuid: publicParameter.uuid, //用户设备号
-			//						uid: personal.uid, //用户账号
-			//						utoken: personal.utoken, //用户令牌
-			//						appid: publicParameter.appid //系统所分配的应用ID
-			//					}
-			//					events.showWaiting();
-			//					//发送网络请求，data为网络返回值
-			//					postDataEncry('GetUserBusFunc', enData1, comData1, 0, function(data1) {
-			//						console.log('4.1.GetUserBusFunc:' + JSON.stringify(data1));
-			//						events.closeWaiting();
-			//						if(data1.RspCode == 0) {
-			//							if(data1.RspData) {
-			//								console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
-			//								personal.packageCount = data1.RspData.userbus.length; //套餐是否绑定学生
-			//								personal.userbus = data1.RspData.userbus; // 绑定的套餐
-			//								store.set(window.storageKeyName.PERSONALINFO, personal);
-			//								//判断是否订购家校互通功能，并且状态开启
-			//								var tempArr = 0;
-			//								if(personal.userbus) {
-			//									for(var i = 0; i < personal.userbus.length; i++) {
-			//										var tempModel = personal.userbus[i];
-			//										for(var a = 0; a < tempModel.funcs.length; a++) {
-			//											var tempM = tempModel.funcs[a];
-			//											if(tempM.ftype == 'jxht') {
-			//												//if(tempM.ftype == 'jxht' && tempModel.serstat == 1) {
-			//												tempArr++;
-			//											}
-			//										}
-			//									}
-			//								}
-			//
-			//								if(tempArr > 0) {
-			//									contentData.showFlag = 0;
-			//								} else {
-			//									contentData.showFlag = 1;
-			//									mui.toast('请关联家校互通套餐');
-			//								}
-			//								contentData.showFlag = 0;
-			//								contentData.showFlag = 0;
-			//							} else {
-			//								personal.packageCount = 0; //套餐是否绑定学生
-			//								personal.userbus = []; // 绑定的套餐
-			//								store.set(window.storageKeyName.PERSONALINFO, personal);
-			//								contentData.showFlag = 1;
-			//							}
-			//						} else {
-			//							mui.toast(data1.RspTxt);
-			//						}
-			//					});
-			//				}
+
 			//关闭侧滑
 			window.addEventListener('closeMinePage', function(data) {
 				closeMenu();
@@ -525,26 +415,29 @@
 					showFlag: 0, //如果是家长身份，判断有没有订购套餐、套餐有没有关联学生，进行显示九宫格，0显示九宫格，1显示家长的订购提醒
 					personal: personal,
 					showNoDataFlag: 9, //是否显示无数据图片
+					textBookDetail: {}, //获取到的教材
 					flag: 0, //0刷新，1加载更多
-					resourceArray: [{
-						tempText: 'ziyuan1',
-						tempTime: '2018-2-11',
-						tempPeople: '何静'
-					}, {
-						tempText: 'ziyuan1',
-						tempTime: '2018-2-11',
-						tempPeople: '何静'
-					}, {
-						tempText: 'ziyuan1',
-						tempTime: '2018-2-11',
-						tempPeople: '何静'
-					}], //通知列表数组
+					resourceArray: [], //资源列表数组
 					pageIndex: 1 //第几页
 				},
 				methods: {
 					clickResourceModel: function(model) {
 						console.log('点击li：' + model);
-						//							utils.mOpenWithData("../../html/homeSchool/noticeDetail.html", model);
+						if(model.is_pack) { //资源包
+							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
+						} else if(model.file_ext == 'mp4') { //视频
+							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
+						} else { //pdf
+							//							model.convert_file_url = model.convert_file_url.split('?')[0];
+							//							utils.mOpenWithData('_www/js/pdfjs/index.html?'+model.convert_file_url, model);
+							mui.openWindow({
+								url: '_www/js/pdfjs/index.html?' + model.convert_file_url,
+								id: 'pdf',
+								show: {
+									duration: 300
+								}
+							});
+						}
 					}
 				}
 			});
@@ -555,67 +448,47 @@
 				interval: 5000
 			});
 
-			//				if(mui.os.android) {
-			//					//监听收到通知后，没通过标题栏而是点击app图标进入app的事件，官方用语叫：应用切换到前台运行事件 
-			//					document.addEventListener("plusready", onPlusReady, false);
-			//
-			//					function onPlusReady() {
-			//						document.addEventListener("resume", onAppReume, false);
-			//					}
-			//
-			//					function onAppReume() {
-			//						plus.clearIcon.clearIco(function(result) {
-			//							console.log("result>>>>>>" + result[0]);
-			//							store.set(window.storageKeyName.ICONNUM, 0);
-			//							plus.push.clear();
-			//						}, function(result) {
-			//							console.log('未知错误：' + result);
-			//						});
-			//					}
-			//				}
-
-			//4.获取学校通知列表
-			//				var getNoticesList = function() {
-			//					var tempData = {
-			//						schoolId: personal.schid, //学校ID,统一部署的时候，学校ID传000000
-			//						manId: personal.utid, //登录人ID
-			//						status: 1, //状态,0 全部,1 有效,2 无效
-			//						pageIndex: contentData.pageIndex, //当前页数
-			//						pageSize: 10 //每页记录数,0为全部
-			//					}
-			//					//				events.showWaiting();
-			//					getNoticesPro(tempData, function function_name(data) {
-			//						//					events.closeWaiting();
-			//						mui('#contentData').pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
-			//						mui('#contentData').pullRefresh().endPulldownToRefresh();
-			//						console.log('data:' + JSON.stringify(data));
-			//						if(data.RspCode == 0) {
-			//							contentData.pageIndex++;
-			//							for(var i = 0; i < data.RspData.Data.length; i++) {
-			//								var model = data.RspData.Data[i];
-			//								model.SendTime = modifyTimeFormat(model.SendTime);
-			//							}
-			//							if(contentData.flag == 0) { //刷新
-			////								contentData.resourceArray = data.RspData.Data;
-			//								contentData.resourceArray = [].concat(data.RspData.Data);
-			//								if(data.RspData.Data.length == 0) {
-			//									//									mui.toast('数据为空');
-			//								}
-			//							} else { //加载更多
-			//								contentData.resourceArray = contentData.resourceArray.concat(data.RspData.Data);
-			//								if(data.RspData.Data.length == 0) {
-			//									mui.toast('已加载全部');
-			//									//								mui('#contentData').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
-			//								}
-			//							}
-			//							contentData.showNoDataFlag = data.RspData.TotalCnt;
-			//							//								contentData.showFlag = 0;
-			//							$("#contentData").show();
-			//						} else {
-			//							mui.toast(data.RspTxt);
-			//						}
-			//					});
-			//				}
+			//获取资源(分页) 
+			var getZiYuanList = function() {
+				var tempData = {
+					categoryid: '', //资源类型id 可选
+					bookid: '18', //教材id 必须
+					catalogid: '360', //目录id 可选
+					p: contentData.pageIndex, //当前页码 默认1
+					s: '10' //每页记录数量 默认10
+				}
+				//				events.showWaiting();
+				getZiYuanRes(tempData, function function_name(data) {
+					//					events.closeWaiting();
+					mui('#contentData').pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+					mui('#contentData').pullRefresh().endPulldownToRefresh();
+					console.log('获取资源(分页) :' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						contentData.pageIndex++;
+						for(var i = 0; i < data.RspData.list.length; i++) {
+							var model = data.RspData.list[i];
+							model.create_time = modifyTimeFormat(model.create_time);
+						}
+						if(contentData.flag == 0) { //刷新
+							contentData.resourceArray = [].concat(data.RspData.list);
+							if(data.RspData.list.length == 0) {
+								//									mui.toast('数据为空');
+							}
+						} else { //加载更多
+							contentData.resourceArray = contentData.resourceArray.concat(data.RspData.list);
+							if(data.RspData.list.length == 0) {
+								mui.toast('已加载全部');
+								//								mui('#contentData').pullRefresh().endPullupToRefresh(true); //参数为true代表没有更多数据了。
+							}
+						}
+						contentData.showNoDataFlag = data.RspData.TotalCnt;
+						contentData.showFlag = 0;
+						$("#contentData").show();
+					} else {
+						mui.toast(data.RspTxt);
+					}
+				});
+			}
 		</script>
 	</body>
 

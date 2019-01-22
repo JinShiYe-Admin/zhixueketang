@@ -120,6 +120,20 @@ var arrayToStr = function(array) {
 	return tempStr;
 }
 
+//将时间转换为显示的格式
+var modifyTimeFormat = function(str) {
+	var tempStr = '';
+	var dt_now = new Date();
+	var int_year = dt_now.getYear();
+	var dt_item = new Date(str.replace(/-/g, '/'));
+	if(int_year == dt_item.getYear()) {
+		tempStr = events.format(dt_item, "MM-dd hh:mm")
+	} else {
+		tempStr = events.format(dt_item, "yyyy-MM-dd hh:mm")
+	}
+	return tempStr;
+}
+
 /**
  * 发送 XMLHttpRequest post 的请求
  * @param {Object} url 路径
