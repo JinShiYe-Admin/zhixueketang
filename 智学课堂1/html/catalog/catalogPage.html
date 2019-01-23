@@ -11,25 +11,33 @@
 		<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css"/>
 		<style type="text/css">
 			.catalogs{
-				margin-top: 18px;
+				margin-top: 5px;
 			}
+			
 			.names{
 				padding-left: 15px;
 				width: 70px;
-				position: absolute;
+				position: relative;
 				background: white;
 				z-index: 2;
+				top: 14px;
 			}
+			.names:first-child{
+				top: 19px;
+			}
+			/*滑动菜单行高*/
+			.swiper-slide{
+				height:30px;
+			}
+			
 			.swiper-container{
 				margin-left: 70px !important;
 			}
 			.fontcolor{
 				color: #00CFBD;
 			}
-			.swiper-slide{
-				height: 40px;
-			}
 			
+			/*可能是多级菜单的样式*/
 			.mui-bar-nav {
 				z-index: 999;
 			}
@@ -200,7 +208,7 @@
 		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;">
 			<a  class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
 			<h1 class="mui-title" style="color: white;">切换目录</h1>
-			<a @click="sure" class="mui-pull-right" style="color: white;font-size: 15px;margin-top: 10px;">确定</a>
+			<!--<a @click="sure" class="mui-pull-right" style="color: white;font-size: 15px;margin-top: 10px;">确定</a>-->
 		</header>
 		<div class="mui-content" style="background: white;">
 			<div id="catalog">
@@ -208,32 +216,32 @@
 				<div class="names">学段：</div>
 				<div class="swiper-container catalogs" id="xueduan">
 					<div class="swiper-wrapper">
-						<div class="swiper-slide" :class="xd.ischeck==1?'fontcolor':''" v-for="(xd,index) in xueduan" @tap="catalogItemClick(xueduan,xd)">{{xd.name}}</div>
+						<div class="swiper-slide" :class="xd.ischeck==1?'fontcolor':''" v-for="(xd,index) in xueduan" @tap="catalogItemClick(xueduan,xd,'xd')">{{xd.pername}}</div>
 					</div>
 				</div>
 				<div class="names">科目：</div>
 				<div class="swiper-container" id="kemu">
 					<div class="swiper-wrapper">
-						<div class="swiper-slide" :class="km.ischeck==1?'fontcolor':''" v-for="(km,index) in kemu"  @tap="catalogItemClick(kemu,km)">{{km.subname}}</div>
+						<div class="swiper-slide" :class="km.ischeck==1?'fontcolor':''" v-for="(km,index) in kemu"  @tap="catalogItemClick(kemu,km,'km')">{{km.subname}}</div>
 					</div>
 				</div>
 				<div class="names">教版：</div>
 				<div class="swiper-container" id="jiaoban">
 					<div class="swiper-wrapper">
-						<div class="swiper-slide" :class="jb.ischeck==1?'fontcolor':''" v-for="(jb,index) in jiaoban"  @tap="catalogItemClick(jiaoban,jb)">{{jb.name}}</div>
+						<div class="swiper-slide" :class="jb.ischeck==1?'fontcolor':''" v-for="(jb,index) in jiaoban"  @tap="catalogItemClick(jiaoban,jb,'jb')">{{jb.matername}}</div>
 					</div>
 				</div> 
 				<div class="names">分册：</div>
 				<div class="swiper-container" id="fence">
 					<div class="swiper-wrapper">
-						<div class="swiper-slide" :class="fc.ischeck==1?'fontcolor':''" v-for="(fc,index) in fence"  @tap="catalogItemClick(fence,fc)">{{fc.name}}</div>
+						<div class="swiper-slide" :class="fc.ischeck==1?'fontcolor':''" v-for="(fc,index) in fence"  @tap="catalogItemClick(fence,fc,'fc')">{{fc.fascname}}</div>
 					</div>
 				</div>
 				<!--底部目录列表-->
 				<div id="test-menu" class="mui-control-content mui-active">
 					<div id="testMenu" class="mui-content vue-tree">
 						<div class="kn-menu" v-cloak>
-							<tree-menu v-for="(model, i) in menu" :model="model" :key="i" :depth="0" @tap="selectNode(model)"></tree-menu>
+							<tree-menu v-for="(model, i) in menu" :model="model" :key="i" :depth="0" @node-click="selectNode"></tree-menu>
 							<p v-if="!menu.length&&isLoaded"  style="padding: 0.3rem;">暂无目录</p>
 						</div>
 					</div>
@@ -264,6 +272,7 @@
 		<script src="../../js/utils/events.js"></script>
 		<script src="../../js/mui/mui.picker.js"></script>
 		<script src="../../js/mui/mui.poppicker.js"></script>
+		<script src="../../js/publicProtocol-ziyuan.js"></script>
 		
 		<script type="text/javascript">
 			
@@ -273,38 +282,67 @@
 			console.log('personal:' + JSON.stringify(personal));
 			//获取共用参数
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-			var subjectList = store.get(window.storageKeyName.SUBJECTLIST);//科目列表
-			var SysPerList = store.get(window.storageKeyName.SYSPERLIST);//系统学段列表
-			var SysFascList = store.get(window.storageKeyName.SYSFASCLIST);//系统分册列表
-			var SysMaterList = store.get(window.storageKeyName.SYSMATERLIST);//系统教版列表
-			console.log('personal:' + JSON.stringify(subjectList));
-			console.log('personal:' + JSON.stringify(SysPerList));
-			console.log('personal:' + JSON.stringify(SysFascList));
-			console.log('personal:' + JSON.stringify(SysMaterList));
+			var subjectCode = store.get(window.storageKeyName.SUBJECTCODE);//科目选择值
+			var SysPerCode = store.get(window.storageKeyName.SYSPERCODE);//系统学段选择值
+			var SysFascCode = store.get(window.storageKeyName.SYSFASCCODE);//系统分册选择值
+			var SysMaterCode = store.get(window.storageKeyName.SYSMATERCODE);//系统教版选择值
+			var selectDatas;//请求参数
+			setData();//设置请求参数
+			getZiYuanTextbookFunc();
 			var catalog=new Vue({
 				el:'#catalog',
 				data:{
-					xueduan:SysPerList,
-					kemu:subjectList,//科目
-					jiaoban:SysMaterList,
-					fence:SysFascList,
+					xueduan:[],
+					kemu:[],//科目
+					jiaoban:[],
+					fence:[],
 					menu: [],
 					isLoaded: false,
+					category:[]
 				},
 				methods:{
-					catalogItemClick:function(parent,item){
-						for(var i=0;i<parent.length;i++){
-							var child=parent[i];
-							child.ischeck=0;
+					catalogItemClick:function(parent,item,lx){
+						if(item.ischeck==0){
+							for(var i=0;i<parent.length;i++){
+								var child=parent[i];
+								child.ischeck=0;
+							}
+							item.ischeck=1;
+							console.log("选择的是这个:"+JSON.stringify(item));
+							//重新查询目录
+							if(lx=='xd'){
+								SysPerCode=item.percode;
+							}else if(lx=='km'){
+								subjectCode=item.subcode;
+							}else if(lx=='jb'){
+								SysMaterCode=item.matercode;
+							}else if(lx=='fc'){
+								SysFascCode=item.fasccode;
+							}
+							setData();//设置请求参数
+							getZiYuanTextbookFunc();
 						}
-						item.ischeck=1;
-						console.log("选择的是这个:"+JSON.stringify(item));
 					},
 					selectNode: function(model) {
-						 console.log(JSON.stringify(model))
+						console.log(JSON.stringify(model));
+						var btnArray = ['否', '是'];
+						mui.confirm('确定切换到当前章节？', '提醒', btnArray, function(e) {
+							if (e.index == 1) {
+								store.set(window.storageKeyName.CATALOGITEM, model);
+								store.set(window.storageKeyName.CATEGORY, catalog.category);
+								var newObj=[];
+								newObj.push(model);
+								newObj.push(catalog.category);
+								console.log(JSON.stringify(newObj));
+								//通知上一页，把参数传过去
+								mui.fire(plus.webview.currentWebview().opener(), 'selectCatalog', newObj);
+								mui.back();
+							}  
+						})
 					}
 				},
 				mounted: function () {
+					//初始化滑动菜单
 					var swiper = new Swiper('.swiper-container', {
 					  	slidesPerView: 5,//菜单可见个数
 					  	spaceBetween: 10,//间隔
@@ -319,21 +357,21 @@
 			    },
 			    watch: {
 			      getKm(val) {
-//			      	setTimeout(function(){
-//			      		var swiper = new Swiper('.swiper-container', {
-//						  	slidesPerView: 5,//菜单可见个数
-//						  	spaceBetween: 10,//间隔
-//						  	freeMode: true,//自由滑动模式
-//						  	noSwiping : true,//禁止滑动
-//						});
-//			      	},500);
+			      	//初始化滑动菜单，防止数据请求慢，导致的初始化失败问题
+			      	setTimeout(function(){
+			      		var swiper = new Swiper('.swiper-container', {
+						  	slidesPerView: 5,//菜单可见个数
+						  	spaceBetween: 10,//间隔
+						  	freeMode: true,//自由滑动模式
+						  	noSwiping : true,//禁止滑动
+						});
+			      	},500);
 			      }
 			    }
 			});
 			
 			
 			
-			//获取科目
 			mui.plusReady(function() {
 				var wv = plus.webview.currentWebview(); 
 				// 关闭侧滑返回功能
@@ -341,41 +379,114 @@
 					'popGesture': 'none'
 				});
 			});
-			
-			var data='{"pers": [{"percode": "1","pername": "幼儿园"},{"percode": "2","pername": "小学"},{"percode": "3","pername": "初中"},{"percode": "4","pername": "高中"}],"percode": "1","subs": [{"subname": "语文","subcode": "01"}],"catalogs": [{"children": [{"name": "太阳花知识点6","pid": 20468,"is_finish": 0,"id": 20474,"children": [{"name": "太阳花知识点7","pid": 20468,"is_finish": 0,"id": 20474,"children": [{"name": "太阳花知识点11","pid": 20468,"is_finish": 0,"id": 20474},{"name": "太阳花知识点12","pid": 20468,"is_finish": 0,"id": 20475},{"name": "太阳花知识点13","pid": 20468,"is_finish": 0,"id": 20476}]},{"name": "太阳花知识点8","pid": 20468,"is_finish": 0,"id": 20475}]},{"name": "太阳花知识点4","pid": 20468,"is_finish": 0,"id": 20475},{"name": "太阳花知识点5","pid": 20468,"is_finish": 0,"id": 20476}],"name": "上学堂知识点1","pid": 0,"is_finish": 0,"id": 20468},{"name": "上学堂知识点2","pid": 0,"is_finish": 0,"id": 20469},{"name": "上学堂知识点3","pid": 0,"is_finish": 0,"id": 20470}],"subcode": "01"}';
-			var rdata = JSON.parse(data);
-			
-			catalog.menu = rdata.catalogs||[];
-			catalog.isLoaded = true;
-//			var getSchSubThread = function() {
-//				var enData1 = {};
-//				//不需要加密的数据
-//				var comData1 = {
-//					uuid: publicParameter.uuid, //用户设备号
-//					utoken: personal.utoken, //用户令牌
-//					appid: publicParameter.appid //系统所分配的应用ID
-//				};
-//				postDataEncry('SchSub', enData1, comData1, 0, function(data1) {
-//					if(data1.RspCode == 0) {
-//						console.log("data1:" + data1.RspTxt);
-//						if(data1.RspData) {
-//							mui('.mui-scroll-wrapper').scroll();
-//							for(var i = 0; i < data1.RspData.subs.length; i++) {
-//								var temp =  data1.RspData.subs[i];
-//								if (i == 0) {
-//									temp.ischeck = 1;
-//								}else{
-//									temp.ischeck = 0;
-//								}
-//							}
-//							catalog.kemu = data1.RspData.subs;
-//						}
-//					} else {
-//						console.log("data1:" + data1.RspTxt);
-//					}
-//				});
-//			}
-
+			//设置请求参数 ，存对象更好一点....写完才发现
+			function setData(){
+				selectDatas = {//如果之前有目录选择值，则使用之前的目录选择值查询目录
+							percode: SysPerCode==null?'':SysPerCode,//学段代码 
+							subcode: subjectCode==null?'':subjectCode,//科目代码 
+							matercode: SysMaterCode==null?'':SysMaterCode,//教材代码 
+							fasccode: SysFascCode==null?'':SysFascCode//分册代码 
+						} 
+				store.set(window.storageKeyName.SUBJECTCODE, subjectCode);
+				store.set(window.storageKeyName.SYSPERCODE, SysPerCode);
+				store.set(window.storageKeyName.SYSFASCCODE, SysFascCode);
+				store.set(window.storageKeyName.SYSMATERCODE, SysMaterCode);
+			}
+			//获取请求参数
+			function getData(){
+				return selectDatas;
+			}
+			//获取教材
+			function getZiYuanTextbookFunc(){
+				var comData = getData();
+				console.log('comData=='+JSON.stringify(comData));
+				var wd = events.showWaiting();
+				getZiYuanTextbook(comData, function(data) {
+					wd.close();
+					console.log('获取教材:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						if(data.RspData){
+							//学段列表
+							var xueduan= data.RspData.per.list;
+							for(var i = 0; i < xueduan.length; i++) {
+                                var temp =  xueduan[i];
+                                if (SysPerCode!=null&&temp.percode==SysPerCode) {
+                                    temp.ischeck = 1;
+                                }else if(SysPerCode==null&&i==0){
+                                	 temp.ischeck = 1;
+                                }else{
+                                    temp.ischeck = 0;
+                                }
+                            }
+//							console.log(JSON.stringify(xueduan))
+							//科目列表
+							var kemu= data.RspData.sub.list;
+							for(var i = 0; i < kemu.length; i++) {
+                                var temp =  kemu[i];
+                                if (subjectCode!=null&&temp.subcode==subjectCode) {
+                                    temp.ischeck = 1;
+                                }else if(subjectCode==null&&i==0){
+                                	 temp.ischeck = 1;
+                                }else{
+                                    temp.ischeck = 0;
+                                }
+                            }
+//							console.log(JSON.stringify(kemu))
+							//教材列表
+							var jiaoban= data.RspData.mater.list;
+							for(var i = 0; i < jiaoban.length; i++) {
+                                var temp =  jiaoban[i];
+                                if (SysMaterCode!=null&&temp.matercode==SysMaterCode) {
+                                    temp.ischeck = 1;
+                                }else if(SysMaterCode==null&&i==0){
+                                	 temp.ischeck = 1;
+                                }else{
+                                    temp.ischeck = 0;
+                                }
+                            }
+//							console.log(JSON.stringify(jiaoban))
+							//分册列表
+							var fence= data.RspData.fasc.list;
+							for(var i = 0; i < fence.length; i++) {
+                                var temp =  fence[i];
+                                if (SysFascCode!=null&&temp.fasccode==SysFascCode) {
+                                    temp.ischeck = 1;
+                                }else if(SysFascCode==null&&i==0){
+                                	 temp.ischeck = 1;
+                                }else{
+                                    temp.ischeck = 0;
+                                }
+                            }
+//							console.log(JSON.stringify(fence))
+							catalog.xueduan=xueduan;
+							catalog.kemu=kemu;
+							catalog.jiaoban=jiaoban;
+							catalog.fence=fence;
+							
+							//多级菜单,变量名替换
+							var catalogObj=data.RspData.catalog;
+							var catalogStr=JSON.stringify(catalogObj);
+							var str =catalogStr.replace(/childList/g,"children");
+							var rdata = JSON.parse(str);
+							catalog.menu = rdata||[];
+							catalog.isLoaded = true;
+							
+							//记录类别
+							var cate=data.RspData.category;
+							var newCategory=[];
+							newCategory.push({name:'全部',id:0,ischeck:1});
+							for(var i = 0; i < cate.length; i++){
+								var temp =  cate[i];
+								temp.ischeck=0;
+								newCategory.push(temp);
+							}
+							catalog.category=newCategory;
+						}
+					} else {
+						mui.toast(data.msg);
+					}
+				});
+			}
 		</script>
 	</body>
 

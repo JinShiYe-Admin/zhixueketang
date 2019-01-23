@@ -6,6 +6,7 @@
 		<title></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../../js/swiper/swiper.min.css">
 		<!--<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css"/>-->
 		<style type="text/css">
 			[v-cloak] {
@@ -51,6 +52,22 @@
 				color: #666666;
 				font-weight: normal;
 			}
+			
+			
+			.catalogs{
+				margin-top: 10px;
+			}
+			/*滑动菜单行高*/
+			.swiper-slide{
+				height:35px;
+			}
+			
+			.swiper-container{
+				margin-left: 20px !important;
+			}
+			.fontcolor{
+				color: #00CFBD;
+			}
 		</style>
 	</head>
 
@@ -60,10 +77,15 @@
 				<img :src=headImg style="width: 26px;height: 26px;border-radius: 50%;" />
 			</a>
 			<h1 @click="clickTitle()" class="mui-title" style="color: white;">
-				<a class="mui-icon" style="font-size: 17px;">学校通知<span class="mui-icon-arrowdown"></span></a>
+				<a class="mui-icon" style="font-size: 17px;">{{titleName}}<span class="mui-icon-arrowdown"></span></a>
 			</h1>
 		</header>
 		<div class="mui-content mui-scroll-wrapper mui-fullscreen" style="background: white;" id="contentData">
+			<div class="swiper-container catalogs" id="ziyuanbao">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide" :class="cate.ischeck==1?'fontcolor':''" v-for="(cate,index) in category" @tap="catalogItemClick(category,cate)">{{cate.name}}</div>
+				</div>
+			</div>
 			<div class="mui-scroll">
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell mui-media" v-for="(resourceModel,index) in resourceArray" @click="clickResourceModel(resourceModel,index)">
@@ -90,6 +112,8 @@
 		<script type="text/javascript" src="../../js/utils/vconsole.min.js"></script>
 		<script type="text/javascript" src="../../js/utils/vue.js"></script>
 		<script src="../../js/utils/utils.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/demoCssJs/jquery-2.1.4.js"></script>
+		<script type="text/javascript" src="../../js/swiper/swiper.js"></script>
 		<!--加密-->
 		<script src="../../js/libs/RSA/Barrett.js" type="text/javascript" charset="utf-8"></script>
 		<script src="../../js/libs/RSA/BigInt.js" type="text/javascript" charset="utf-8"></script>
@@ -111,6 +135,10 @@
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+			//取出选择的章节model，给标题赋值
+			var catalogItem = store.get(window.storageKeyName.CATALOGITEM);//选择的章节
+			//取出选择的章节model对应的类别，给滑动菜单赋值
+			var categoryList = store.get(window.storageKeyName.CATEGORY);//选择的类别
 			mui.init({
 				statusBarBackground: '#00CFBD',
 				swipeBack: false,
@@ -141,7 +169,14 @@
 				//4.获取学校通知列表
 				getZiYuanList();
 			}
-
+			//选择章节目录监听
+			window.addEventListener('selectCatalog', function(data) {
+				tempHead.titleName = data.detail[0].name;//给标题赋值
+				contentData.category = data.detail[1];//取出选择的章节model对应的类别，给滑动菜单赋值
+				//TODO 刷新列表  传值对象示例：（章节+类别数组）[{"sequence":815,"name":"第五课 《世说新语》两则","pid":810,"children":[],"id":815},[{"name":"微课","id":1},{"name":"课件","id":801}]]
+			});
+			
+			
 			/**
 			 * 下拉刷新具体业务实现
 			 */
@@ -208,30 +243,31 @@
 					tempHead.headImg = data.detail.imgurl;
 				});
 
-				var tempHead = new Vue({
-					el: "#tempHead",
-					data: {
-						personal: personal,
-						//							addFlag: ifNew(), //是否可以新建，0不可以
-						headImg: setImg(personal.imgurl)
-					},
-					methods: {
-						clickLeftImg: function() {
-							console.log('indexweeeeeeeeee:');
-							openMenu();
-						},
-						clickTitle: function() {
-							console.log('点击标题');
-							utils.mOpenWithData("../../html/catalog/catalogPage.html", {});
-							//							utils.mOpenWithData("../../html/catalog/inside_page.html", {});
-						}
-					}
-				});
-
 				//获取教材
 				getTextBook();
 			});
-
+			
+			var tempHead = new Vue({
+				el: "#tempHead",
+				data: {
+					personal: personal,
+					//							addFlag: ifNew(), //是否可以新建，0不可以
+					headImg: setImg(personal.imgurl),
+					titleName:''
+				},
+				methods: {
+					clickLeftImg: function() {
+						console.log('indexweeeeeeeeee:');
+						openMenu();
+					},
+					clickTitle: function() {
+						console.log('点击标题');
+						utils.mOpenWithData("../../html/catalog/catalogPage.html", {});
+						//							utils.mOpenWithData("../../html/catalog/inside_page.html", {});
+					}
+				}
+			});
+			
 			//获取教材
 			var getTextBook = function() {
 				var comData = {
@@ -246,6 +282,33 @@
 					console.log('获取教材:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						contentData.textBookDetail = data.RspData;
+						if (data.RspData.catalog.length>0) {
+							var tempModel = data.RspData.catalog[0];
+							if (tempModel.childList.length>0) {
+								var tempModel2 = tempModel.childList[0];
+								//给标题赋值
+								if(catalogItem==null){
+									tempHead.titleName=tempModel2.name;
+								}else{
+									tempHead.titleName=catalogItem.name;
+								}
+								//根据选择的章节model对应的类别，给滑动菜单赋值
+								if(categoryList==null){
+									var cate=data.RspData.category;
+									var newCategory=[];
+									newCategory.push({name:'全部',id:0,ischeck:1});
+									for(var i = 0; i < cate.length; i++){
+										var temp =  cate[i];
+										temp.ischeck=0;
+										newCategory.push(temp);
+									}
+									contentData.category=newCategory;
+								}else{
+									contentData.category=categoryList;
+								}
+								console.log(JSON.stringify(contentData.category));
+							}
+						}
 						//获取资源(分页) 
 						getZiYuanList();
 					} else {
@@ -418,7 +481,8 @@
 					textBookDetail: {}, //获取到的教材
 					flag: 0, //0刷新，1加载更多
 					resourceArray: [], //资源列表数组
-					pageIndex: 1 //第几页
+					pageIndex: 1, //第几页
+					category:[]
 				},
 				methods: {
 					clickResourceModel: function(model) {
@@ -438,8 +502,46 @@
 								}
 							});
 						}
+					},
+					catalogItemClick:function(parent,item){
+						console.log("选择的是这个:"+JSON.stringify(item));
+						if(item.ischeck==0){
+							for(var i=0;i<parent.length;i++){
+								var child=parent[i];
+								child.ischeck=0;
+							}
+							item.ischeck=1;
+							//TODO 根据选择值，刷新列表
+						}
 					}
-				}
+				},
+				mounted: function () {
+					//初始化滑动菜单
+					var swiper = new Swiper('.swiper-container', {
+					  	slidesPerView: 5,//菜单可见个数
+					  	spaceBetween: 10,//间隔
+					  	freeMode: true,//自由滑动模式
+					  	noSwiping : true,//禁止滑动
+					});
+		        },   
+		        computed: {
+			      getKm() {
+			        return this.category;
+			      }
+			    },
+			    watch: {
+			      getKm(val) {
+			      	//初始化滑动菜单，防止数据请求慢，导致的初始化失败问题
+			      	setTimeout(function(){
+			      		var swiper = new Swiper('.swiper-container', {
+						  	slidesPerView: 5,//菜单可见个数
+						  	spaceBetween: 10,//间隔
+						  	freeMode: true,//自由滑动模式
+						  	noSwiping : true,//禁止滑动
+						});
+			      	},500);
+			      }
+			    }
 			});
 
 			var slider = mui("#slider");
