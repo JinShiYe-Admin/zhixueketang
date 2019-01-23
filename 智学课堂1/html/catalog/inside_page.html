@@ -34,7 +34,7 @@
 				margin: 2px 0 0 0;
 			}
 			.mui-ellipsis {
-				margin: 13px 0 0 0;
+				margin: 0px 0 0 0;
 				height: 20px;
 				overflow: hidden;
 				word-break: break-all;
@@ -62,16 +62,16 @@
 				font-size: 12px;
 			}
 			.page-img{
-				width: 60px !important;
-				height: 60px !important;
+				width: 40px !important;
+				height: 40px !important;
 			}
 		</style>
 	</head>
 
 	<body>
-		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;">
+		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;" id="packHead">
 			<a id="returnBtn" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color:#ffffff"></a>
-			<h1 class="mui-title" style="color: white;">3.2.3这是一个标题</h1>
+			<h1 class="mui-title" style="color: white;">{{headTitle}}</h1>
 		</header>
 		<div id='scroll' class="mui-content">
 			<div id='pages'>
@@ -80,21 +80,21 @@
 				</div>-->
 				<div v-cloak class="mui-scroll">
 					<ul class="mui-table-view">
-						<li v-for="item in pageList" @click="toMealDetails($event,item)" class="mui-table-view-cell mui-media">
+						<li v-for="item in pageList" @click="toMealDetails(item)" class="mui-table-view-cell mui-media">
 							<a href="javascript:;">
-								<template v-if="item.lx =='pdf'">
-									<img class="mui-media-object mui-pull-left page-img" src="../../img/swiper/pdf.png">
-								</template>
-								<template v-else-if="item.lx =='word'">
-									<img class="mui-media-object mui-pull-left page-img" src="../../img/swiper/word.png">
-								</template>
-								<template v-else-if="item.lx =='mp4'">
+								<template v-if="item.file_ext =='mp4'">
 									<img class="mui-media-object mui-pull-left page-img" src="../../img/swiper/mp4.png">
 								</template>
+								<template v-else-if="item.file_ext =='doc'">
+									<img class="mui-media-object mui-pull-left page-img" src="../../img/swiper/word.png">
+								</template>
+								<template v-else="">
+									<img class="mui-media-object mui-pull-left page-img" src="../../img/swiper/pdf.png">
+								</template>
 								<div class="mui-media-body">
-									<div class="mui-media-body">
-										{{item.title}}
-										<p class='mui-ellipsis'>{{item.time}}|{{personal.utname}}</p>
+									<div class="mui-media-body" style="font-size: 16px;color: #333;">
+										{{item.name}}
+										<p class='mui-ellipsis' style="font-size: 12px;color: #999;">{{item.create_time}} | {{item.owner_name}}</p>
 									</div>
 								</div>
 							</a>
@@ -115,7 +115,7 @@
 		<script src='../../js/libs/crypto-js/require.js'></script>
 		<script src='../../js/utils/signHmacSHA1.js'></script>
 		<script src='../../js/libs/jquery.js'></script>
-		<script src="../../js/publicProtocolNew.js"></script>
+		<script src="../../js/publicProtocol-ziyuan.js"></script>
 		<script src='../../js/utils/sortSign.js'></script>
 		<script src="../../js/storageKeyName.js"></script>
 		<script src="../../js/utils/store.js" type="text/javascript" charset="utf-8"></script>
@@ -130,66 +130,57 @@
 			});
 			var personal;
 			var publicParameter;
+			var curPage = {};
 			mui.plusReady(function() {
-				//获取个人信息
-				personal = store.get(window.storageKeyName.PERSONALINFO);
-				console.log('personal:' + JSON.stringify(personal));
-				publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+				curPage = utils.getDataFromUrl(window.location.href);
+				console.log('2222:' + JSON.stringify(curPage));
 				getPageList();
+				packHead.headTitle = curPage.name;
+			});
+			var packHead = new Vue({
+				el: '#packHead',
+				data: {
+					headTitle:''
+				}
 			});
 			var pages = new Vue({
 				el: '#pages',
 				data: {
 					pageList: [],
-					flag: 0, //0刷新，1加载更多
-					pageIndex: 1, //当前页数
 					personal:""
 				},
 				methods: {
-					toMealDetails: function(event, item) {
-						var _event = event.target;
-//							utils.mOpenWithData("../../html/order/packageDetails_order.html", item);
-						console.log(JSON.stringify(item))
+					toMealDetails: function(model) {
+						console.log('toMealDetails:'+JSON.stringify(model));
+						if(model.file_ext == 'mp4') { //视频
+//							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
+						} else { //pdf
+							mui.openWindow({
+								url: '_www/js/pdfjs/index.html?' + model.convert_file_url,
+								id: 'pdf',
+								show: {
+									duration: 300
+								}
+							});
+						}
 					}
 				}
 			});
-			//3.12.获取内页列表
+			//获取资源包下的资源列表
 			function getPageList() {
-//				var enData1 = {};
-//				//不需要加密的数据
-//				var comData1 = {
-//					uuid: publicParameter.uuid, //用户设备号
-//					bustp: '2', //套餐类型,0全部,1基本套餐,2CP套餐
-//					utoken: personal.utoken, //用户令牌
-//					appid: publicParameter.appid //系统所分配的应用ID
-//				};
-//				events.showWaiting();
-//				//获取验证码
-//				//发送网络请求，data为网络返回值
-//				postDataEncry('SysBus', enData1, comData1, 0, function(data1) {
-//					console.log('SysBus:' + JSON.stringify(data1));
-//					events.closeWaiting();
-//					if(data1.RspCode == 0) {
-//						//主动添加是否订购字段
-//						for(var i = 0; i < data1.RspData.sysbus.length; i++) {
-//							var tempModel = data1.RspData.sysbus[i];
-//							tempModel.orderFlag = 0;
-//							tempModel.busimg = setImg(tempModel.busimg,1);
-//						}
-//						orders.orderList = [].concat(data1.RspData.sysbus);
-//						//用户已订购套餐及功能扩展栏目
-//						getUserBusFunc();
-//					} else {
-//						mui.toast(data1.RspTxt);
-//					}
-//				});
-				pages.pageList=[
-					{lx:'pdf',title:'山东济南市天桥区XXX高级中学啥啥啥到底是个啥',time:'2019年1月19日 11:04:06'},
-					{lx:'word',title:'山东济南市历城区XXX高级中学啥啥啥到底是个啥',time:'2019年1月19日 11:05:02'},
-					{lx:'mp4',title:'山东济南市高新区XXX高级中学啥啥啥到底是个啥',time:'2019年1月19日 11:05:04'},
-					{lx:'word',title:'山东济南市历下区XXX高级中学啥啥啥到底是个啥',time:'2019年1月19日 11:05:06'}
-				];
-				pages.personal=personal;
+				var comData = {
+					id: curPage.id //资源包id 必须
+				}
+				var wd = events.showWaiting();
+				getZiYuanResList(comData, function(data) {
+					wd.close();
+					console.log('获取资源包下的资源列表:' + JSON.stringify(data));
+					if(data.RspCode == 0) {
+						pages.pageList = data.RspData;
+					} else {
+						mui.toast(data.RspTxt);
+					}
+				});
 			}
 		</script>
 	</body>

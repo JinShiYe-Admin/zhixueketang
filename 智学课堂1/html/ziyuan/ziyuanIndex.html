@@ -98,9 +98,9 @@
 								<img v-else-if="resourceModel.file_ext == 'word'" class="mui-media-object mui-pull-left" src="../../img/ziyuan/word.png">
 								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/ziyuan/ppt.png">
 							</div>
-							<div class="mui-media-body">
+							<div class="mui-media-body" style="font-size: 16px;color: #333;">
 								{{resourceModel.name}}
-								<p class="mui-ellipsis">{{resourceModel.create_time}} | {{resourceModel.owner_name}}</p>
+								<p class="mui-ellipsis" style="font-size: 12px;color: #999;">{{resourceModel.create_time}} | {{resourceModel.owner_name}}</p>
 							</div>
 						</a>
 					</li>
