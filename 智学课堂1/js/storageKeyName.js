@@ -76,13 +76,7 @@ var storageKeyName = (function(mod) {
 		default:
 			break;
 }
-	mod.SUBJECTCODE = 'subjectCode';//科目选择值
-	mod.SYSPERCODE = 'SysPerCode';//系统学段选择值
-	mod.SYSFASCCODE = 'SysFascCode';//系统分册选择值
-	mod.SYSMATERCODE = 'SysMaterCode';//系统教版选择值
-	mod.CATALOGITEM = 'catalogItem';//选择的章节
-	mod.CATEGORY = 'category';//选择的章节对应的类别category
-	mod.BOOKOBJ = 'bookobj';//选择的教材对象    
+	mod.CATALOGOBJ = 'catalogObj';//滑动菜单选择值对象
 	
 	mod.BADGENUMBER = 'badgeNumber'//app角标
 	mod.PUBLICPARAMETER = 'publicParameter'//共用参数

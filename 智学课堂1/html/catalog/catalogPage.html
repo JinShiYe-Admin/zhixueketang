@@ -282,24 +282,28 @@
 			console.log('personal:' + JSON.stringify(personal));
 			//获取共用参数
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-			var subjectCode = store.get(window.storageKeyName.SUBJECTCODE);//科目选择值
-			var SysPerCode = store.get(window.storageKeyName.SYSPERCODE);//系统学段选择值
-			var SysFascCode = store.get(window.storageKeyName.SYSFASCCODE);//系统分册选择值
-			var SysMaterCode = store.get(window.storageKeyName.SYSMATERCODE);//系统教版选择值
+			var catalogObj = store.get(window.storageKeyName.CATALOGOBJ);//滑动菜单选择值对象
+			if(catalogObj==null){
+				catalogObj={
+					percode: '',//学段代码 
+					subcode: '',//科目代码 
+					matercode: '',//教材代码 
+					fasccode: ''//分册代码
+				}
+			}
 			var selectDatas;//请求参数
-			setData();//设置请求参数
 			getZiYuanTextbookFunc();
 			var catalog=new Vue({
 				el:'#catalog',
 				data:{
-					xueduan:[],
+					xueduan:[],//学段
 					kemu:[],//科目
-					jiaoban:[],
-					fence:[],
-					menu: [],
+					jiaoban:[],//教版
+					fence:[],//分册
+					menu: [],//多级菜单
 					isLoaded: false,
-					category:[],
-					book:''
+					category:[],//资源类型
+					book:''//教材
 				},
 				methods:{
 					catalogItemClick:function(parent,item,lx){
@@ -312,15 +316,15 @@
 							console.log("选择的是这个:"+JSON.stringify(item));
 							//重新查询目录
 							if(lx=='xd'){
-								SysPerCode=item.percode;
+								catalogObj.percode=item.percode;
 							}else if(lx=='km'){
-								subjectCode=item.subcode;
+								catalogObj.subcode=item.subcode;
 							}else if(lx=='jb'){
-								SysMaterCode=item.matercode;
+								catalogObj.matercode=item.matercode;
 							}else if(lx=='fc'){
-								SysFascCode=item.fasccode;
+								catalogObj.fasccode=item.fasccode;
 							}
-							setData();//设置请求参数
+							store.set(window.storageKeyName.CATALOGOBJ,catalogObj);
 							getZiYuanTextbookFunc();
 						}
 					},
@@ -329,9 +333,6 @@
 						var btnArray = ['否', '是'];
 						mui.confirm('确定切换到当前章节？', '提醒', btnArray, function(e) {
 							if (e.index == 1) {
-								store.set(window.storageKeyName.CATALOGITEM, model);
-								store.set(window.storageKeyName.CATEGORY, catalog.category);
-								store.set(window.storageKeyName.BOOKOBJ, catalog.book);
 								var newObj=[];
 								newObj.push(model);
 								newObj.push(catalog.category);
@@ -381,26 +382,9 @@
 					'popGesture': 'none'
 				});
 			});
-			//设置请求参数 ，存对象更好一点....写完才发现
-			function setData(){
-				selectDatas = {//如果之前有目录选择值，则使用之前的目录选择值查询目录
-							percode: SysPerCode==null?'':SysPerCode,//学段代码 
-							subcode: subjectCode==null?'':subjectCode,//科目代码 
-							matercode: SysMaterCode==null?'':SysMaterCode,//教材代码 
-							fasccode: SysFascCode==null?'':SysFascCode//分册代码 
-				}     
-				store.set(window.storageKeyName.SUBJECTCODE, subjectCode);
-				store.set(window.storageKeyName.SYSPERCODE, SysPerCode);
-				store.set(window.storageKeyName.SYSFASCCODE, SysFascCode);
-				store.set(window.storageKeyName.SYSMATERCODE, SysMaterCode);
-			}
-			//获取请求参数
-			function getData(){
-				return selectDatas;
-			}
 			//获取教材
 			function getZiYuanTextbookFunc(){
-				var comData = getData();
+				var comData = catalogObj;
 				console.log('comData=='+JSON.stringify(comData));
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {
@@ -410,12 +394,11 @@
 						if(data.RspData){
 							//学段列表
 							var xueduan= data.RspData.per.list;
+							var xdselected= data.RspData.per.selected;
 							for(var i = 0; i < xueduan.length; i++) {
                                 var temp =  xueduan[i];
-                                if (SysPerCode!=null&&temp.percode==SysPerCode) {
+                                if (temp.percode==xdselected) {
                                     temp.ischeck = 1;
-                                }else if(SysPerCode==null&&i==0){
-                                	 temp.ischeck = 1;
                                 }else{
                                     temp.ischeck = 0;
                                 }
@@ -423,12 +406,11 @@
 //							console.log(JSON.stringify(xueduan))
 							//科目列表
 							var kemu= data.RspData.sub.list;
+							var kmselected= data.RspData.sub.selected;
 							for(var i = 0; i < kemu.length; i++) {
                                 var temp =  kemu[i];
-                                if (subjectCode!=null&&temp.subcode==subjectCode) {
+                                if (temp.subcode==kmselected) {
                                     temp.ischeck = 1;
-                                }else if(subjectCode==null&&i==0){
-                                	 temp.ischeck = 1;
                                 }else{
                                     temp.ischeck = 0;
                                 }
@@ -436,12 +418,11 @@
 //							console.log(JSON.stringify(kemu))
 							//教材列表
 							var jiaoban= data.RspData.mater.list;
+							var jbselected= data.RspData.mater.selected;
 							for(var i = 0; i < jiaoban.length; i++) {
                                 var temp =  jiaoban[i];
-                                if (SysMaterCode!=null&&temp.matercode==SysMaterCode) {
+                                if (temp.matercode==jbselected) {
                                     temp.ischeck = 1;
-                                }else if(SysMaterCode==null&&i==0){
-                                	 temp.ischeck = 1;
                                 }else{
                                     temp.ischeck = 0;
                                 }
@@ -449,12 +430,11 @@
 //							console.log(JSON.stringify(jiaoban))
 							//分册列表
 							var fence= data.RspData.fasc.list;
+							var fcselected= data.RspData.fasc.selected;
 							for(var i = 0; i < fence.length; i++) {
                                 var temp =  fence[i];
-                                if (SysFascCode!=null&&temp.fasccode==SysFascCode) {
+                                if (temp.fasccode==fcselected) {
                                     temp.ischeck = 1;
-                                }else if(SysFascCode==null&&i==0){
-                                	 temp.ischeck = 1;
                                 }else{
                                     temp.ischeck = 0;
                                 }
