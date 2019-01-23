@@ -139,6 +139,7 @@
 			var catalogItem = store.get(window.storageKeyName.CATALOGITEM);//选择的章节
 			//取出选择的章节model对应的类别，给滑动菜单赋值
 			var categoryList = store.get(window.storageKeyName.CATEGORY);//选择的类别
+			var bookobj = store.get(window.storageKeyName.BOOKOBJ);//教材
 			mui.init({
 				statusBarBackground: '#00CFBD',
 				swipeBack: false,
@@ -171,9 +172,13 @@
 			}
 			//选择章节目录监听
 			window.addEventListener('selectCatalog', function(data) {
+				console.log(JSON.stringify(data.detail));
 				tempHead.titleName = data.detail[0].name;//给标题赋值
 				contentData.category = data.detail[1];//取出选择的章节model对应的类别，给滑动菜单赋值
-				//TODO 刷新列表  传值对象示例：（章节+类别数组）[{"sequence":815,"name":"第五课 《世说新语》两则","pid":810,"children":[],"id":815},[{"name":"微课","id":1},{"name":"课件","id":801}]]
+				contentData.book=data.detail[2];//教材
+				//TODO 刷新列表  传值对象示例：
+				//（章节+类别数组+教材）
+				//[{"sequence":922,"name":"第四课 就英法联军远征中国给巴特勒上尉的信","pid":918,"children":[],"id":922},[{"name":"全部","id":"","ischeck":1},{"name":"微课","id":1,"ischeck":0},{"name":"资源包","id":13,"ischeck":0},{"name":"教案","id":802,"ischeck":0}],{"name":"人教版初中语文八年级","id":38}]
 			});
 			
 			
@@ -296,7 +301,7 @@
 								if(categoryList==null){
 									var cate=data.RspData.category;
 									var newCategory=[];
-									newCategory.push({name:'全部',id:0,ischeck:1});
+									newCategory.push({name:'全部',id:'',ischeck:1});
 									for(var i = 0; i < cate.length; i++){
 										var temp =  cate[i];
 										temp.ischeck=0;
@@ -306,7 +311,12 @@
 								}else{
 									contentData.category=categoryList;
 								}
-								console.log(JSON.stringify(contentData.category));
+								
+								if(bookobj==null){
+									contentData.book=data.RspData.book;
+								}else{
+									contentData.book=bookobj;
+								}
 							}
 						}
 						//获取资源(分页) 
@@ -482,7 +492,8 @@
 					flag: 0, //0刷新，1加载更多
 					resourceArray: [], //资源列表数组
 					pageIndex: 1, //第几页
-					category:[]
+					category:[],
+					book:''
 				},
 				methods: {
 					clickResourceModel: function(model) {
@@ -504,7 +515,7 @@
 						}
 					},
 					catalogItemClick:function(parent,item){
-						console.log("选择的是这个:"+JSON.stringify(item));
+						console.log("选择的是这个:"+JSON.stringify(item)+",教材："+JSON.stringify(contentData.book));
 						if(item.ischeck==0){
 							for(var i=0;i<parent.length;i++){
 								var child=parent[i];
@@ -512,6 +523,8 @@
 							}
 							item.ischeck=1;
 							//TODO 根据选择值，刷新列表
+							//传值示例：
+							//目录：{"name":"资源包","id":13,"ischeck":0},教材：{"name":"人教版初中语文八年级","id":38}
 						}
 					}
 				},

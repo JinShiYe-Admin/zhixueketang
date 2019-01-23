@@ -298,7 +298,8 @@
 					fence:[],
 					menu: [],
 					isLoaded: false,
-					category:[]
+					category:[],
+					book:''
 				},
 				methods:{
 					catalogItemClick:function(parent,item,lx){
@@ -330,10 +331,11 @@
 							if (e.index == 1) {
 								store.set(window.storageKeyName.CATALOGITEM, model);
 								store.set(window.storageKeyName.CATEGORY, catalog.category);
+								store.set(window.storageKeyName.BOOKOBJ, catalog.book);
 								var newObj=[];
 								newObj.push(model);
 								newObj.push(catalog.category);
-								console.log(JSON.stringify(newObj));
+								newObj.push(catalog.book);
 								//通知上一页，把参数传过去
 								mui.fire(plus.webview.currentWebview().opener(), 'selectCatalog', newObj);
 								mui.back();
@@ -474,13 +476,15 @@
 							//记录类别
 							var cate=data.RspData.category;
 							var newCategory=[];
-							newCategory.push({name:'全部',id:0,ischeck:1});
+							newCategory.push({name:'全部',id:'',ischeck:1});
 							for(var i = 0; i < cate.length; i++){
 								var temp =  cate[i];
 								temp.ischeck=0;
 								newCategory.push(temp);
 							}
 							catalog.category=newCategory;
+							//教材
+							catalog.book=data.RspData.book;
 						}
 					} else {
 						mui.toast(data.msg);
