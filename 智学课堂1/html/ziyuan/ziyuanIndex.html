@@ -95,9 +95,10 @@
 								<img class="mui-media-object mui-pull-left" src="../../img/ziyuan/ziyuanPack.png" />
 							</div>
 							<div v-else="">
-								<img v-if="resourceModel.file_ext == 'mp4'" class="mui-media-object mui-pull-left" src="../../img/ziyuan/mp4.png">
-								<img v-else-if="resourceModel.file_ext == 'word'" class="mui-media-object mui-pull-left" src="../../img/ziyuan/word.png">
-								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/ziyuan/ppt.png">
+								<img v-if="resourceModel.file_ext == 'mp4' || resourceModel.file_ext == 'mp3' " class="mui-media-object mui-pull-left" src="../../img/swiper/mp4.png">
+								<img v-else-if="resourceModel.file_ext == 'word'" class="mui-media-object mui-pull-left" src="../../img/swiper/word.png">
+								<img v-else-if="resourceModel.file_ext == 'pdf'" class="mui-media-object mui-pull-left" src="../../img/swiper/pdf.png">
+								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/swiper/image.png">
 							</div>
 							<div class="mui-media-body" style="font-size: 16px;color: #333;">
 								{{resourceModel.name}}
