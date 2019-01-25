@@ -95,9 +95,10 @@
 								<img class="mui-media-object mui-pull-left" src="../../img/ziyuan/ziyuanPack.png" />
 							</div>
 							<div v-else="">
-								<img v-if="resourceModel.file_ext == 'mp4'" class="mui-media-object mui-pull-left" src="../../img/ziyuan/mp4.png">
-								<img v-else-if="resourceModel.file_ext == 'word'" class="mui-media-object mui-pull-left" src="../../img/ziyuan/word.png">
-								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/ziyuan/ppt.png">
+								<img v-if="resourceModel.file_ext == 'mp4' || resourceModel.file_ext == 'mp3' " class="mui-media-object mui-pull-left" src="../../img/swiper/mp4.png">
+								<img v-else-if="resourceModel.file_ext == 'word'" class="mui-media-object mui-pull-left" src="../../img/swiper/word.png">
+								<img v-else-if="resourceModel.file_ext == 'pdf'" class="mui-media-object mui-pull-left" src="../../img/swiper/pdf.png">
+								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/swiper/image.png">
 							</div>
 							<div class="mui-media-body" style="font-size: 16px;color: #333;">
 								{{resourceModel.name}}
@@ -136,11 +137,6 @@
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
 			console.log('personal:' + JSON.stringify(personal));
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-			//取出选择的章节model，给标题赋值
-			var catalogItem = store.get(window.storageKeyName.CATALOGITEM); //选择的章节
-			//取出选择的章节model对应的类别，给滑动菜单赋值
-			var categoryList = store.get(window.storageKeyName.CATEGORY); //选择的类别
-			var bookobj = store.get(window.storageKeyName.BOOKOBJ); //教材
 			mui.init({
 				statusBarBackground: '#00CFBD',
 				swipeBack: false,
@@ -509,15 +505,24 @@
 						} else if(model.file_ext == 'mp4'||model.file_ext == 'mp3') { //视频
 							utils.mOpenWithData("../../html/ziyuan/playVideo.html", model);
 						} else if(model.file_ext == 'jpg'||model.file_ext == 'png') { //照片
-							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
+							var imgUrl=model.original_file_url;
+							plus.nativeUI.previewImage(imgUrl, {
+						      current: 0,
+						      loop: false,
+						      indicator: 'number'
+						    });
 						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx') {//文档
-							mui.openWindow({
-								url: '_www/js/pdfjs/index.html?' + model.convert_file_url,
-								id: 'pdf',
-								show: {
-									duration: 300
-								}
-							});
+							if(plus.os.name == 'Android') {
+								mui.openWindow({
+									url: '_www/js/pdfjs/index.html?' + model.convert_file_url,
+									id: 'pdf',
+									show: {
+										duration: 300
+									}
+								});
+							}else{
+								plus.runtime.openFile(model.convert_file_url);
+							}
 						} else if(model.file_ext == 'wmv'||model.file_ext == 'flash') {
 							mui.toast('不知道查看此类型文件');
 						}
