@@ -292,7 +292,14 @@
 				}
 			}
 			var selectDatas;//请求参数
-			getZiYuanTextbookFunc();
+			mui.plusReady(function() {
+				var wv = plus.webview.currentWebview(); 
+				// 关闭侧滑返回功能
+				wv.setStyle({
+					'popGesture': 'none'
+				});
+				getZiYuanTextbookFunc();
+			});
 			var catalog=new Vue({
 				el:'#catalog',
 				data:{
@@ -374,14 +381,6 @@
 			});
 			
 			
-			
-			mui.plusReady(function() {
-				var wv = plus.webview.currentWebview(); 
-				// 关闭侧滑返回功能
-				wv.setStyle({
-					'popGesture': 'none'
-				});
-			});
 			//获取教材
 			function getZiYuanTextbookFunc(){
 				var comData = catalogObj;
