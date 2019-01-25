@@ -1,22 +1,22 @@
 {
-	"html/ziyuan/ziyuanIndex.html": {
-		"refer": [
-			"html/catalog/catalogPage2.html",
-			"html/ziyuan/mine.html",
-			"html/catalog/catalogPage.html"
-		]
-	},
-	"html/login/loginIndex.html": {
-		"refer": [
-			"html/login/index.html"
-		]
-	},
-	"html/login/index.html": {
-		"resources": [
-			"html/ziyuan/ziyuanIndex.html"
-		],
-		"refer": [
-			"html/ziyuan/ziyuanIndex.html"
-		]
-	}
+  "html/ziyuan/ziyuanIndex.html": {
+    "refer": [
+      "html/catalog/catalogPage2.html",
+      "html/ziyuan/mine.html",
+      "html/catalog/catalogPage.html"
+    ]
+  },
+  "html/login/loginIndex.html": {
+    "refer": [
+      "html/login/index.html"
+    ]
+  },
+  "html/login/index.html": {
+    "resources": [
+      "html/ziyuan/ziyuanIndex.html"
+    ],
+    "refer": [
+      "html/ziyuan/ziyuanIndex.html"
+    ]
+  }
 }

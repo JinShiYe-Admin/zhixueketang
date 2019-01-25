@@ -181,6 +181,8 @@
 				contentData.categoryArray = data.detail[1];
 				//教材
 				contentData.bookModel = data.detail[2]; //教材
+				//刷新数据
+				pulldownRefresh();
 			});
 
 			/**
@@ -501,14 +503,14 @@
 				},
 				methods: {
 					clickResourceModel: function(model) {
-						console.log('点击li：' + model);
+						console.log('点击li：' + JSON.stringify(model));
 						if(model.is_pack) { //资源包
 							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
-						} else if(model.file_ext == 'mp4') { //视频
+						} else if(model.file_ext == 'mp4'||model.file_ext == 'mp3') { //视频
 							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
-						} else { //pdf
-							//							model.convert_file_url = model.convert_file_url.split('?')[0];
-							//							utils.mOpenWithData('_www/js/pdfjs/index.html?'+model.convert_file_url, model);
+						} else if(model.file_ext == 'jpg'||model.file_ext == 'png') { //照片
+							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
+						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx') {//文档
 							mui.openWindow({
 								url: '_www/js/pdfjs/index.html?' + model.convert_file_url,
 								id: 'pdf',
@@ -516,6 +518,8 @@
 									duration: 300
 								}
 							});
+						} else if(model.file_ext == 'wmv'||model.file_ext == 'flash') {
+							mui.toast('不知道查看此类型文件');
 						}
 					},
 					catalogItemClick: function(parent, item) {
