@@ -1,32 +1,72 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>播放视频</title>
-    <link rel="stylesheet" href="dist/css/ckin.css">
-    <link rel="stylesheet" href="demoDist/demo.css">
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="152x152" href="/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="/favicons/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="/favicons/favicon-16x16.png" sizes="16x16">
-    <link rel="manifest" href="/favicons/manifest.json">
-    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
-    <link rel="shortcut icon" href="/favicons/favicon.ico">
-    <meta name="msapplication-config" content="/favicons/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
-  
-</head>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>播放视频</title>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.css" />
+	</head>
 
-<body>
-    <section class="demo-section demo-section--light" id="demo">
-        <div class="container">
-            <video poster="ckin.jpg" src="ckin.mp4" data-ckin="default" data-overlay="1" data-title="The curious case of Chameleon..."></video>
-        </div>
-    </section>
-    <script src="dist/js/ckin.js"></script>
-  
-</body>
+	<body style="background: black;">
+		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;" id="headVue">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" style="color: white;"></a>
+			<h1 class="mui-title" style="color: white;">{{curPage.name}}</h1>
+		</header>
+		<div id="pages">
+			<br/><br/><br/><br/><br/><br/>
+			<div id="video" style="width:100%;height:300px;background-color:#000000;margin:auto"></div>
+			<br/>
+			<p style="margin-left: 10px;font-size: 16px;color: white;">{{curPage.name}}</p>
+			<div class="">
+				<p style="margin-left: 10px;float: left;">{{curPage.owner_name}} | {{curPage.create_time}}</p>
+				<p style="float: right;background: #13B6FA;margin-right: 10px;padding-left: 8px;padding-right: 8px;border-radius:4px;color: white;">{{curPage.category_name}}</p>
+			</div>
+		</div>
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/utils/utils.js"></script>
+		<script src="../../js/utils/vue.js"></script>
+		<script src="../../js/utils/vconsole.min.js"></script>
+		<script src="../../js/storageKeyName.js"></script>
+		<script src="../../js/utils/store.js"></script>
+		<script src="../../js/utils/events.js"></script>
+		<script type="text/javascript">
+			var video = null;
+			// H5 plus事件处理
+			function plusReady() {
+				pages.curPage = utils.getDataFromUrl(window.location.href);
+				headVue.curPage = utils.getDataFromUrl(window.location.href);
+				console.log('2222:' + JSON.stringify(pages.curPage));
+				// 创建视频播放控件
+				video = new plus.video.VideoPlayer('video', {
+					src: pages.curPage.original_file_url
+				});
+				playVideo();
+				setTimeout("fullscreenVideo()", 1000);
+			}
+			document.addEventListener('plusready', plusReady, false);
+			// 播放视频
+			function playVideo() {
+				video.play();
+			}
+			// 全屏播放
+			function fullscreenVideo() {
+				video.requestFullScreen();
+			}
+			var headVue = new Vue({
+				el: '#headVue',
+				data: {
+					curPage: {}
+				}
+			});
+
+			var pages = new Vue({
+				el: '#pages',
+				data: {
+					curPage: {}
+				}
+			});
+		</script>
+	</body>
 
 </html>
