@@ -158,18 +158,27 @@
 						if(model.is_pack) { //资源包
 							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
 						} else if(model.file_ext == 'mp4'||model.file_ext == 'mp3') { //视频
-							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
+							utils.mOpenWithData("../../html/ziyuan/playVideo.html", model);
 						} else if(model.file_ext == 'jpg'||model.file_ext == 'png') { //照片
-							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
+							var imgUrl=model.original_file_url;
+							plus.nativeUI.previewImage(imgUrl, {
+						      current: 0,
+						      loop: false,
+						      indicator: 'number'
+						    });
 						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx') {//文档
-							mui.openWindow({
-								url: '_www/js/pdfjs/index.html?' + model.convert_file_url,
-								id: 'pdf',
-								show: {
-									duration: 300
-								}
-							});
-						} else if(model.file_ext == 'wmv'||model.file_ext == 'flash') {
+							if(plus.os.name == 'Android') {
+								mui.openWindow({
+									url: '_www/js/pdfjs/index.html?' + model.convert_file_url,
+									id: 'pdf',
+									show: {
+										duration: 300
+									}
+								});
+							}else{
+								plus.runtime.openFile(model.convert_file_url);
+							}
+						} else {
 							mui.toast('不知道查看此类型文件');
 						}
 					}
