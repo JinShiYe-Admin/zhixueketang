@@ -96,7 +96,7 @@
 							</div>
 							<div v-else="">
 								<img v-if="resourceModel.file_ext == 'mp4' || resourceModel.file_ext == 'mp3' " class="mui-media-object mui-pull-left" src="../../img/swiper/mp4.png">
-								<img v-else-if="resourceModel.file_ext == 'word'" class="mui-media-object mui-pull-left" src="../../img/swiper/word.png">
+								<img v-else-if="resourceModel.file_ext == 'ppt'||resourceModel.file_ext == 'pptx'||resourceModel.file_ext == 'doc'||resourceModel.file_ext == 'docx'||resourceModel.file_ext == 'pdf'" class="mui-media-object mui-pull-left" src="../../img/swiper/word.png">
 								<img v-else-if="resourceModel.file_ext == 'pdf'" class="mui-media-object mui-pull-left" src="../../img/swiper/pdf.png">
 								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/swiper/image.png">
 							</div>
@@ -501,30 +501,40 @@
 					clickResourceModel: function(model) {
 						console.log('点击li：' + JSON.stringify(model));
 						if(model.is_pack) { //资源包
+							console.log('000000001');
 							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
 						} else if(model.file_ext == 'mp4'||model.file_ext == 'mp3') { //视频
+							console.log('000000002');
 							utils.mOpenWithData("../../html/ziyuan/playVideo.html", model);
 						} else if(model.file_ext == 'jpg'||model.file_ext == 'png') { //照片
+							console.log('000000003');
 							var imgUrl=model.original_file_url;
 							plus.nativeUI.previewImage(imgUrl, {
 						      current: 0,
 						      loop: false,
 						      indicator: 'number'
 						    });
-						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx') {//文档
+						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx'||model.file_ext == 'pdf') {//文档
+							var tempUrl = model.convert_file_url;
+							if (model.file_ext == 'pdf') {
+								tempUrl = model.original_file_url;
+							}
+							console.log('000000004:'+tempUrl);
 							if(plus.os.name == 'Android') {
+								console.log('000000005');
 								mui.openWindow({
-									url: '_www/js/pdfjs/index.html?' + model.convert_file_url,
+									url: '_www/js/pdfjs/index.html?' + tempUrl,
 									id: 'pdf',
 									show: {
 										duration: 300
 									}
 								});
 							}else{
-								plus.runtime.openFile(model.convert_file_url);
+								console.log('000000006');
+								plus.runtime.openFile(tempUrl);
 							}
 						} else {
-							mui.toast('不知道查看此类型文件');
+							mui.toast('不支持查看此类型文件');
 						}
 					},
 					catalogItemClick: function(parent, item) {

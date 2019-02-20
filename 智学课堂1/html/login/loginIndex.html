@@ -209,20 +209,20 @@
 								var personal = store.get(window.storageKeyName.PERSONALINFO);
 								console.log('personal000:' + JSON.stringify(personal));
 
-								var info = plus.push.getClientInfo();
-								var tempBindData = {
-									appId: info.appid,
-									alias: data1.RspData.utid,
-									cid: info.clientid
-								}
-								bindPro(tempBindData, function function_name(data) {
-									//									events.closeWaiting();
-									if(data.RspCode == 0) {
-										//										utils.mOpenWithData("../../index.html", {});
-									} else {
-										//											mui.toast(data.RspTxt);
-									}
-								});
+//								var info = plus.push.getClientInfo();
+//								var tempBindData = {
+//									appId: info.appid,
+//									alias: data1.RspData.utid,
+//									cid: info.clientid
+//								}
+//								bindPro(tempBindData, function function_name(data) {
+//									//									events.closeWaiting();
+//									if(data.RspCode == 0) {
+//										//										utils.mOpenWithData("../../index.html", {});
+//									} else {
+//										//											mui.toast(data.RspTxt);
+//									}
+//								});
 
 								//如果密码为1--6，让修改密码后，进入主界面
 								if(personal.password0 == '123456') {

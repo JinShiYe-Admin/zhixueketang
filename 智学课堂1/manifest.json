@@ -1,4 +1,4 @@
-﻿{
+{
     "@platforms": ["android", "iPhone", "iPad"],
     "id": "H5C8B70A9",/*应用的标识，创建应用时自动生成，勿手动修改*/
     "name": "智学课堂",/*应用名称，程序桌面图标名称*/
@@ -37,7 +37,7 @@
         },
         "Speech": {
             "description": "管理语音识别插件"
-        }
+        },"VideoPlayer":{}
     },
     "plus": {
         "splashscreen": {
