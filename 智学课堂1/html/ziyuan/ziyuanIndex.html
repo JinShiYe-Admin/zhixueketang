@@ -95,10 +95,32 @@
 								<img class="mui-media-object mui-pull-left" src="../../img/ziyuan/ziyuanPack.png" />
 							</div>
 							<div v-else="">
-								<img v-if="resourceModel.file_ext == 'mp4' || resourceModel.file_ext == 'mp3' " class="mui-media-object mui-pull-left" src="../../img/swiper/mp4.png">
-								<img v-else-if="resourceModel.file_ext == 'ppt'||resourceModel.file_ext == 'pptx'||resourceModel.file_ext == 'doc'||resourceModel.file_ext == 'docx'||resourceModel.file_ext == 'pdf'" class="mui-media-object mui-pull-left" src="../../img/swiper/word.png">
+								<img v-if="resourceModel.file_ext == 'mp4'" class="mui-media-object mui-pull-left" src="../../img/swiper/mp4.png">
+								<img v-else-if="resourceModel.file_ext == 'doc'" class="mui-media-object mui-pull-left" src="../../img/swiper/doc.png" />
+								<img v-else-if="resourceModel.file_ext == 'docx'" class="mui-media-object mui-pull-left" src="../../img/swiper/docx.png" />
+								<img v-else-if="resourceModel.file_ext == 'mp3'" class="mui-media-object mui-pull-left" src="../../img/swiper/mp3.png">
+								<img v-else-if="resourceModel.file_ext == 'asf'" class="mui-media-object mui-pull-left" src="../../img/swiper/asf.png">
+								<img v-else-if="resourceModel.file_ext == 'avi'" class="mui-media-object mui-pull-left" src="../../img/swiper/avi.png">
+								<img v-else-if="resourceModel.file_ext == 'flv'" class="mui-media-object mui-pull-left" src="../../img/swiper/flv.png">
+								<img v-else-if="resourceModel.file_ext == 'gif'" class="mui-media-object mui-pull-left" src="../../img/swiper/gif.png">
+								<img v-else-if="resourceModel.file_ext == 'ppt'" class="mui-media-object mui-pull-left" src="../../img/swiper/ppt.png">
+								<img v-else-if="resourceModel.file_ext == 'pptx'" class="mui-media-object mui-pull-left" src="../../img/swiper/pptx.png">
+								<img v-else-if="resourceModel.file_ext == 'xls'" class="mui-media-object mui-pull-left" src="../../img/swiper/xls.png">
+								<img v-else-if="resourceModel.file_ext == 'xlsx'" class="mui-media-object mui-pull-left" src="../../img/swiper/xlsx.png">
+								<img v-else-if="resourceModel.file_ext == 'mpg'" class="mui-media-object mui-pull-left" src="../../img/swiper/mpg.png">
+								<img v-else-if="resourceModel.file_ext == 'swf'" class="mui-media-object mui-pull-left" src="../../img/swiper/swf.png">
+								<img v-else-if="resourceModel.file_ext == 'ts'" class="mui-media-object mui-pull-left" src="../../img/swiper/ts.png">
+								<img v-else-if="resourceModel.file_ext == 'wav'" class="mui-media-object mui-pull-left" src="../../img/swiper/wav.png">
+								<img v-else-if="resourceModel.file_ext == 'wma'" class="mui-media-object mui-pull-left" src="../../img/swiper/wma.png">
+								<img v-else-if="resourceModel.file_ext == 'wmv'" class="mui-media-object mui-pull-left" src="../../img/swiper/wmv.png">
 								<img v-else-if="resourceModel.file_ext == 'pdf'" class="mui-media-object mui-pull-left" src="../../img/swiper/pdf.png">
-								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/swiper/image.png">
+								<img v-else-if="resourceModel.file_ext == 'exe'" class="mui-media-object mui-pull-left" src="../../img/swiper/exe.png">
+								<img v-else-if="resourceModel.file_ext == 'jpg'" class="mui-media-object mui-pull-left" src="../../img/swiper/jpg.png">
+								<img v-else-if="resourceModel.file_ext == 'png'" class="mui-media-object mui-pull-left" src="../../img/swiper/png.png">
+								<img v-else-if="resourceModel.file_ext == 'rar'" class="mui-media-object mui-pull-left" src="../../img/swiper/rar.png">
+								<img v-else-if="resourceModel.file_ext == 'zip'" class="mui-media-object mui-pull-left" src="../../img/swiper/zip.png">
+								<img v-else-if="resourceModel.file_ext == 'txt'" class="mui-media-object mui-pull-left" src="../../img/swiper/txt.png">
+								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/swiper/other.png">
 							</div>
 							<div class="mui-media-body" style="font-size: 16px;color: #333;">
 								{{resourceModel.name}}
@@ -503,27 +525,30 @@
 						if(model.is_pack) { //资源包
 							console.log('000000001');
 							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
-						} else if(model.file_ext == 'mp4'||model.file_ext == 'mp3') { //视频
-							console.log('000000002');
-							utils.mOpenWithData("../../html/ziyuan/playVideo.html", model);
-						} else if(model.file_ext == 'jpg'||model.file_ext == 'png') { //照片
+						} else if(model.file_ext == 'mp4'||model.file_ext == 'mp3'||model.file_ext == 'wmv'||model.file_ext == 'wma'||model.file_ext == 'mpg'||model.file_ext == 'avi'||model.file_ext == 'flv'||model.file_ext == 'mkv'||model.file_ext == 'asf') { //视频、音频
+							if (model.file_ext == 'mp4'||model.file_ext == 'mp3') {
+								utils.mOpenWithData("../../html/ziyuan/playVideo.html", model);
+							} else{
+								plus.runtime.openWeb(model.openFileUrl);
+							}
+						} else if(model.file_ext == 'jpg'||model.file_ext == 'png'||model.file_ext == 'gif') { //照片
 							console.log('000000003');
-							var imgUrl=model.original_file_url;
-							plus.nativeUI.previewImage(imgUrl, {
+//							var imgUrl=model.original_file_url;
+							plus.nativeUI.previewImage(model.openFileUrl, {
 						      current: 0,
 						      loop: false,
 						      indicator: 'number'
 						    });
-						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx'||model.file_ext == 'pdf') {//文档
-							var tempUrl = model.convert_file_url;
-							if (model.file_ext == 'pdf') {
-								tempUrl = model.original_file_url;
-							}
-							console.log('000000004:'+tempUrl);
+						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx'||model.file_ext == 'pdf'||model.file_ext == 'xlsx'||model.file_ext == 'xls') {//文档
+//							var tempUrl = model.convert_file_url;
+//							if (model.file_ext == 'pdf') {
+//								tempUrl = model.original_file_url;
+//							}
+//							console.log('000000004:'+tempUrl);
 							if(plus.os.name == 'Android') {
 								console.log('000000005');
 								mui.openWindow({
-									url: '_www/js/pdfjs/index.html?' + tempUrl,
+									url: '_www/js/pdfjs/index.html?' + model.openFileUrl,
 									id: 'pdf',
 									show: {
 										duration: 300
@@ -531,7 +556,7 @@
 								});
 							}else{
 								console.log('000000006');
-								plus.runtime.openFile(tempUrl);
+								plus.runtime.openWeb(model.openFileUrl);
 							}
 						} else {
 							mui.toast('不支持查看此类型文件');
@@ -559,12 +584,12 @@
 					});
 				},
 				computed: {
-					getKm() {
+					getKm: function() {
 						return this.categoryArray;
 					}
 				},
 				watch: {
-					getKm(val) {
+					getKm: function(val) {
 						//初始化滑动菜单，防止数据请求慢，导致的初始化失败问题
 						setTimeout(function() {
 							var swiper = new Swiper('.swiper-container', {
@@ -612,6 +637,11 @@
 						for(var i = 0; i < data.RspData.list.length; i++) {
 							var model = data.RspData.list[i];
 							model.create_time = modifyTimeFormat(model.create_time);
+							if (model.convert_file_url==null||model.convert_file_url.length==0) {
+								model.openFileUrl = model.original_file_url;
+							} else{
+								model.openFileUrl = model.convert_file_url;
+							}
 						}
 						if(contentData.flag == 0) { //刷新
 							contentData.resourceArray = [].concat(data.RspData.list);

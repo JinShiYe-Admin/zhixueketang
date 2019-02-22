@@ -39,7 +39,7 @@
 				console.log('2222:' + JSON.stringify(pages.curPage));
 				// 创建视频播放控件
 				video = new plus.video.VideoPlayer('video', {
-					src: pages.curPage.original_file_url
+					src: pages.curPage.openFileUrl
 				});
 				playVideo();
 				setTimeout("fullscreenVideo()", 1000);

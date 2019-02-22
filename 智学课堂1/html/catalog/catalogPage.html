@@ -361,12 +361,12 @@
 					});
 		        },   
 		        computed: {
-			      getKm() {
+			      getKm: function() {
 			        return this.kemu;
 			      }
 			    },
 			    watch: {
-			      getKm(val) {
+			      getKm: function(val) {
 			      	//初始化滑动菜单，防止数据请求慢，导致的初始化失败问题
 			      	setTimeout(function(){
 			      		var swiper = new Swiper('.swiper-container', {
