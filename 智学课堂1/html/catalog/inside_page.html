@@ -169,6 +169,10 @@
 				methods: {
 					toMealDetails: function(model) {
 						console.log('toMealDetails:'+JSON.stringify(model));
+						if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+							mui.toast('网络异常，请检查网络设置！');
+							return;
+						}
 						if(model.is_pack) { //资源包
 							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
 						} else if(model.file_ext == 'mp4'||model.file_ext == 'mp3'||model.file_ext == 'wmv'||model.file_ext == 'wma'||model.file_ext == 'mpg'||model.file_ext == 'avi'||model.file_ext == 'flv'||model.file_ext == 'mkv'||model.file_ext == 'asf') { //视频、音频

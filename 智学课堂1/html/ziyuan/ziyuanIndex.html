@@ -338,7 +338,7 @@
 									matercode: data.RspData.mater.selected, //教材代码 
 									fasccode: data.RspData.fasc.selected //分册代码
 								}
-								store.set(window.storageKeyName.CATALOGOBJ,catalogObj);
+								store.set(window.storageKeyName.CATALOGOBJ, catalogObj);
 							}
 						}
 						//获取资源(分页) 
@@ -521,46 +521,50 @@
 				methods: {
 					clickResourceModel: function(model) {
 						console.log('点击li：' + JSON.stringify(model));
+						if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
+							mui.toast('网络异常，请检查网络设置！');
+							return;
+						}
 						if(model.is_pack) { //资源包
 							console.log('000000001');
 							utils.mOpenWithData("../../html/catalog/inside_page.html", model);
-						} else if(model.file_ext == 'mp4'||model.file_ext == 'mp3'||model.file_ext == 'wmv'||model.file_ext == 'wma'||model.file_ext == 'mpg'||model.file_ext == 'avi'||model.file_ext == 'flv'||model.file_ext == 'mkv'||model.file_ext == 'asf') { //视频、音频
-							if (model.file_ext == 'mp4'||model.file_ext == 'mp3') {
+						} else if(model.file_ext == 'mp4' || model.file_ext == 'mp3' || model.file_ext == 'wmv' || model.file_ext == 'wma' || model.file_ext == 'mpg' || model.file_ext == 'avi' || model.file_ext == 'flv' || model.file_ext == 'mkv' || model.file_ext == 'asf') { //视频、音频
+							if(model.file_ext == 'mp4' || model.file_ext == 'mp3') {
 								utils.mOpenWithData("../../html/ziyuan/playVideo.html", model);
-							} else{
+							} else {
 								plus.runtime.openWeb(model.openFileUrl);
 							}
-						} else if(model.file_ext == 'jpg'||model.file_ext == 'png'||model.file_ext == 'gif') { //照片
+						} else if(model.file_ext == 'jpg' || model.file_ext == 'png' || model.file_ext == 'gif') { //照片
 							console.log('000000003');
-//							var imgUrl=model.original_file_url;
+							//							var imgUrl=model.original_file_url;
 							if(plus.os.name == 'Android') {
-								plus.pushPermission.openFileFromURL(JSON.stringify(model),function(result) {
+								plus.pushPermission.openFileFromURL(JSON.stringify(model), function(result) {
 									console.log("result>>>>>>" + result[0]);
 								}, function(result) {
 									console.log('未知错误：' + result);
 								});
 								// plus.runtime.openWeb(model.openFileUrl);
-							}else{
+							} else {
 								plus.nativeUI.previewImage(model.openFileUrl, {
-							      current: 0,
-							      loop: false,
-							      indicator: 'number'
-							    });
+									current: 0,
+									loop: false,
+									indicator: 'number'
+								});
 							}
-						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx'||model.file_ext == 'pdf'||model.file_ext == 'xlsx'||model.file_ext == 'xls') {//文档
-//							var tempUrl = model.convert_file_url;
-//							if (model.file_ext == 'pdf') {
-//								tempUrl = model.original_file_url;
-//							}
-//							console.log('000000004:'+tempUrl);
+						} else if(model.file_ext == 'ppt' || model.file_ext == 'pptx' || model.file_ext == 'doc' || model.file_ext == 'docx' || model.file_ext == 'pdf' || model.file_ext == 'xlsx' || model.file_ext == 'xls') { //文档
+							//							var tempUrl = model.convert_file_url;
+							//							if (model.file_ext == 'pdf') {
+							//								tempUrl = model.original_file_url;
+							//							}
+							//							console.log('000000004:'+tempUrl);
 							if(plus.os.name == 'Android') {
 								console.log('000000005');
-								plus.pushPermission.openFileFromURL(JSON.stringify(model),function(result) {
+								plus.pushPermission.openFileFromURL(JSON.stringify(model), function(result) {
 									console.log("result>>>>>>" + result[0]);
 								}, function(result) {
 									console.log('未知错误：' + result);
 								});
-							}else{
+							} else {
 								console.log('000000006');
 								plus.runtime.openWeb(model.openFileUrl);
 							}
@@ -643,9 +647,9 @@
 						for(var i = 0; i < data.RspData.list.length; i++) {
 							var model = data.RspData.list[i];
 							model.create_time = modifyTimeFormat(model.create_time);
-							if (model.convert_file_url==null||model.convert_file_url.length==0) {
+							if(model.convert_file_url == null || model.convert_file_url.length == 0) {
 								model.openFileUrl = model.original_file_url;
-							} else{
+							} else {
 								model.openFileUrl = model.convert_file_url;
 							}
 						}
