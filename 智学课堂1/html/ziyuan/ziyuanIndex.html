@@ -153,7 +153,6 @@
 		<script src="../../js/utils/events.js"></script>
 		<script src="../../js/libs/jquery.js"></script>
 		<script src="../../js/utils/pushPermission.js"></script>
-		<script src="../../js/utils/clearIcon.js"></script>
 		<script type="text/javascript">
 			//获取个人信息
 			var personal = store.get(window.storageKeyName.PERSONALINFO);
@@ -534,11 +533,20 @@
 						} else if(model.file_ext == 'jpg'||model.file_ext == 'png'||model.file_ext == 'gif') { //照片
 							console.log('000000003');
 //							var imgUrl=model.original_file_url;
-							plus.nativeUI.previewImage(model.openFileUrl, {
-						      current: 0,
-						      loop: false,
-						      indicator: 'number'
-						    });
+							if(plus.os.name == 'Android') {
+								plus.pushPermission.openFileFromURL(JSON.stringify(model),function(result) {
+									console.log("result>>>>>>" + result[0]);
+								}, function(result) {
+									console.log('未知错误：' + result);
+								});
+								// plus.runtime.openWeb(model.openFileUrl);
+							}else{
+								plus.nativeUI.previewImage(model.openFileUrl, {
+							      current: 0,
+							      loop: false,
+							      indicator: 'number'
+							    });
+							}
 						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx'||model.file_ext == 'pdf'||model.file_ext == 'xlsx'||model.file_ext == 'xls') {//文档
 //							var tempUrl = model.convert_file_url;
 //							if (model.file_ext == 'pdf') {
@@ -547,12 +555,10 @@
 //							console.log('000000004:'+tempUrl);
 							if(plus.os.name == 'Android') {
 								console.log('000000005');
-								mui.openWindow({
-									url: '_www/js/pdfjs/index.html?' + model.openFileUrl,
-									id: 'pdf',
-									show: {
-										duration: 300
-									}
+								plus.pushPermission.openFileFromURL(JSON.stringify(model),function(result) {
+									console.log("result>>>>>>" + result[0]);
+								}, function(result) {
+									console.log('未知错误：' + result);
 								});
 							}else{
 								console.log('000000006');
