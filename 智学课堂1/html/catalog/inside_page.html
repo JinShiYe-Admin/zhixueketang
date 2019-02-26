@@ -194,7 +194,7 @@
 								});
 							}
 						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx'||model.file_ext == 'pdf'||model.file_ext == 'xlsx'||model.file_ext == 'xls') {//文档
-//							if(plus.os.name == 'Android') {
+							if(plus.os.name == 'Android') {
 								console.log('000000005');
 								plus.pushPermission.openFileFromURL(JSON.stringify(model), function(result) {
 									console.log("result>>>>>>" + result[0]);
