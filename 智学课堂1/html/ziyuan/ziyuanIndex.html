@@ -73,7 +73,7 @@
 	</head>
 
 	<body style="background: white;">
-		<header class="mui-bar mui-bar-nav" style="background-color:#00CFBD;" id="tempHead">
+		<header class="mui-bar mui-bar-nav v-cloak" style="background-color:#00CFBD;" id="tempHead">
 			<a @click="clickLeftImg" class="mui-icon mui-pull-left">
 				<img :src=headImg style="width: 26px;height: 26px;border-radius: 50%;" />
 			</a>
@@ -81,7 +81,7 @@
 				<a class="mui-icon" style="font-size: 17px;">{{titleName}}<span class="mui-icon-arrowdown"></span></a>
 			</h1>
 		</header>
-		<div class="mui-content mui-scroll-wrapper mui-fullscreen" style="background: white;" id="contentData">
+		<div class="mui-content mui-scroll-wrapper mui-fullscreen v-cloak" style="background: white;" id="contentData">
 			<div class="swiper-container catalogs" id="ziyuanbao">
 				<div class="swiper-wrapper">
 					<div class="swiper-slide" :class="cate.ischeck==1?'fontcolor':''" v-for="(cate,index) in categoryArray" @tap="catalogItemClick(categoryArray,cate)">{{cate.name}}</div>
