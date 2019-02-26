@@ -132,6 +132,7 @@
 		<script src='../../js/libs/crypto-js/require.js'></script>
 		<script src='../../js/utils/signHmacSHA1.js'></script>
 		<script src='../../js/libs/jquery.js'></script>
+		<script src="../../js/utils/pushPermission.js"></script>
 		<script src="../../js/publicProtocol-ziyuan.js"></script>
 		<script src='../../js/utils/sortSign.js'></script>
 		<script src="../../js/storageKeyName.js"></script>
@@ -183,29 +184,29 @@
 							}
 						} else if(model.file_ext == 'jpg'||model.file_ext == 'png'||model.file_ext == 'gif') { //照片
 //							var imgUrl=model.original_file_url;
-							plus.nativeUI.previewImage(model.openFileUrl, {
-						      current: 0,
-						      loop: false,
-						      indicator: 'number'
-						    });
-						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx'||model.file_ext == 'pdf'||model.file_ext == 'xlsx'||model.file_ext == 'xls') {//文档
-//							var tempUrl = model.convert_file_url;
-//							if (model.file_ext == 'pdf') {
-//								tempUrl = model.original_file_url;
-//							}
 							if(plus.os.name == 'Android') {
-								mui.openWindow({
-									url: '_www/js/pdfjs/index.html?' + model.openFileUrl,
-									id: 'pdf',
-									show: {
-										duration: 300
-									}
+								plus.nativeUI.previewImage([model.openFileUrl]);
+							} else {
+								plus.nativeUI.previewImage(model.openFileUrl, {
+									current: 0,
+									loop: false,
+									indicator: 'number'
 								});
-							}else{
+							}
+						} else if(model.file_ext == 'ppt'||model.file_ext == 'pptx'||model.file_ext == 'doc'||model.file_ext == 'docx'||model.file_ext == 'pdf'||model.file_ext == 'xlsx'||model.file_ext == 'xls') {//文档
+//							if(plus.os.name == 'Android') {
+								console.log('000000005');
+								plus.pushPermission.openFileFromURL(JSON.stringify(model), function(result) {
+									console.log("result>>>>>>" + result[0]);
+								}, function(result) {
+									console.log('未知错误：' + result);
+								});
+							} else {
+								console.log('000000006');
 								plus.runtime.openWeb(model.openFileUrl);
 							}
 						} else {
-							mui.toast('不知道查看此类型文件');
+							mui.toast('不支持查看此类型文件');
 						}
 					}
 				}
