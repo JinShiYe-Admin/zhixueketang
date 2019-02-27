@@ -1,4 +1,4 @@
-﻿﻿//此js用于保存本地存储时，用到的key值
+//此js用于保存本地存储时，用到的key值
 
 var storageKeyName = (function(mod) {
 
@@ -69,7 +69,9 @@ var storageKeyName = (function(mod) {
 			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
 			//	---七牛空间和接口---开发---end---
 			//益测益学服务端地址
-			mod.YCYXHOST = "http://zhxyx.jiaobaowang.net/yiceyixue";
+			// mod.YCYXHOST = "http://zhxyx.jiaobaowang.net/yiceyixue";
+			// mod.YCYXHOST = "http://192.168.0.125:8080/yiceyixue";
+			mod.YCYXHOST = "http://139.129.252.49:8080/yiceyixue";
 			//资源
 			mod.ZIYUANURL = "https://gxkf.jiaobaowang.net:9443/zxzyapi/api/";
 			break;

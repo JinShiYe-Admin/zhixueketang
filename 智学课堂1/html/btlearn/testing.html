@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
 		<link href="../../css/mui.min.css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="../../css/btlearn/common.css"/>
 		<style type="text/css">
@@ -90,7 +90,7 @@
 
 	<body>
 		<div id="testing" v-cloak :class="{tested: isTested}">
-			<header class="mui-bar mui-bar-nav">
+			<header class="mui-bar mui-bar-nav theme">
 				<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 				<span class="mui-icon mui-pull-right time" v-if="isTested">用时：{{time}}</span>
 				<span class="mui-icon mui-pull-right time" v-else>{{timeStr}}</span>
@@ -187,6 +187,10 @@
 					});
 				}
 				
+				// 关闭侧滑返回功能
+				self.setStyle({
+					'popGesture': 'none'
+				});
 				
 				// 获取题目
 				testing.isTested = self.isTested;
@@ -333,17 +337,6 @@
 									}
 								}
 							});
-//							var test_submit = plus.webview.create("testSubmit.html", "bl-test-submit", {}, {
-//								submitData: {
-//										title: _this.headerTitle,
-//										diskey: _this.diskey,
-//										catalogId: self.catalogId,
-//										name: _this.paperName,
-//										usedTime: _this.timeStr,
-//										answerArray: ans
-//									}
-//							});
-//							test_submit.show("slide-in-right");
 						}else if(des<0){
 							return false;
 						}else{
@@ -410,7 +403,7 @@
 				  area: "6rem",
 				  btn: ["确认", "取消"],
 				  btnAlign: 'c',
-				  shadeClose: true,
+				  shadeClose: false,
 				  isOutAnim: false,
 				  content: $('#beforeLeaveDialog'),
 				  yes: function(index, layero){
