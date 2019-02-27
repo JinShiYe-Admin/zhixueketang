@@ -234,15 +234,15 @@
 				//获取个人信息
 				var personal = store.get(window.storageKeyName.PERSONALINFO);
 				//解绑个推
-				var info = plus.push.getClientInfo();
-				var tempBindData = {
-					appId: info.appid,
-					alias: personal.utid,
-					cid: info.clientid
-				}
-				unbindPro(tempBindData, function function_name(data) {
-					if(data.RspCode == 0) {} else {}
-				});
+//				var info = plus.push.getClientInfo();
+//				var tempBindData = {
+//					appId: info.appid,
+//					alias: personal.utid,
+//					cid: info.clientid
+//				}
+//				unbindPro(tempBindData, function function_name(data) {
+//					if(data.RspCode == 0) {} else {}
+//				});
 				//设置app角标,flag=0直接设置角标数字，flag=1角标减1,falg=2角标加1
 				utils.setBadgeNumber(0, 0);
 
