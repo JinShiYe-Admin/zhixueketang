@@ -216,7 +216,7 @@
 						try{
 							var ques_ops = JSON.parse(ques.option);
 							ques_ops.forEach(function(v){
-								if(/^[A-Z]/.test(v)){
+								if(!/^[A-Z]/.test(v)){
 									isWrongOpt = true;
 								}
 							});
