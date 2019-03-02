@@ -160,6 +160,16 @@ function filterArray(arr, key, val) {
 	return r;
 }
 
+// 遍历树形菜单，并回调
+function readTree(tree, callback) {
+    for (var i = 0; i < tree.length; i++) {
+        callback(tree[i]);
+        if(tree[i].children) {
+            readTree(tree[i].children, callback);
+        }
+    }
+}
+
 //树形菜单
 (function(obj){
 	if(!obj) return;

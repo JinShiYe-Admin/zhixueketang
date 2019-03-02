@@ -188,9 +188,9 @@
 				}
 				
 				// 关闭侧滑返回功能
-				self.setStyle({
-					'popGesture': 'none'
-				});
+// 				self.setStyle({
+// 					'popGesture': 'none'
+// 				});
 				
 				// 获取题目
 				testing.isTested = self.isTested;
@@ -201,6 +201,7 @@
 					testing.paperName = self.paperName;
 					testing.questions = self.detailInfo;
 					testing.time = self.used_time;
+					testing.index = self.index||0;
 				}else{ 
 					//新测试
 					testing.paperName = self.data.paperName;
