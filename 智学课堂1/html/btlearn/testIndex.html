@@ -293,7 +293,7 @@
 				}
 			}
 			var selectDatas;//请求参数
-			var test_start;
+			// var test_start;
 			mui.plusReady(function() {
 				var wv = plus.webview.currentWebview(); 
 				// 关闭侧滑返回功能
@@ -302,12 +302,31 @@
 				});
 				
 				//开始测试页
-				test_start = mui.preload({
-					url: 'testStart.html',
-					id: 'bl-test-start'
-				});
+// 				test_start = mui.preload({
+// 					url: 'testStart.html',
+// 					id: 'bl-test-start'
+// 				});
 				
 				getZiYuanTextbookFunc();
+				
+				// 检测是否提交答案的节点是否完成测试
+				window.addEventListener("checkFinish", function(e){
+					console.log("checkFinish_id: "+e.detail.catalogId);
+					readTree(catalog.menu, function(node){
+						if(node.children&&node.children.length){
+							var checkNode;
+							for(var i=0;i<node.children.length;i++){
+								if(node.children[i].book_catalog_id==e.detail.catalogId){
+									checkNode = node;
+									break;
+								}
+							}
+							if(checkNode){
+								catalog.selectNode(checkNode);
+							}
+						}
+					});
+				});
 			});
 			
 			var isWaiting = false;
@@ -351,7 +370,6 @@
 						if(model.isKnowledge) {
 							// 点击知识点目录
 							if(!model.book_catalog_id) return;
-							console.log(model.book_catalog_id);
 							plus.nativeUI.showWaiting();
 							commonAjax("/Ycyx/Practice/schedule", {// 向 开始页 传递数据
 								data: {
@@ -362,12 +380,21 @@
 								success: function(res) {
 									var res_data = res.data;
 									console.log("难度等级："+JSON.stringify(res_data));
-									mui.fire(test_start, "getData", {
-										title: model.name, 
-										catalogId: model.book_catalog_id,
-										difficulty: res_data
-									});
-									test_start.show("slide-in-right");
+// 									mui.fire(test_start, "getData", {
+// 										title: model.name, 
+// 										catalogId: model.book_catalog_id,
+// 										difficulty: res_data
+// 									});
+									// test_start.show("slide-in-right");
+									mui.openWindow({
+										url: 'testStart.html',
+										id: 'bl-test-start',
+										extras:{
+											title: model.name, 
+											catalogId: model.book_catalog_id,
+											difficulty: res_data
+										}
+									})
 									plus.nativeUI.closeWaiting();
 								},
 								fail: function(res) {
@@ -380,23 +407,33 @@
 						}else{
 							// 点击章节目录,展开知识点
 							model.children = [];
-							!isWaiting && commonAjax("/Ycyx/Chapter", {
-								data: {chapterId: model.id},
-								success: function(res){
-									isWaiting = false;
-									console.log("知识点："+JSON.stringify(res.data.catalogs));
-									res.data.catalogs.forEach(function(v){
-										v.isKnowledge = true;
-										v.name && model.children.push(v);
-									});
-									if(!res.data.catalogs.length) {
-										model.children.push({name:"<p>本章节无知识点</p>",id:"",isKnowledge:true});
+							if(!isWaiting){
+								isWaiting = true;
+								plus.nativeUI.showWaiting();
+								commonAjax("/Ycyx/Chapter", {
+									data: {chapterId: model.id},
+									success: function(res){
+										isWaiting = false;
+										plus.nativeUI.closeWaiting();
+										console.log("知识点："+JSON.stringify(res.data.catalogs));
+										res.data.catalogs.forEach(function(v){
+											v.isKnowledge = true;
+											v.name && model.children.push(v);
+										});
+										if(!res.data.catalogs.length) {
+											model.children.push({name:"<p>本章节无知识点</p>",id:"",isKnowledge:true});
+										}
+									},
+									fail: function(res) { 
+										isWaiting = false;
+										plus.nativeUI.closeWaiting(); 
+									},
+									error: function() { 
+										isWaiting = false;
+										plus.nativeUI.closeWaiting();
 									}
-								},
-								fail: function(res) { isWaiting = false; },
-								error: function() { isWaiting = false; }
-							});
-							isWaiting = true;
+								});
+							}
 						}
 					}
 				},
@@ -494,8 +531,8 @@
 							catalog.fence=fence;
 							
 							//多级菜单,变量名替换
-							var catalogObj=data.RspData.catalog;
-							var catalogStr=JSON.stringify(catalogObj);
+							var catalogObj1=data.RspData.catalog;
+							var catalogStr=JSON.stringify(catalogObj1);
 							var str =catalogStr.replace(/childList/g,"children");
 							var rdata = JSON.parse(str);
 							catalog.menu = rdata||[];
@@ -522,7 +559,8 @@
 								return v.subname!="语文"&&v.subname!="英语";
 							});
 							if(kmItem[0]&&(kmItem[0].subname=="语文"||kmItem[0].subname=="英语")) {
-								catalog.menu = [];
+								catalogObj.subcode = catalog.kemu[0].subcode;
+								getZiYuanTextbookFunc();
 							}
 						}
 					} else {

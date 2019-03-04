@@ -43,7 +43,7 @@ body {
 	color: #00CFBD;
 	background: none!important;
 }
-.mui-bar-tab .mui-tab-item.mui-active, .btn-bottom {
+.mui-bar-tab .mui-tab-item.mui-active, .btn-bottom, .btn-bottom:active {
 	color: #00CFBD;
 }
 .options-pannel label.selected {
