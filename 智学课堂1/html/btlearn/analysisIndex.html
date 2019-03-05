@@ -58,6 +58,9 @@
 				max-height: 100%;
 				overflow-y: auto;
 			}
+			.mui-table-view {
+				backface-visibility: hidden;
+			}
 		</style>
 	</head>
 
@@ -73,7 +76,7 @@
 					<div class="als-title mui-text-center mui-ellipsis">{{user_name}}学情分析报告</div>
 					<div style="padding: .2rem .22rem .15rem;">学科均衡:</div>
 					<div id="subRadar"></div>
-					<ul class="mui-table-view als-list same-line-list" v-if="alsList.length">
+					<ul class="mui-table-view als-list same-line-list" v-if="alsList.length" v-cloak>
 					    <li class="mui-table-view-cell" style="background-color: transparent;">
 					        <div class="sub">科目</div>
 					        <div class="times">学习次数</div>

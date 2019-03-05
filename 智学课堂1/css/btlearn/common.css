@@ -251,6 +251,7 @@ body, .mui-content {
 .same-line-list:before, .same-line-list:after, .same-line-list li:after {
 	left: 0.2rem;
 	right: 0.2rem;
+	z-index: 2;
 }
 ul li.navigate-right:before {
 	right: 0.2rem;
@@ -387,7 +388,8 @@ ul li.navigate-right:before {
 }
 .beforeLeaveDialog .layui-layer-btn .layui-layer-btn0 {
 	order: 2;
-	background-color: #007AFF;
+	background-color: #00CFBD;
+	border-color: #00CFBD;
 }
 
 /*文本渲染*/
