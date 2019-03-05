@@ -26,11 +26,11 @@
 		<nav class="mui-bar mui-bar-tab" id="navIndex">
 			<a id="defaultTab" v-cloak class="mui-tab-item mui-active" href='../../html/ziyuan/ziyuanIndex.html'>
 				<span class="mui-icon iconfont icon-jiaxiaohudong"></span>
-				<span id="testVersion" class="mui-tab-label">智学资源</span>
+				<span class="mui-tab-label">智学资源</span>
 			</a>
 			<a id="kecheng" class="mui-tab-item" href="../../html/btlearn/testIndex.html">
 				<span class="mui-icon iconfont icon-timu"></span>
-				<span class="mui-tab-label">1.0.4</span>
+				<span class="mui-tab-label">组卷测试</span>
 			</a>
 			<a id="kejiao" class="mui-tab-item" href="../../html/btlearn/analysisIndex.html">
 				<span class="mui-icon iconfont icon-kejiaowenhua"></span>
@@ -64,11 +64,6 @@
 
 			//创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {
-				plus.runtime.getProperty(plus.runtime.appid, function(inf) {
-					alert('应用版本号:' + plus.runtime.version + ',资源升级版本号:' + inf.version)
-					$('#testVersion').html(plus.runtime.version+','+inf.version)
-				});
-				
 				appUpdate.updateApp(personal.schid);
 				//安卓的连续点击两次退出程序
 				var backButtonPress = 0;
