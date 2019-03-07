@@ -603,25 +603,24 @@ ul li.navigate-right:before {
 ul.als-list li .sub {
 	padding-left: 1.1rem;
 	vertical-align: middle;
+	position: relative;
 }
 ul.als-list li .sub .label {
-	display: inline-block;
-	text-align: center;
-	border: 1px solid #25AE38;
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	border: 2px solid #25AE38;
 	color: #25AE38;
-	border-radius: 4px;
-	vertical-align: middle;
-	margin-top: -3px;
+	border-radius: 5px;
 	width: 1.2rem;
 	height: .64rem;
-	line-height: .64rem;
 	font-size: 150%;
-	margin-left: -1.6rem;
-	margin-right: 0.4rem;
 	-webkit-transform: scale(0.5);
 	transform: scale(0.5);
-	-webkit-transform-origin: 150% 50%;
-	transform-origin: 150% 50%;
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin-top: -0.32rem;
 }
 ul.als-list li .sub .label.bad {
 	color: #DB4848;
