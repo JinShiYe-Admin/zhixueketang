@@ -52,14 +52,15 @@
 			#subRadar {
 				min-height: 205px;
 				max-height: 440px;
-				margin-bottom: .6rem;
+				padding-bottom: 0.6rem;
 			}
 			#analysis {
 				max-height: 100%;
 				overflow-y: auto;
 			}
-			.mui-table-view {
-				backface-visibility: hidden;
+			.mui-android .mui-table-view-cell:after {
+				transform: none;
+				bottom: 1px;
 			}
 		</style>
 	</head>
@@ -73,7 +74,7 @@
 			<!--学情分析-->
 			<div id="bl-analysis">
 				<div id="analysisTab">
-					<div class="als-title mui-text-center mui-ellipsis">{{user_name}}学情分析报告</div>
+					<div class="als-title mui-text-center mui-ellipsis" v-cloak>{{user_name}}学情分析报告</div>
 					<div style="padding: .2rem .22rem .15rem;">学科均衡:</div>
 					<div id="subRadar"></div>
 					<ul class="mui-table-view als-list same-line-list" v-if="alsList.length" v-cloak>

@@ -589,13 +589,16 @@ ul li.navigate-right:before {
 	display: none;
 }
 .als-list li {
-	display: flex;
-	justify-content: space-between;
+	/* display: flex; */
+	/* justify-content: space-between; */
 	padding: 0.3rem 0.6rem 0.3rem 0.2rem;
 	line-height: 0.64rem;
 }
 .als-list li:first-child {
 	padding-bottom: 0.15rem;
+}
+.als-list li > div {
+	display: inline-block;
 }
 ul.als-list li .sub {
 	padding-left: 1.1rem;
