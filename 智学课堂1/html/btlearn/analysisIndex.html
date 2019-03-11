@@ -122,6 +122,7 @@
 			mui.init();
 			
 			mui.plusReady(function() {
+				toChildPage("子页学情分析");
 				self = plus.webview.currentWebview();
 				//状态栏白色
 // 				if(plus.navigator.isImmersedStatusbar()){
@@ -266,7 +267,10 @@
 			}
 			
 			// analysis.alsList = [{"subname":"语文","count":52,"subcode":"01","remark":"-1","avg_score":14},{"subname":"语文","count":52,"subcode":"01","remark":"0","avg_score":14}];
-						
+				//父——>子页传值方法
+			function toChildPage(text){
+				console.log(text)
+			}		
 		</script>
 	</body>
 

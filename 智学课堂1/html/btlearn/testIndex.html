@@ -296,6 +296,7 @@
 			var selectDatas;//请求参数
 			// var test_start;
 			mui.plusReady(function() {
+				toChildPage("子页组卷测试");
 				var wv = plus.webview.currentWebview(); 
 				// 关闭侧滑返回功能
 				wv.setStyle({
@@ -568,6 +569,10 @@
 						mui.toast(data.msg);
 					}
 				});
+			}
+			//父——>子页传值方法
+			function toChildPage(text){
+				console.log(text)
 			}
 		</script>
 	</body>

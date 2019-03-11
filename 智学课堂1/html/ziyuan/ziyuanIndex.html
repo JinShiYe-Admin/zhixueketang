@@ -236,6 +236,7 @@
 			//							left: '-70%'
 			//						});
 			mui.plusReady(function() {
+				toChildPage("子页智学资源");
 				var backButtonPress = 0;
 				//重写返回键
 				mui.back = function(event) {
@@ -666,6 +667,11 @@
 						mui.toast(data.RspTxt);
 					}
 				});
+			}
+			
+			//父——>子页传值方法
+			function toChildPage(text){
+				console.log(text)
 			}
 		</script>
 	</body>

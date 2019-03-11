@@ -103,6 +103,21 @@
 							self.append(newSub);
 						}
 					}
+					
+					//父——>子页传值
+					if(targetTab=='../../html/ziyuan/ziyuanIndex.html'){
+						var homeSchoolIndex=plus.webview.getWebviewById(targetTab);
+						homeSchoolIndex.evalJS('toChildPage("智学资源")')
+					}
+					if(targetTab=='../../html/btlearn/testIndex.html'){
+						var oralsIndex=plus.webview.getWebviewById(targetTab);
+						oralsIndex.evalJS('toChildPage("组卷测试")')
+					}
+					if(targetTab=='../../html/btlearn/analysisIndex.html'){
+						var zxktIndex=plus.webview.getWebviewById(targetTab);
+						zxktIndex.evalJS('toChildPage("学情分析")')
+					}
+					
 					//更换标题
 					//title.innerHTML = this.querySelector('.mui-tab-label').innerHTML;
 					plus.webview.show(targetTab, "fade-in", 00);
