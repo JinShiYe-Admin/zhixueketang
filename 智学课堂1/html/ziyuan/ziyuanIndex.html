@@ -245,6 +245,7 @@
 			//							left: '-70%'
 			//						});
 			mui.plusReady(function() {
+				toChildPage("子页智学资源");
 				var backButtonPress = 0;
 				//重写返回键
 				mui.back = function(event) {
@@ -595,7 +596,15 @@
 							if(model.file_ext == 'mp4' || model.file_ext == 'mp3') {
 								utils.mOpenWithData("../../html/ziyuan/playVideo.html", model);
 							} else {
-								plus.runtime.openWeb(model.openFileUrl);
+								if(plus.os.name == 'Android') {
+									plus.pushPermission.openFileFromURL(JSON.stringify(model), function(result) {
+										console.log("result>>>>>>" + result[0]);
+									}, function(result) {
+										console.log('未知错误：' + result);
+									});
+								} else {
+									plus.runtime.openWeb(model.openFileUrl);
+								}
 							}
 						} else if(model.file_ext == 'jpg' || model.file_ext == 'png' || model.file_ext == 'gif') { //照片
 							console.log('000000003');
@@ -725,6 +734,11 @@
 						mui.toast(data.RspTxt);
 					}
 				});
+			}
+			
+			//父——>子页传值方法
+			function toChildPage(text){
+				console.log(text)
 			}
 		</script>
 	</body>
