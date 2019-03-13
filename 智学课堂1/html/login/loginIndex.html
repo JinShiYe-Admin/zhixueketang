@@ -179,7 +179,7 @@
 					postDataEncry('Login', enData1, comData1, 0, function(data1) {
 						events.closeWaiting();
 						if(data1.RspCode == 0) {
-							if(data1.RspData.utp == 2) {
+//							if(data1.RspData.utp == 2) {
 								if(data1.RspData.dpts == null) {
 									data1.RspData.dpts = [];
 								}
@@ -252,9 +252,9 @@
 									curr.close();
 								}
 
-							} else {
-								mui.toast('此app需要学生身份的账号才可使用');
-							}
+//							} else {
+//								mui.toast('此app需要学生身份的账号才可使用');
+//							}
 						} else {
 							mui.toast(data1.RspTxt);
 						}

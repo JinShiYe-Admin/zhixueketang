@@ -82,54 +82,63 @@
 			</h1>
 		</header>
 		<div class="mui-content mui-scroll-wrapper mui-fullscreen" v-cloak style="background: white;" id="contentData">
-			<div class="swiper-container catalogs" id="ziyuanbao">
-				<div class="swiper-wrapper">
-					<div class="swiper-slide" style="font-size: 14px;" :class="cate.ischeck==1?'fontcolor':''" v-for="(cate,index) in categoryArray" @tap="catalogItemClick(categoryArray,cate)">{{cate.name}}</div>
+			<div v-if="showFlag>0">
+				<div class="swiper-container catalogs" id="ziyuanbao">
+					<div class="swiper-wrapper">
+						<div class="swiper-slide" style="font-size: 14px;" :class="cate.ischeck==1?'fontcolor':''" v-for="(cate,index) in categoryArray" @tap="catalogItemClick(categoryArray,cate)">{{cate.name}}</div>
+					</div>
+				</div>
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell mui-media" v-for="(resourceModel,index) in resourceArray" @click="clickResourceModel(resourceModel,index)">
+							<a href="javascript:;">
+								<div v-if="resourceModel.is_pack">
+									<img class="mui-media-object mui-pull-left" src="../../img/ziyuan/ziyuanPack.png" />
+								</div>
+								<div v-else="">
+									<img v-if="resourceModel.file_ext == 'mp4'" class="mui-media-object mui-pull-left" src="../../img/swiper/mp4.png">
+									<img v-else-if="resourceModel.file_ext == 'doc'" class="mui-media-object mui-pull-left" src="../../img/swiper/doc.png" />
+									<img v-else-if="resourceModel.file_ext == 'docx'" class="mui-media-object mui-pull-left" src="../../img/swiper/docx.png" />
+									<img v-else-if="resourceModel.file_ext == 'mp3'" class="mui-media-object mui-pull-left" src="../../img/swiper/mp3.png">
+									<img v-else-if="resourceModel.file_ext == 'asf'" class="mui-media-object mui-pull-left" src="../../img/swiper/asf.png">
+									<img v-else-if="resourceModel.file_ext == 'avi'" class="mui-media-object mui-pull-left" src="../../img/swiper/avi.png">
+									<img v-else-if="resourceModel.file_ext == 'flv'" class="mui-media-object mui-pull-left" src="../../img/swiper/flv.png">
+									<img v-else-if="resourceModel.file_ext == 'gif'" class="mui-media-object mui-pull-left" src="../../img/swiper/gif.png">
+									<img v-else-if="resourceModel.file_ext == 'ppt'" class="mui-media-object mui-pull-left" src="../../img/swiper/ppt.png">
+									<img v-else-if="resourceModel.file_ext == 'pptx'" class="mui-media-object mui-pull-left" src="../../img/swiper/pptx.png">
+									<img v-else-if="resourceModel.file_ext == 'xls'" class="mui-media-object mui-pull-left" src="../../img/swiper/xls.png">
+									<img v-else-if="resourceModel.file_ext == 'xlsx'" class="mui-media-object mui-pull-left" src="../../img/swiper/xlsx.png">
+									<img v-else-if="resourceModel.file_ext == 'mpg'" class="mui-media-object mui-pull-left" src="../../img/swiper/mpg.png">
+									<img v-else-if="resourceModel.file_ext == 'swf'" class="mui-media-object mui-pull-left" src="../../img/swiper/swf.png">
+									<img v-else-if="resourceModel.file_ext == 'ts'" class="mui-media-object mui-pull-left" src="../../img/swiper/ts.png">
+									<img v-else-if="resourceModel.file_ext == 'wav'" class="mui-media-object mui-pull-left" src="../../img/swiper/wav.png">
+									<img v-else-if="resourceModel.file_ext == 'wma'" class="mui-media-object mui-pull-left" src="../../img/swiper/wma.png">
+									<img v-else-if="resourceModel.file_ext == 'wmv'" class="mui-media-object mui-pull-left" src="../../img/swiper/wmv.png">
+									<img v-else-if="resourceModel.file_ext == 'pdf'" class="mui-media-object mui-pull-left" src="../../img/swiper/pdf.png">
+									<img v-else-if="resourceModel.file_ext == 'exe'" class="mui-media-object mui-pull-left" src="../../img/swiper/exe.png">
+									<img v-else-if="resourceModel.file_ext == 'jpg'" class="mui-media-object mui-pull-left" src="../../img/swiper/jpg.png">
+									<img v-else-if="resourceModel.file_ext == 'png'" class="mui-media-object mui-pull-left" src="../../img/swiper/png.png">
+									<img v-else-if="resourceModel.file_ext == 'rar'" class="mui-media-object mui-pull-left" src="../../img/swiper/rar.png">
+									<img v-else-if="resourceModel.file_ext == 'zip'" class="mui-media-object mui-pull-left" src="../../img/swiper/zip.png">
+									<img v-else-if="resourceModel.file_ext == 'txt'" class="mui-media-object mui-pull-left" src="../../img/swiper/txt.png">
+									<img v-else="" class="mui-media-object mui-pull-left" src="../../img/swiper/other.png">
+								</div>
+								<div class="mui-media-body" style="font-size: 14px;color: #333;">
+									{{resourceModel.name}}
+									<p class="mui-ellipsis" style="font-size: 12px;color: #999;">{{resourceModel.create_time}} | {{resourceModel.owner_name}}</p>
+								</div>
+							</a>
+						</li>
+					</ul>
 				</div>
 			</div>
-			<div class="mui-scroll">
-				<ul class="mui-table-view">
-					<li class="mui-table-view-cell mui-media" v-for="(resourceModel,index) in resourceArray" @click="clickResourceModel(resourceModel,index)">
-						<a href="javascript:;">
-							<div v-if="resourceModel.is_pack">
-								<img class="mui-media-object mui-pull-left" src="../../img/ziyuan/ziyuanPack.png" />
-							</div>
-							<div v-else="">
-								<img v-if="resourceModel.file_ext == 'mp4'" class="mui-media-object mui-pull-left" src="../../img/swiper/mp4.png">
-								<img v-else-if="resourceModel.file_ext == 'doc'" class="mui-media-object mui-pull-left" src="../../img/swiper/doc.png" />
-								<img v-else-if="resourceModel.file_ext == 'docx'" class="mui-media-object mui-pull-left" src="../../img/swiper/docx.png" />
-								<img v-else-if="resourceModel.file_ext == 'mp3'" class="mui-media-object mui-pull-left" src="../../img/swiper/mp3.png">
-								<img v-else-if="resourceModel.file_ext == 'asf'" class="mui-media-object mui-pull-left" src="../../img/swiper/asf.png">
-								<img v-else-if="resourceModel.file_ext == 'avi'" class="mui-media-object mui-pull-left" src="../../img/swiper/avi.png">
-								<img v-else-if="resourceModel.file_ext == 'flv'" class="mui-media-object mui-pull-left" src="../../img/swiper/flv.png">
-								<img v-else-if="resourceModel.file_ext == 'gif'" class="mui-media-object mui-pull-left" src="../../img/swiper/gif.png">
-								<img v-else-if="resourceModel.file_ext == 'ppt'" class="mui-media-object mui-pull-left" src="../../img/swiper/ppt.png">
-								<img v-else-if="resourceModel.file_ext == 'pptx'" class="mui-media-object mui-pull-left" src="../../img/swiper/pptx.png">
-								<img v-else-if="resourceModel.file_ext == 'xls'" class="mui-media-object mui-pull-left" src="../../img/swiper/xls.png">
-								<img v-else-if="resourceModel.file_ext == 'xlsx'" class="mui-media-object mui-pull-left" src="../../img/swiper/xlsx.png">
-								<img v-else-if="resourceModel.file_ext == 'mpg'" class="mui-media-object mui-pull-left" src="../../img/swiper/mpg.png">
-								<img v-else-if="resourceModel.file_ext == 'swf'" class="mui-media-object mui-pull-left" src="../../img/swiper/swf.png">
-								<img v-else-if="resourceModel.file_ext == 'ts'" class="mui-media-object mui-pull-left" src="../../img/swiper/ts.png">
-								<img v-else-if="resourceModel.file_ext == 'wav'" class="mui-media-object mui-pull-left" src="../../img/swiper/wav.png">
-								<img v-else-if="resourceModel.file_ext == 'wma'" class="mui-media-object mui-pull-left" src="../../img/swiper/wma.png">
-								<img v-else-if="resourceModel.file_ext == 'wmv'" class="mui-media-object mui-pull-left" src="../../img/swiper/wmv.png">
-								<img v-else-if="resourceModel.file_ext == 'pdf'" class="mui-media-object mui-pull-left" src="../../img/swiper/pdf.png">
-								<img v-else-if="resourceModel.file_ext == 'exe'" class="mui-media-object mui-pull-left" src="../../img/swiper/exe.png">
-								<img v-else-if="resourceModel.file_ext == 'jpg'" class="mui-media-object mui-pull-left" src="../../img/swiper/jpg.png">
-								<img v-else-if="resourceModel.file_ext == 'png'" class="mui-media-object mui-pull-left" src="../../img/swiper/png.png">
-								<img v-else-if="resourceModel.file_ext == 'rar'" class="mui-media-object mui-pull-left" src="../../img/swiper/rar.png">
-								<img v-else-if="resourceModel.file_ext == 'zip'" class="mui-media-object mui-pull-left" src="../../img/swiper/zip.png">
-								<img v-else-if="resourceModel.file_ext == 'txt'" class="mui-media-object mui-pull-left" src="../../img/swiper/txt.png">
-								<img v-else="" class="mui-media-object mui-pull-left" src="../../img/swiper/other.png">
-							</div>
-							<div class="mui-media-body" style="font-size: 14px;color: #333;">
-								{{resourceModel.name}}
-								<p class="mui-ellipsis" style="font-size: 12px;color: #999;">{{resourceModel.create_time}} | {{resourceModel.owner_name}}</p>
-							</div>
-						</a>
-					</li>
-				</ul>
+			<div v-else="">
+				<p style="text-align: center;margin-top: 5px;">您还没有订购套餐，请去个人中心设置</p>
+					<div v-cloak style="text-align: center;margin:10% auto;">
+						<img src="../../img/noData.png" style="width: 250px;" />
+					</div>
 			</div>
+
 		</div>
 
 		<script src="../../js/mui.min.js"></script>
@@ -269,10 +278,60 @@
 				window.addEventListener('home_setHeadImg', function(data) {
 					tempHead.headImg = data.detail.imgurl;
 				});
-
-				//获取教材
-				getTextBook();
+				//4.1.用户已订购套餐及功能扩展栏目
+				getUserBusFunc();
 			});
+
+			//4.1.用户已订购套餐及功能扩展栏目
+			function getUserBusFunc() {
+				personal = store.get(window.storageKeyName.PERSONALINFO);
+				var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
+				var enData1 = {};
+				//不需要加密的数据
+				var comData1 = {
+					uuid: publicParameter.uuid, //用户设备号
+					uid: personal.uid, //用户账号
+					utoken: personal.utoken, //用户令牌
+					appid: publicParameter.appid //系统所分配的应用ID
+				}
+				events.showWaiting();
+				//发送网络请求，data为网络返回值
+				postDataEncry('GetUserBusFunc', enData1, comData1, 0, function(data1) {
+					console.log('4.1.GetUserBusFunc:' + JSON.stringify(data1));
+					events.closeWaiting();
+					if(data1.RspCode == 0) {
+						if(data1.RspData) {
+							var tempFlag = 0; //判断是否有智学课堂套餐
+							for(var i = 0; i < data1.RspData.userbus.length; i++) {
+								var tempM = data1.RspData.userbus[i];
+								for(var a = 0; a < tempM.funcs.length; a++) {
+									var tempFuncs = tempM.funcs[a];
+									if(tempFuncs.ftype == 'zxkt') {
+										tempFlag++;
+									}
+								}
+							}
+							personal.userbus = tempFlag; // 绑定的套餐
+							store.set(window.storageKeyName.PERSONALINFO, personal);
+							if(tempFlag > 0) {
+								console.log('showFlag=0');
+								contentData.showFlag = 1;
+								//获取教材
+								getTextBook();
+							} else {
+								console.log('showFlag=01');
+								contentData.showFlag = 0;
+							}
+						} else {
+							personal.userbus = 0; // 绑定的套餐
+							store.set(window.storageKeyName.PERSONALINFO, personal);
+							contentData.showFlag = 0;
+						}
+					} else {
+						mui.toast(data1.RspTxt);
+					}
+				});
+			}
 
 			var tempHead = new Vue({
 				el: "#tempHead",
@@ -367,68 +426,68 @@
 			 * 显示菜单菜单
 			 */
 			function openMenu() {
-//				if(!showMenu) {
-					var wvs = plus.webview.getDisplayWebview();
-					for(var i = 0; i < wvs.length; i++) {
-						var url = wvs[i].getURL();
-						if(url.indexOf('/ziyuan/mine') == -1) {
-							if(plus.os.name == 'Android') {
-								wvs[i].setStyle({
-									mask: "rgba(0,0,0,0.1)"
-								});
-							} else {
-								wvs[i].setStyle({
-									mask: "rgba(0,0,0,0.3)"
-								});
-							}
-							wvs[i].addEventListener("maskClick", function() {
-								closeMenu();
-							}, false);
+				//				if(!showMenu) {
+				var wvs = plus.webview.getDisplayWebview();
+				for(var i = 0; i < wvs.length; i++) {
+					var url = wvs[i].getURL();
+					if(url.indexOf('/ziyuan/mine') == -1) {
+						if(plus.os.name == 'Android') {
+							wvs[i].setStyle({
+								mask: "rgba(0,0,0,0.1)"
+							});
+						} else {
+							wvs[i].setStyle({
+								mask: "rgba(0,0,0,0.3)"
+							});
 						}
+						wvs[i].addEventListener("maskClick", function() {
+							closeMenu();
+						}, false);
 					}
-					//							mui.fire(plus.webview.currentWebview().opener(), 'closeClick', {});
-					//侧滑菜单处于隐藏状态，则立即显示出来；
-					//显示完毕后，根据不同动画效果移动窗体；
-					menu.show('none', 0, function() {
-						switch(mode) {
-							case 'main-move':
-								//主窗体开始侧滑；
-								main.setStyle({
-									left: '70%',
-									transition: {
-										duration: 150
-									}
-								});
-								break;
-							case 'menu-move':
-								menu.setStyle({
-									left: '0%',
-									transition: {
-										duration: 10
-									}
-								});
-								break;
-							case 'all-move':
-//								main.setStyle({
-//									left: '70%',
-//									transition: {
-//										duration: 150
-//									}
-//								});
-								menu.setStyle({
-									left: '0%',
-									transition: {
-										duration: 10
-									}
-								});
-								break;
-						}
-					});
-					//显示遮罩
-					mask.show();
-					showMenu = true;
-					//通知index页隐藏tab栏
-//				}
+				}
+				//							mui.fire(plus.webview.currentWebview().opener(), 'closeClick', {});
+				//侧滑菜单处于隐藏状态，则立即显示出来；
+				//显示完毕后，根据不同动画效果移动窗体；
+				menu.show('none', 0, function() {
+					switch(mode) {
+						case 'main-move':
+							//主窗体开始侧滑；
+							main.setStyle({
+								left: '70%',
+								transition: {
+									duration: 150
+								}
+							});
+							break;
+						case 'menu-move':
+							menu.setStyle({
+								left: '0%',
+								transition: {
+									duration: 10
+								}
+							});
+							break;
+						case 'all-move':
+							//								main.setStyle({
+							//									left: '70%',
+							//									transition: {
+							//										duration: 150
+							//									}
+							//								});
+							menu.setStyle({
+								left: '0%',
+								transition: {
+									duration: 10
+								}
+							});
+							break;
+					}
+				});
+				//显示遮罩
+				mask.show();
+				showMenu = true;
+				//通知index页隐藏tab栏
+				//				}
 			}
 			/**
 			 * 关闭侧滑菜单
@@ -443,61 +502,61 @@
 			 * 关闭侧滑菜单（业务部分）
 			 */
 			function _closeMenu() {
-//				if(showMenu) {
-					//						mui.fire(plus.webview.currentWebview().opener(), 'openClick', {});
-					var wvs = plus.webview.getDisplayWebview();
-					for(var i = 0; i < wvs.length; i++) {
-						wvs[i].setStyle({
-							mask: "none"
+				//				if(showMenu) {
+				//						mui.fire(plus.webview.currentWebview().opener(), 'openClick', {});
+				var wvs = plus.webview.getDisplayWebview();
+				for(var i = 0; i < wvs.length; i++) {
+					wvs[i].setStyle({
+						mask: "none"
+					});
+				}
+				//关闭遮罩；
+				switch(mode) {
+					case 'main-move':
+						//主窗体开始侧滑；
+						main.setStyle({
+							left: '0',
+							transition: {
+								duration: 150
+							}
 						});
-					}
-					//关闭遮罩；
-					switch(mode) {
-						case 'main-move':
-							//主窗体开始侧滑；
-							main.setStyle({
-								left: '0',
-								transition: {
-									duration: 150
-								}
-							});
-							break;
-						case 'menu-move':
-							//主窗体开始侧滑；
-							menu.setStyle({
-								left: '-70%',
-								transition: {
-									duration: 150
-								}
-							});
-							break;
-						case 'all-move':
-							//主窗体开始侧滑；
-//							main.setStyle({
-//								left: '0',
-//								transition: {
-//									duration: 150
-//								}
-//							});
-							//menu页面同时移动
-							menu.setStyle({
-								left: '-70%',
-								transition: {
-									duration: 150
-								}
-							});
+						break;
+					case 'menu-move':
+						//主窗体开始侧滑；
+						menu.setStyle({
+							left: '-70%',
+							transition: {
+								duration: 150
+							}
+						});
+						break;
+					case 'all-move':
+						//主窗体开始侧滑；
+						//							main.setStyle({
+						//								left: '0',
+						//								transition: {
+						//									duration: 150
+						//								}
+						//							});
+						//menu页面同时移动
+						menu.setStyle({
+							left: '-70%',
+							transition: {
+								duration: 150
+							}
+						});
 
-							break;
-					}
+						break;
+				}
 
-					//等窗体动画结束后，隐藏菜单webview，节省资源；
-					setTimeout(function() {
-						menu.hide();
-					}, 200);
-					//改变标志位
-					showMenu = false;
-					//通知index页显示tab栏
-//				}
+				//等窗体动画结束后，隐藏菜单webview，节省资源；
+				setTimeout(function() {
+					menu.hide();
+				}, 200);
+				//改变标志位
+				showMenu = false;
+				//通知index页显示tab栏
+				//				}
 			}
 			//重写mui.menu方法，Android版本menu按键按下可自动打开、关闭侧滑菜单；
 			mui.menu = function() {
@@ -511,7 +570,7 @@
 			var contentData = new Vue({
 				el: "#contentData",
 				data: {
-					showFlag: 0, //如果是家长身份，判断有没有订购套餐、套餐有没有关联学生，进行显示九宫格，0显示九宫格，1显示家长的订购提醒
+					showFlag: 0, //判断有没有订购套餐，进行显示九宫格，1正常显示，0显示的订购提醒
 					personal: personal,
 					showNoDataFlag: 9, //是否显示无数据图片
 					textBookDetail: {}, //获取到的教材
@@ -660,7 +719,7 @@
 							}
 						}
 						contentData.showNoDataFlag = data.RspData.TotalCnt;
-						contentData.showFlag = 0;
+						contentData.showFlag = 1;
 						$("#contentData").show();
 					} else {
 						mui.toast(data.RspTxt);
