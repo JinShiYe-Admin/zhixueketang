@@ -132,7 +132,7 @@
 					</ul>
 				</div>
 			</div>
-			<div v-else-if="showFlag==0">
+			<div v-else-if="showFlag==0 || showFlag==-1">
 				<p style="text-align: center;margin-top: 5px;" v-cloak>{{noData}}</p>
 					<div v-cloak style="text-align: center;margin:10% auto;">
 						<img src="../../img/noData.png" style="width: 250px;" />
@@ -198,7 +198,7 @@
 			//加载更多
 			function pullupRefresh() {
 				contentData.flag = 1;
-				//4.获取学校通知列表
+				//4.获取资源列表
 				getZiYuanList();
 			}
 			//选择章节目录监听
@@ -221,7 +221,7 @@
 			function pulldownRefresh() {
 				contentData.flag = 0;
 				contentData.pageIndex = 1;
-				//4.获取学校通知列表
+				//4.获取资源列表
 				getZiYuanList();
 			}
 
@@ -302,7 +302,9 @@
 					},
 					clickTitle: function() {
 						console.log('点击标题');
-						utils.mOpenWithData("../../html/catalog/catalogPage.html", {});
+						if(contentData.showFlag==0){
+							utils.mOpenWithData("../../html/catalog/catalogPage.html", {});
+						}
 						//							utils.mOpenWithData("../../html/catalog/inside_page.html", {});
 					}
 				}
@@ -349,7 +351,7 @@
 								getGrdList(catalogObj);
 							} else {
 								console.log('showFlag=01');
-								contentData.showFlag = 0;
+								contentData.showFlag = -1;
 								tempHead.titleName = '请先订购套餐';
 								contentData.noData = '您还没有订购套餐，请去个人中心设置';
 							}
