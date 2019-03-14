@@ -134,9 +134,9 @@
 			</div>
 			<div v-else-if="showFlag==0 || showFlag==-1">
 				<p style="text-align: center;margin-top: 5px;" v-cloak>{{noData}}</p>
-					<div v-cloak style="text-align: center;margin:10% auto;">
-						<img src="../../img/noData.png" style="width: 250px;" />
-					</div>
+				<div v-cloak style="text-align: center;margin:10% auto;">
+					<img src="../../img/noData.png" style="width: 250px;" />
+				</div>
 			</div>
 		</div>
 
@@ -170,7 +170,7 @@
 			store.set(window.storageKeyName.CATALOG, null);
 			//重置学段、年级、科目选择值对象
 			store.set(window.storageKeyName.CATALOGOBJ, null);
-			
+
 			mui.init({
 				statusBarBackground: '#00CFBD',
 				swipeBack: false,
@@ -213,7 +213,7 @@
 				contentData.bookModel = data.detail[2]; //教材
 				//刷新数据
 				pulldownRefresh();
-			}); 
+			});
 
 			/**
 			 * 下拉刷新具体业务实现
@@ -287,6 +287,12 @@
 				getUserBusFunc();
 			});
 
+			window.addEventListener('refush_count1', function() {
+				console.log('refush_count000');
+				//4.1.用户已订购套餐及功能扩展栏目
+				getUserBusFunc();
+			});
+
 			var tempHead = new Vue({
 				el: "#tempHead",
 				data: {
@@ -302,14 +308,13 @@
 					},
 					clickTitle: function() {
 						console.log('点击标题');
-						if(contentData.showFlag==0){
+						if(contentData.showFlag == 0) {
 							utils.mOpenWithData("../../html/catalog/catalogPage.html", {});
 						}
 						//							utils.mOpenWithData("../../html/catalog/inside_page.html", {});
 					}
 				}
 			});
-
 
 			//4.1.用户已订购套餐及功能扩展栏目
 			function getUserBusFunc() {
@@ -335,7 +340,7 @@
 								var tempM = data1.RspData.userbus[i];
 								for(var a = 0; a < tempM.funcs.length; a++) {
 									var tempFuncs = tempM.funcs[a];
-									if(tempFuncs.ftype == 'zxkt') {
+									if(tempFuncs.ftype == 'zxkt'&&tempM.serstat == 1) {
 										tempArray.push(tempM.servid);
 									}
 								}
@@ -346,7 +351,7 @@
 								console.log('showFlag=0');
 								contentData.showFlag = 1;
 								//根据已订购套餐，得到学段、科目
-								var catalogObj=getCatalog(data1.RspData.userbus);
+								var catalogObj = getCatalog(data1.RspData.userbus);
 								//根据学段获取学段下的年级，在智学课堂中，年级不是从订购的套餐中获取的，而是通过协议拿到的。
 								getGrdList(catalogObj);
 							} else {
@@ -365,40 +370,40 @@
 					}
 				});
 			}
-			
+
 			//获取分册（年级）
-			function getGrdList(catalogObj){
+			function getGrdList(catalogObj) {
 				var comData = {};
-				if(catalogObj.prdList.length>0){
-					comData.percode=catalogObj.prdList[0].percode;//学段代码
-				}else{
+				if(catalogObj.prdList.length > 0) {
+					comData.percode = catalogObj.prdList[0].percode; //学段代码
+				} else {
 					contentData.showFlag = 0;
 					tempHead.titleName = '请切换目录';
 					contentData.noData = '该目录下暂无资源，请切换目录';
 					return 0
 				}
-				console.log('comData=='+JSON.stringify(comData));
+				console.log('comData==' + JSON.stringify(comData));
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {
 					wd.close();
 					console.log('获取分册（年级）:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
-						if(data.RspData){
+						if(data.RspData) {
 							//分册列表
-							var fence= data.RspData.fasc.list;
-							var fcselected= data.RspData.fasc.selected;
+							var fence = data.RspData.fasc.list;
+							var fcselected = data.RspData.fasc.selected;
 							for(var i = 0; i < fence.length; i++) {
-                                if (fence[i].fasccode==fcselected) {
-                                    fence[i].ischeck = 1;
-                                }else{
-                                    fence[i].ischeck = 0;
-                                }
-                            }
-							catalogObj.grdList=fence;
+								if(fence[i].fasccode == fcselected) {
+									fence[i].ischeck = 1;
+								} else {
+									fence[i].ischeck = 0;
+								}
+							}
+							catalogObj.grdList = fence;
 							//将获取到的学段、年级、科目保存起来
 							store.set(window.storageKeyName.CATALOG, catalogObj);
-							console.log('catalogObj:'+JSON.stringify(catalogObj)); 
-							if(fence.length==0){
+							console.log('catalogObj:' + JSON.stringify(catalogObj));
+							if(fence.length == 0) {
 								contentData.showFlag = 0;
 								tempHead.titleName = '请切换目录';
 								contentData.noData = '该目录下暂无资源，请切换目录';
@@ -416,16 +421,16 @@
 			//根据得到的得到学段、年级、科目 获取教材和资源列表
 			var getTextBook = function(catalogObj) {
 				var comData = {}
-				comData.percode=catalogObj.prdList[0].percode;//学段代码 可选
-				comData.fasccode=catalogObj.grdList[0].fasccode;//分册（年级）代码 可选
-				if(catalogObj.subList.length>0){
-					comData.subcode=catalogObj.subList[0].subcode;//科目代码
-				}else{
+				comData.percode = catalogObj.prdList[0].percode; //学段代码 可选
+				comData.fasccode = catalogObj.grdList[0].fasccode; //分册（年级）代码 可选
+				if(catalogObj.subList.length > 0) {
+					comData.subcode = catalogObj.subList[0].subcode; //科目代码
+				} else {
 					contentData.showFlag = 0;
 					tempHead.titleName = '请切换目录';
 					contentData.noData = '该目录下暂无资源，请切换目录';
 					return 0
-				} 
+				}
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {
 					wd.close();
@@ -441,7 +446,7 @@
 								//当前章节
 								contentData.catalogModel = tempModel2;
 								//根据选择的章节model对应的类别，给滑动菜单赋值
-								var cate = data.RspData.category; 
+								var cate = data.RspData.category;
 								var newCategory = [];
 								newCategory.push({
 									name: '全部',
@@ -465,7 +470,7 @@
 								store.set(window.storageKeyName.CATALOGOBJ, catalogObj);
 							}
 						}
-						if(data.RspData.book==null||data.RspData.book==undefined){//如果没有教材
+						if(data.RspData.book == null || data.RspData.book == undefined) { //如果没有教材
 							contentData.showFlag = 0;
 							tempHead.titleName = '请切换目录';
 							contentData.noData = '该目录下暂无资源，请切换目录';
@@ -478,7 +483,7 @@
 					}
 				});
 			}
-			
+
 			//获取资源(分页) 
 			var getZiYuanList = function() {
 				//资源类型
@@ -533,9 +538,9 @@
 					}
 				});
 			}
-			
+
 			//父——>子页传值方法
-			function toChildPage(text){
+			function toChildPage(text) {
 				console.log(text)
 			}
 
@@ -709,7 +714,7 @@
 					categoryArray: [], //资源类型数组
 					bookModel: '', //教材model
 					catalogModel: '', //章节
-					noData:''//暂无数据
+					noData: '' //暂无数据
 				},
 				methods: {
 					clickResourceModel: function(model) {
@@ -809,8 +814,6 @@
 			slider.slider({
 				interval: 5000
 			});
-
-			
 		</script>
 	</body>
 
