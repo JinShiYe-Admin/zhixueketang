@@ -328,19 +328,19 @@
 					events.closeWaiting();
 					if(data1.RspCode == 0) {
 						if(data1.RspData) {
-							var tempFlag = 0; //判断是否有智学课堂套餐
+							var tempArray = []; //判断是否有智学课堂套餐
 							for(var i = 0; i < data1.RspData.userbus.length; i++) {
 								var tempM = data1.RspData.userbus[i];
 								for(var a = 0; a < tempM.funcs.length; a++) {
 									var tempFuncs = tempM.funcs[a];
 									if(tempFuncs.ftype == 'zxkt') {
-										tempFlag++;
+										tempArray.push(tempM.servid);
 									}
 								}
 							}
-							personal.userbus = tempFlag; // 绑定的套餐
+							personal.userbus = tempArray.join('|'); // 绑定的套餐
 							store.set(window.storageKeyName.PERSONALINFO, personal);
-							if(tempFlag > 0) {
+							if(tempArray.length > 0) {
 								console.log('showFlag=0');
 								contentData.showFlag = 1;
 								//根据已订购套餐，得到学段、科目
@@ -354,7 +354,7 @@
 								contentData.noData = '您还没有订购套餐，请去个人中心设置';
 							}
 						} else {
-							personal.userbus = 0; // 绑定的套餐
+							personal.userbus = ''; // 绑定的套餐
 							store.set(window.storageKeyName.PERSONALINFO, personal);
 							contentData.showFlag = 0;
 						}
