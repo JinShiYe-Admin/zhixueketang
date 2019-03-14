@@ -78,6 +78,7 @@ var storageKeyName = (function(mod) {
 		default:
 			break;
 }
+	mod.CATALOG = 'catalog';//滑动菜单对象
 	mod.CATALOGOBJ = 'catalogObj';//滑动菜单选择值对象
 	
 	mod.BADGENUMBER = 'badgeNumber'//app角标
