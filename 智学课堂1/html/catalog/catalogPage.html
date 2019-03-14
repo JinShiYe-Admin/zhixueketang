@@ -397,17 +397,6 @@
 					console.log('获取教材:' + JSON.stringify(data));
 					if(data.RspCode == 0) {
 						if(data.RspData){
-							//分册列表
-							var fence= data.RspData.fasc.list;
-							var fcselected= data.RspData.fasc.selected;
-							for(var i = 0; i < fence.length; i++) {
-                                var temp =  fence[i];
-                                if (temp.fasccode==fcselected) {
-                                    temp.ischeck = 1;
-                                }else{
-                                    temp.ischeck = 0;
-                                } 
-                            }
 							//学段列表
 							var xdselected= data.RspData.per.selected;
 							for(var i = 0; i < catalogPage.prdList.length; i++) {
@@ -427,6 +416,18 @@
                                 }else{
                                     temp.ischeck = 0;
                                 }
+                            }
+							
+							//分册列表
+							var fence= data.RspData.fasc.list;
+							var fcselected= data.RspData.fasc.selected;
+							for(var i = 0; i < fence.length; i++) {
+                                var temp =  fence[i];
+                                if (temp.fasccode==fcselected) {
+                                    temp.ischeck = 1;
+                                }else{
+                                    temp.ischeck = 0;
+                                } 
                             }
 							catalog.xueduan=catalogPage.prdList;
 							catalog.kemu=catalogPage.subList;

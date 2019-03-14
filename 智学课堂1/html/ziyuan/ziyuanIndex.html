@@ -82,7 +82,7 @@
 			</h1>
 		</header>
 		<div class="mui-content mui-scroll-wrapper mui-fullscreen" v-cloak style="background: white;" id="contentData">
-			<div v-if="showFlag>0">
+			<div v-show="showFlag>0">
 				<div class="swiper-container catalogs" id="ziyuanbao">
 					<div class="swiper-wrapper">
 						<div class="swiper-slide" style="font-size: 14px;" :class="cate.ischeck==1?'fontcolor':''" v-for="(cate,index) in categoryArray" @tap="catalogItemClick(categoryArray,cate)">{{cate.name}}</div>
@@ -132,7 +132,7 @@
 					</ul>
 				</div>
 			</div>
-			<div v-else-if="showFlag==0 || showFlag==-1">
+			<div v-show="showFlag==0 || showFlag==-1">
 				<p style="text-align: center;margin-top: 5px;" v-cloak>{{noData}}</p>
 					<div v-cloak style="text-align: center;margin:10% auto;">
 						<img src="../../img/noData.png" style="width: 250px;" />
@@ -302,10 +302,9 @@
 					},
 					clickTitle: function() {
 						console.log('点击标题');
-						if(contentData.showFlag==0){
+						if(contentData.showFlag!=-1){
 							utils.mOpenWithData("../../html/catalog/catalogPage.html", {});
 						}
-						//							utils.mOpenWithData("../../html/catalog/inside_page.html", {});
 					}
 				}
 			});
@@ -343,14 +342,11 @@
 							personal.userbus = tempArray.join('|'); // 绑定的套餐
 							store.set(window.storageKeyName.PERSONALINFO, personal);
 							if(tempArray.length > 0) {
-								console.log('showFlag=0');
-								contentData.showFlag = 1;
 								//根据已订购套餐，得到学段、科目
 								var catalogObj=getCatalog(data1.RspData.userbus);
 								//根据学段获取学段下的年级，在智学课堂中，年级不是从订购的套餐中获取的，而是通过协议拿到的。
 								getGrdList(catalogObj);
 							} else {
-								console.log('showFlag=01');
 								contentData.showFlag = -1;
 								tempHead.titleName = '请先订购套餐';
 								contentData.noData = '您还没有订购套餐，请去个人中心设置';
@@ -529,6 +525,7 @@
 						contentData.showFlag = 1;
 						$("#contentData").show();
 					} else {
+						contentData.showFlag = 0;
 						mui.toast(data.RspTxt);
 					}
 				});

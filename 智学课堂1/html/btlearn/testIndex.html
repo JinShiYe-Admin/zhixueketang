@@ -264,12 +264,6 @@
 							<div class="swiper-slide" :class="km.ischeck==1?'fontcolor':''" v-for="(km,index) in kemu" @tap="catalogItemClick(kemu,km,'km')">{{km.subname}}</div>
 						</div>
 					</div>
-					<div class="names">教版：</div>
-					<div class="swiper-container" id="jiaoban">
-						<div class="swiper-wrapper" v-cloak>
-							<div class="swiper-slide" :class="jb.ischeck==1?'fontcolor':''" v-for="(jb,index) in jiaoban" @tap="catalogItemClick(jiaoban,jb,'jb')">{{jb.matername}}</div>
-						</div>
-					</div>
 					<div class="names">分册：</div>
 					<div class="swiper-container" id="fence">
 						<div class="swiper-wrapper" v-cloak>
@@ -329,12 +323,23 @@
 			//获取共用参数
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
 			var catalogObj = store.get(window.storageKeyName.CATALOGOBJ); //滑动菜单选择值对象
+			var catalogPage = store.get(window.storageKeyName.CATALOG); //滑动菜单对象
+			console.log('catalogPage testIndex:'+JSON.stringify(catalogPage));
+			console.log('catalogObj testIndex:'+JSON.stringify(catalogObj));
 			if(catalogObj == null) {
 				catalogObj = {
 					percode: '', //学段代码 
 					subcode: '', //科目代码 
-					matercode: '', //教材代码 
 					fasccode: '' //分册代码
+				}
+				if(catalogPage&&catalogPage.prdList.length>0){
+					catalogObj.percode=catalogPage.prdList[0].percode;
+				}
+				if(catalogPage&&catalogPage.grdList.length>0){
+					catalogObj.fasccode=catalogPage.grdList[0].fasccode;
+				}
+				if(catalogPage&&catalogPage.subList.length>0){
+					catalogObj.subcode=catalogPage.subList[0].subcode;
 				}
 			}
 			var selectDatas; //请求参数
@@ -405,8 +410,6 @@
 								catalogObj.percode = item.percode;
 							} else if(lx == 'km') {
 								catalogObj.subcode = item.subcode;
-							} else if(lx == 'jb') {
-								catalogObj.matercode = item.matercode;
 							} else if(lx == 'fc') {
 								catalogObj.fasccode = item.fasccode;
 							}
@@ -532,41 +535,35 @@
 					if(data.RspCode == 0) {
 						if(data.RspData) {
 							//学段列表
-							var xueduan = data.RspData.per.list;
-							var xdselected = data.RspData.per.selected;
-							for(var i = 0; i < xueduan.length; i++) {
-								var temp = xueduan[i];
-								if(temp.percode == xdselected) {
-									temp.ischeck = 1;
-								} else {
-									temp.ischeck = 0;
-								}
-							}
-							//							console.log(JSON.stringify(xueduan))
+//							var xueduan = data.RspData.per.list;
+//							var xdselected = data.RspData.per.selected;
+//							for(var i = 0; i < xueduan.length; i++) {
+//								var temp = xueduan[i];
+//								if(temp.percode == xdselected) {
+//									temp.ischeck = 1;
+//								} else {
+//									temp.ischeck = 0;
+//								}
+//							}
+							var xdselected= data.RspData.per.selected;
+							for(var i = 0; i < catalogPage.prdList.length; i++) {
+                                var temp =  catalogPage.prdList[i];
+                                if (temp.percode==xdselected) {
+                                    temp.ischeck = 1;
+                                }else{
+                                    temp.ischeck = 0;
+                                }
+                            }
 							//科目列表
-							var kemu = data.RspData.sub.list;
-							var kmselected = data.RspData.sub.selected;
-							for(var i = 0; i < kemu.length; i++) {
-								var temp = kemu[i];
-								if(temp.subcode == kmselected) {
-									temp.ischeck = 1;
-								} else {
-									temp.ischeck = 0;
-								}
-							}
-							//							console.log(JSON.stringify(kemu))
-							//教材列表
-							var jiaoban = data.RspData.mater.list;
-							var jbselected = data.RspData.mater.selected;
-							for(var i = 0; i < jiaoban.length; i++) {
-								var temp = jiaoban[i];
-								if(temp.matercode == jbselected) {
-									temp.ischeck = 1;
-								} else {
-									temp.ischeck = 0;
-								}
-							}
-							//							console.log(JSON.stringify(jiaoban))
+							var kmselected= data.RspData.sub.selected;
+							for(var i = 0; i < catalogPage.subList.length; i++) {
+                                var temp =  catalogPage.subList[i];
+                                if (temp.subcode==kmselected) {
+                                    temp.ischeck = 1;
+                                }else{
+                                    temp.ischeck = 0;
+                                }
+                            }
 							//分册列表
 							var fence = data.RspData.fasc.list;
 							var fcselected = data.RspData.fasc.selected;
@@ -578,10 +575,8 @@
 									temp.ischeck = 0;
 								}
 							}
-							//							console.log(JSON.stringify(fence))
-							catalog.xueduan = xueduan;
-							catalog.kemu = kemu;
-							catalog.jiaoban = jiaoban;
+							catalog.xueduan = catalogPage.prdList;
+							catalog.kemu = catalogPage.subList;
 							catalog.fence = fence;
 
 							//多级菜单,变量名替换
@@ -620,7 +615,7 @@
 								catalogObj.subcode = catalog.kemu[0].subcode;
 								getZiYuanTextbookFunc();
 							}
-						}
+						} 
 					} else {
 						mui.toast(data.msg);
 					}
