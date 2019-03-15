@@ -387,15 +387,26 @@
 						if(data.RspData) {
 							//分册列表
 							var fence = data.RspData.fasc.list;
-							var fcselected = data.RspData.fasc.selected;
+							var fcSelected = data.RspData.fasc.selected;
 							for(var i = 0; i < fence.length; i++) {
-								if(fence[i].fasccode == fcselected) {
+								if(fence[i].fasccode == fcSelected) {
 									fence[i].ischeck = 1;
 								} else {
 									fence[i].ischeck = 0;
 								}
 							}
 							catalogObj.grdList = fence;
+							//教版
+							var mater = data.RspData.mater.list;
+							var materSelected = data.RspData.mater.selected;
+							for(var i = 0; i < fence.length; i++) {
+								if(mater[i].matercode == materSelected) {
+									mater[i].ischeck = 1;
+								} else {
+									mater[i].ischeck = 0;
+								}
+							}
+							catalogObj.materList = mater; 
 							//将获取到的学段、年级、科目保存起来
 							store.set(window.storageKeyName.CATALOG, catalogObj);
 							console.log('catalogObj:' + JSON.stringify(catalogObj));
@@ -417,10 +428,11 @@
 			//根据得到的得到学段、年级、科目 获取教材和资源列表
 			var getTextBook = function(catalogObj) {
 				var comData = {}
-				comData.percode = catalogObj.prdList[0].percode; //学段代码 可选
-				comData.fasccode = catalogObj.grdList[0].fasccode; //分册（年级）代码 可选
-				if(catalogObj.subList.length > 0) {
+				comData.percode = catalogObj.prdList[0].percode; //学段代码，取默认第一个 可选
+				comData.fasccode = catalogObj.grdList[0].fasccode; //分册（年级），取默认第一个代码 可选
+				if(catalogObj.subList.length > 0 && catalogObj.materList.length > 0 ) {//如果科目和学段都不为空的话，取默认第一个
 					comData.subcode = catalogObj.subList[0].subcode; //科目代码
+					comData.matercode = catalogObj.materList[0].matercode; //科目代码
 				} else {
 					contentData.showFlag = 0;
 					tempHead.titleName = '请切换目录';
@@ -461,6 +473,7 @@
 								var catalogObj = {
 									percode: data.RspData.per.selected, //学段代码 
 									subcode: data.RspData.sub.selected, //科目代码 
+									matercode: data.RspData.mater.selected, //教材代码 
 									fasccode: data.RspData.fasc.selected //分册代码
 								}
 								store.set(window.storageKeyName.CATALOGOBJ, catalogObj);
