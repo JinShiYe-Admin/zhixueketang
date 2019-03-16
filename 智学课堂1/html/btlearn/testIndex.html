@@ -333,24 +333,11 @@
 			var catalogPage = store.get(window.storageKeyName.CATALOG); //滑动菜单对象
 			console.log('catalogPage testIndex:'+JSON.stringify(catalogPage));
 			console.log('catalogObj testIndex:'+JSON.stringify(catalogObj));
-			if(catalogObj == null) {
-				catalogObj = {
-					percode: '', //学段代码 
-					subcode: '', //科目代码 
-					fasccode: '' //分册代码
-				}
-				if(catalogPage&&catalogPage.prdList.length>0){
-					catalogObj.percode=catalogPage.prdList[0].percode;
-				}
-				if(catalogPage&&catalogPage.grdList.length>0){
-					catalogObj.fasccode=catalogPage.grdList[0].fasccode;
-				}
-				if(catalogPage&&catalogPage.materList.length>0){
-					catalogObj.matercode=catalogPage.materList[0].matercode;
-				}
-				if(catalogPage&&catalogPage.subList.length>0){
-					catalogObj.subcode=catalogPage.subList[0].subcode;
-				}
+			catalogObj = {
+				percode: '', //学段代码 
+				subcode: '', //科目代码 
+				matercode:'',//教版代码
+				fasccode: '' //分册代码
 			}
 			var selectDatas; //请求参数
 			// var test_start;
@@ -425,7 +412,7 @@
 							} else if(lx == 'fc') {
 								catalogObj.fasccode = item.fasccode;
 							}
-							// store.set(window.storageKeyName.CATALOGOBJ,catalogObj);
+							catalogPage = store.get(window.storageKeyName.CATALOG);
 							getZiYuanTextbookFunc();
 						}
 					},
@@ -567,15 +554,31 @@
                                 }
                             }
 							//科目列表
-							var kmselected= data.RspData.sub.selected;
-							for(var i = 0; i < catalogPage.subList.length; i++) {
-                                var temp =  catalogPage.subList[i];
-                                if (temp.subcode==kmselected) {
-                                    temp.ischeck = 1;
-                                }else{
-                                    temp.ischeck = 0;
-                                }
-                            }
+							if(catalogPage.subList.length == 0){//如果订购套餐里无法获取到科目,那么从广西接口拿科目列表
+								var sub= data.RspData.sub.list;
+								var kmselected= data.RspData.sub.selected;
+								for(var i = 0; i < sub.length; i++) {
+	                                if (sub[i].subcode==kmselected) {
+	                                    sub[i].ischeck = 1;
+	                                }else{
+	                                    sub[i].ischeck = 0;
+	                                }
+	                            }
+								catalogPage.subList=sub;
+								console.log('liushuai'+JSON.stringify(sub));
+							}else{
+								var sub= catalogPage.subList;
+								var kmselected= data.RspData.sub.selected;
+								for(var i = 0; i < sub.length; i++) {
+	                                if (sub[i].subcode==kmselected) {
+	                                    sub[i].ischeck = 1;
+	                                }else{
+	                                    sub[i].ischeck = 0;
+	                                }
+	                            }
+								catalogPage.subList=sub;
+								console.log('liushuai2:'+kmselected);
+							}
 							//教版列表
 							var jiaoban= data.RspData.mater.list;
                             var jbselected= data.RspData.mater.selected;
@@ -599,7 +602,6 @@
 								}
 							}
 							
-							
 							if(catalogPage.prdList.length>0){
 								catalog.xueduan=catalogPage.prdList;
 							}else{
@@ -608,6 +610,8 @@
 							}
 							if(catalogPage.subList.length>0){
 								catalog.kemu=catalogPage.subList;
+							}else if(data.RspData.sub.list.length>0){
+								catalog.kemu=data.RspData.sub.list;
 							}else{
 								var newKemu=[{subcode:'-1',subname:'暂无',isselect:0}];
 								catalog.kemu=newKemu;
