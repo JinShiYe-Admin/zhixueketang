@@ -344,7 +344,7 @@ var getCatalog = function(userbus) {
 			var tempM = userbus[i];
 			if(JSON.stringify(tempM).indexOf('zxkt') != -1 && tempM.serstat == 1) { //已订购并且没停用的套餐
 				//对已订购套餐的学段和学段对应的科目进行分组，如果该学段下没有科目，则取广西接口下的科目
-//				console.log('智学课堂套餐：' + JSON.stringify(tempM.busext));
+				//								console.log('智学课堂套餐：' + JSON.stringify(tempM.busext));
 				//循环已经得到的学段数组
 				for(var m = 0; m < prdList.length; m++) {
 					var tempPrdModel = prdList[m];
@@ -352,27 +352,28 @@ var getCatalog = function(userbus) {
 					//循环当前的套餐，找到学段字段
 					for(var a = 0; a < tempM.busext.length; a++) {
 						var tempM1 = tempM.busext[a];
-//						console.log('tempM1:' + JSON.stringify(tempM1));
+						//						console.log('tempM1:' + JSON.stringify(tempM1));
 						//找到学段
 						if(tempM1.itemcode == 'prd' && JSON.stringify(tempM1.itemsons).indexOf(tempPrdModel.prdSum) != -1) {
 							tempFlag++;
 						}
 					}
 					if(tempFlag > 0) {
+						var tempFlag1 = 0;
 						//循环当前的套餐，找到科目字段
 						for(var a = 0; a < tempM.busext.length; a++) {
 							var tempM1 = tempM.busext[a];
-//							console.log('tempM1:' + JSON.stringify(tempM1));
+							//														console.log('tempM1:' + JSON.stringify(tempM1));
 							//找到对应的科目
 							if(tempM1.itemcode == 'sub') {
-								tempFlag++;
+								tempFlag1++;
 								//将科目分割成数组
 								var tempArr = tempM1.itemsons.split(',');
-//								console.log('tempArr:' + JSON.stringify(tempArr));
+								//																console.log('tempArr:' + JSON.stringify(tempArr));
 								//循环学段数组
 								for(var b = 0; b < tempArr.length; b++) {
 									var tempM2 = tempArr[b]; //
-//									console.log('tempM2:' + JSON.stringify(tempM2));
+									//																		console.log('tempM2:' + JSON.stringify(tempM2));
 									var tempArr1 = tempM2.split('|');
 									var tempM4 = {
 										subSum: tempM2,
@@ -382,16 +383,19 @@ var getCatalog = function(userbus) {
 									tempPrdModel.subList.push(tempM4);
 								}
 							}
-							if(tempFlag > 0) {
-								tempPrdModel.subFlag = 1;
-							}
+						}
+						if(tempFlag1 == 0) {
+							tempPrdModel.subFlag = 1;
 						}
 					}
 				}
 			}
 		}
-		//		prdList = prdList.unique('prdCode');
-		console.log('prdList222:' + JSON.stringify(prdList));
+		for(var i = 0; i < prdList.length; i++) {
+			var tempM = prdList[i];
+			tempM.subList = tempM.subList.unique('subCode');
+		}
+		console.log('prdList333:' + JSON.stringify(prdList));
 		var catalogObj = {};
 		catalogObj.prdList = [];
 		return catalogObj;
