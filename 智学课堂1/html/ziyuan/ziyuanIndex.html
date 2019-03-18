@@ -352,7 +352,7 @@
 								//根据已订购套餐，得到学段、科目
 								var catalogObj = getCatalog(data1.RspData.userbus);
 								//根据学段获取学段下的年级，在智学课堂中，年级不是从订购的套餐中获取的，而是通过协议拿到的。
-//								getGrdList(catalogObj);
+								getGrdList(catalogObj);
 							} else {
 								contentData.showFlag = -1;
 								tempHead.titleName = '请先订购套餐';
@@ -372,15 +372,8 @@
 			//获取分册（年级）
 			function getGrdList(catalogObj) {
 				var comData = {};
-				if(catalogObj.prdList.length > 0) {
-					comData.percode = catalogObj.prdList[0].percode; //学段代码
-				} else {
-					contentData.showFlag = 0;
-					tempHead.titleName = '请切换目录';
-					contentData.noData = '该目录下暂无资源，请切换目录';
-					mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
-					return 0
-				}
+				var firstPrd=catalogObj.prdList[0];
+				comData.percode = catalogObj.prdList[0].percode; //学段代码
 				console.log('comData==' + JSON.stringify(comData));
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {
@@ -400,31 +393,52 @@
 								}
 							} 
 							catalogObj.grdList = fence;
-							//科目列表
-							if(catalogObj.subList.length == 0){//如果订购套餐里无法获取到科目,那么从广西接口拿科目列表
+							
+							if(firstPrd.subFlag==0){//需要与广西接口的科目列表合并，并去重
+								var orderSub=firstPrd.subList;
 								var sub= data.RspData.sub.list;
 								var kmselected= data.RspData.sub.selected;
-								for(var i = 0; i < sub.length; i++) {
-	                                if (sub[i].subcode==kmselected) {
-	                                    sub[i].ischeck = 1;
+								var subList=orderSub.concat(sub);
+								console.log('liushuai:'+JSON.stringify(sub));
+								console.log('liushuai:'+JSON.stringify(subList));
+								var newSubList=subList.unique('subCode');
+								console.log('liushuai:'+JSON.stringify(newSubList));
+								for(var i = 0; i < newSubList.length; i++) {
+	                                if (newSubList[i].subcode==kmselected) {
+	                                    newSubList[i].ischeck = 1;
 	                                }else{
-	                                    sub[i].ischeck = 0;
+	                                    newSubList[i].ischeck = 0;
 	                                }
 	                            }
-								catalogObj.subList=sub;
-							}else{
-								var sub= catalogObj.subList;
-								var kmselected= data.RspData.sub.selected;
-								for(var i = 0; i < sub.length; i++) {
-	                                if (sub[i].subcode==kmselected) {
-	                                    sub[i].ischeck = 1;
-	                                }else{
-	                                    sub[i].ischeck = 0;
-	                                }
-	                            }
-								catalogObj.subList=sub;
+								catalogObj.orderSub=newSubList;
+							}else{//不需要合并广西接口的科目列表
+								
 							}
-							
+							//科目列表
+//							if(catalogObj.subList.length == 0){//如果订购套餐里无法获取到科目,那么从广西接口拿科目列表
+//								var sub= data.RspData.sub.list;
+//								var kmselected= data.RspData.sub.selected;
+//								for(var i = 0; i < sub.length; i++) {
+//	                                if (sub[i].subcode==kmselected) {
+//	                                    sub[i].ischeck = 1;
+//	                                }else{
+//	                                    sub[i].ischeck = 0;
+//	                                }
+//	                            }
+//								catalogObj.subList=sub;
+//							}else{
+//								var sub= catalogObj.subList;
+//								var kmselected= data.RspData.sub.selected;
+//								for(var i = 0; i < sub.length; i++) {
+//	                                if (sub[i].subcode==kmselected) {
+//	                                    sub[i].ischeck = 1;
+//	                                }else{
+//	                                    sub[i].ischeck = 0;
+//	                                }
+//	                            }
+//								
+//							}
+//							catalogObj.subList=sub;
 							//教版
 							var mater = data.RspData.mater.list;
 							var materSelected = data.RspData.mater.selected;

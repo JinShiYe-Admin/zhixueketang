@@ -397,7 +397,7 @@ var getCatalog = function(userbus) {
 		}
 		console.log('prdList333:' + JSON.stringify(prdList));
 		var catalogObj = {};
-		catalogObj.prdList = [];
+		catalogObj.prdList = prdList;
 		return catalogObj;
 	} catch(e) {
 		console.error('对userbus字段进行科目、学段、年级去重时发生异常,' + e);
