@@ -7,7 +7,6 @@ document.write('<script src="../../js/libs/crypto-js/require.js"><\/script>');
 document.write('<script src="../../js/utils/signHmacSHA1.js"><\/script>');
 document.write('<script src="../../js/utils/sortSign.js"><\/script>');
 
-
 function generateUUID() {
 	var d = new Date().getTime();
 	var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -64,7 +63,7 @@ var postDataEncry = function(url, encryData, commonData, flag, callback) {
 		var tempStr = JSON.stringify(tempData).replace(/\\/g, "");
 		console.log('tempStr:' + tempStr);
 		jQAjaxPost(url, tempStr, callback);
-//		jQAjaxPost(url, JSON.stringify(tempData), callback);
+		//		jQAjaxPost(url, JSON.stringify(tempData), callback);
 	});
 }
 
@@ -300,40 +299,143 @@ var jQAjaxPost = function(url, data, callback) {
 	});
 }
 
-			//根据已订购套餐，得到学段、科目
-			var getCatalog = function(userbus) {
-				try{
-					var prdList=[];
-					var subList=[];
-					for(var i = 0; i < userbus.length; i++) {
-						var tempM = userbus[i];
-						if(JSON.stringify(tempM).indexOf('zxkt')!=-1 && tempM.serstat == 1){//已订购并且没停用的套餐
-							//对已订购套餐的学段和学段对应的科目进行分组，如果该学段下没有科目，则取广西接口下的科目
-							console.log(JSON.stringify(tempM.busext));
+//根据已订购套餐，得到学段、科目
+var getCatalog = function(userbus) {
+	try {
+		var prdList = [];
+		var subList = [];
+		//选循环，得到所有的学段
+		for(var i = 0; i < userbus.length; i++) {
+			var tempM = userbus[i];
+			if(JSON.stringify(tempM).indexOf('zxkt') != -1 && tempM.serstat == 1) { //已订购并且没停用的套餐
+				//对已订购套餐的学段和学段对应的科目进行分组，如果该学段下没有科目，则取广西接口下的科目
+				//				console.log('智学课堂套餐：' + JSON.stringify(tempM.busext));
+				//循环当前的套餐，找到学段字段
+				for(var a = 0; a < tempM.busext.length; a++) {
+					var tempM1 = tempM.busext[a];
+					//					console.log('tempM1:' + JSON.stringify(tempM1));
+					//找到学段
+					if(tempM1.itemcode == 'prd') {
+						//将学段分割成数组，2|小学,3|初中
+						var tempArr = tempM1.itemsons.split(',');
+						//						console.log('tempArr:' + JSON.stringify(tempArr));
+						//循环学段数组
+						for(var b = 0; b < tempArr.length; b++) {
+							var tempM2 = tempArr[b]; //2|小学
+							//							console.log('tempM2:' + JSON.stringify(tempM2));
+							var tempArr1 = tempM2.split('|');
+							var tempM4 = {
+								prdSum: tempM2,
+								prdName: tempArr1[1],
+								prdCode: tempArr1[0],
+								subList: [],
+								subFlag: 0
+							}
+							prdList.push(tempM4);
 						}
 					}
-					var catalogObj={};
-					catalogObj.prdList=??;
-					catalogObj.subList=??;
-					
-					return catalogObj;
-				}catch(e){
-					console.error('对userbus字段进行科目、学段、年级去重时发生异常,'+e);
-					console.error('====================')
-					console.error(e.stack); 
-					console.error('====================')
-					return {};
 				}
 			}
-			//按指定字段，对对象数组进行快速排序
-			 function compare(property){
-		         return function(obj1,obj2){
-		             var value1 = obj1[property];
-		             var value2 = obj2[property];
-		             return value1 - value2;     // 升序
-		         }
-		    }
-			 
+		}
+		prdList = prdList.unique('prdCode');
+		console.log('prdList:' + JSON.stringify(prdList));
+		//循环科目，对应塞值
+		for(var i = 0; i < userbus.length; i++) {
+			var tempM = userbus[i];
+			if(JSON.stringify(tempM).indexOf('zxkt') != -1 && tempM.serstat == 1) { //已订购并且没停用的套餐
+				//对已订购套餐的学段和学段对应的科目进行分组，如果该学段下没有科目，则取广西接口下的科目
+//				console.log('智学课堂套餐：' + JSON.stringify(tempM.busext));
+				//循环已经得到的学段数组
+				for(var m = 0; m < prdList.length; m++) {
+					var tempPrdModel = prdList[m];
+					var tempFlag = 0;
+					//循环当前的套餐，找到学段字段
+					for(var a = 0; a < tempM.busext.length; a++) {
+						var tempM1 = tempM.busext[a];
+//						console.log('tempM1:' + JSON.stringify(tempM1));
+						//找到学段
+						if(tempM1.itemcode == 'prd' && JSON.stringify(tempM1.itemsons).indexOf(tempPrdModel.prdSum) != -1) {
+							tempFlag++;
+						}
+					}
+					if(tempFlag > 0) {
+						//循环当前的套餐，找到科目字段
+						for(var a = 0; a < tempM.busext.length; a++) {
+							var tempM1 = tempM.busext[a];
+//							console.log('tempM1:' + JSON.stringify(tempM1));
+							//找到对应的科目
+							if(tempM1.itemcode == 'sub') {
+								tempFlag++;
+								//将科目分割成数组
+								var tempArr = tempM1.itemsons.split(',');
+//								console.log('tempArr:' + JSON.stringify(tempArr));
+								//循环学段数组
+								for(var b = 0; b < tempArr.length; b++) {
+									var tempM2 = tempArr[b]; //
+//									console.log('tempM2:' + JSON.stringify(tempM2));
+									var tempArr1 = tempM2.split('|');
+									var tempM4 = {
+										subSum: tempM2,
+										subName: tempArr1[1],
+										subCode: tempArr1[0]
+									}
+									tempPrdModel.subList.push(tempM4);
+								}
+							}
+							if(tempFlag > 0) {
+								tempPrdModel.subFlag = 1;
+							}
+						}
+					}
+				}
+			}
+		}
+		//		prdList = prdList.unique('prdCode');
+		console.log('prdList222:' + JSON.stringify(prdList));
+		var catalogObj = {};
+		catalogObj.prdList = [];
+		return catalogObj;
+	} catch(e) {
+		console.error('对userbus字段进行科目、学段、年级去重时发生异常,' + e);
+		console.error('====================')
+		console.error(e.stack);
+		console.error('====================')
+		return {};
+	}
+}
+//给数组去重
+Array.prototype.unique = function(key) {
+	var arr = this;
+	var n = [arr[0]];
+	for(var i = 1; i < arr.length; i++) {
+		if(key === undefined) {
+			if(n.indexOf(arr[i]) == -1) n.push(arr[i]);
+		} else {
+			inner: {
+				var has = false;
+				for(var j = 0; j < n.length; j++) {
+					if(arr[i][key] == n[j][key]) {
+						has = true;
+						break inner;
+					}
+				}
+			}
+			if(!has) {
+				n.push(arr[i]);
+			}
+		}
+	}
+	return n;
+}
+//按指定字段，对对象数组进行快速排序
+function compare(property) {
+	return function(obj1, obj2) {
+		var value1 = obj1[property];
+		var value2 = obj2[property];
+		return value1 - value2; // 升序
+	}
+}
+
 var tempPro = function(url, data0, callback) {
 	if(plus.networkinfo.getCurrentType() == plus.networkinfo.CONNECTION_NONE) {
 		callback({
