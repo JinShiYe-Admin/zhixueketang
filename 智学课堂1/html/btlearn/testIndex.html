@@ -579,8 +579,8 @@
 								} 
 								newSub=orderSub;
 							}
-							 console.log(subFlag+'liushuai:'+JSON.stringify(orderSub))
-							 console.log(subFlag+'liushuai:'+JSON.stringify(newSub))
+							 console.log(subFlag+'orderSub:'+JSON.stringify(orderSub))
+							 console.log(subFlag+'newSub:'+JSON.stringify(newSub))
 							//教版列表
 							var mater= data.RspData.mater.list;
                             var materSelected= data.RspData.mater.selected;
@@ -616,8 +616,8 @@
 								var newKemu=[{subcode:'-1',subname:'暂无',isselect:0}];
 								catalog.kemu=newKemu;
 							}
-							if(jiaoban.length>0){
-								catalog.jiaoban=jiaoban;
+							if(mater.length>0){
+								catalog.jiaoban=mater;
 							}else{
 								var newJiaoban=[{matercode:'-1',matername:'暂无',isselect:0}];
 								catalog.jiaoban=newJiaoban;

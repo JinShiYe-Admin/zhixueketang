@@ -406,7 +406,9 @@ var getCatalog = function(userbus) {
 		}
 		for(var i = 0; i < prdList.length; i++) {
 			var tempM = prdList[i];
-			tempM.subList = tempM.subList.unique('subcode');
+			if(tempM.subList.length>0){
+				tempM.subList = tempM.subList.unique('subcode');
+			}
 		}
 		console.log('prdList333:' + JSON.stringify(prdList));
 		var catalogObj = {};
