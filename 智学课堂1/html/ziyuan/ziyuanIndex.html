@@ -372,6 +372,14 @@
 			//获取分册（年级）
 			function getGrdList(catalogObj) {
 				var comData = {};
+				console.log('liushuai:'+JSON.stringify(catalogObj.prdList));
+				if(catalogObj.prdList.length == 0) {
+					contentData.showFlag = 0;
+					tempHead.titleName = '请切换目录';
+					contentData.noData = '该目录下暂无资源，请切换目录';
+					mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
+					return 0
+				}
 				var firstPrd=catalogObj.prdList[0];
 				comData.percode = catalogObj.prdList[0].percode; //学段代码
 				console.log('comData==' + JSON.stringify(comData));
@@ -388,57 +396,47 @@
 							for(var i = 0; i < fence.length; i++) {
 								if(fence[i].fasccode == fcSelected) {
 									fence[i].ischeck = 1;
-								} else {
+								} else { 
 									fence[i].ischeck = 0;
 								}
 							} 
-							catalogObj.grdList = fence;
-							
+							catalogObj.grdList = fence;  
+							    
 							if(firstPrd.subFlag==0){//需要与广西接口的科目列表合并，并去重
-								var orderSub=firstPrd.subList;
-								var sub= data.RspData.sub.list;
+								var orderSub=firstPrd.subList;//套餐里的科目列表
+								var sub= data.RspData.sub.list;//接口里的科目列表
 								var kmselected= data.RspData.sub.selected;
-								var subList=orderSub.concat(sub);
-								console.log('liushuai:'+JSON.stringify(sub));
-								console.log('liushuai:'+JSON.stringify(subList));
-								var newSubList=subList.unique('subCode');
-								console.log('liushuai:'+JSON.stringify(newSubList));
+								var subList=orderSub.concat(sub);//合并的科目列表
+								var newSubList=subList.unique('subcode');
+								newSubList.sort(compare('subcode'));
 								for(var i = 0; i < newSubList.length; i++) {
 	                                if (newSubList[i].subcode==kmselected) {
 	                                    newSubList[i].ischeck = 1;
 	                                }else{
 	                                    newSubList[i].ischeck = 0;
+	                                } 
+	                            }
+								if(JSON.stringify(newSubList).indexOf('ischeck:1')==-1){//如果广西接口传过来的默认勾选值与套餐中的科目勾选值不对应，则默认选中第一个科目
+									newSubList[0].ischeck=1;
+								}
+								catalogObj.subList=newSubList;
+								catalogObj.subFlag=0;   
+							}else{//不需要合并广西接口的科目列表
+								var orderSub=firstPrd.subList;
+								var kmselected= data.RspData.sub.selected;
+								for(var i = 0; i < orderSub.length; i++) {
+	                                if (orderSub[i].subcode==kmselected) {
+	                                    orderSub[i].ischeck = 1;
+	                                }else{
+	                                    orderSub[i].ischeck = 0;
 	                                }
 	                            }
-								catalogObj.orderSub=newSubList;
-							}else{//不需要合并广西接口的科目列表
-								
+								if(JSON.stringify(orderSub).indexOf('ischeck:1')==-1){
+									orderSub[0].ischeck=1;
+								} 
+							    catalogObj.subList=orderSub;
+							    catalogObj.subFlag=1;
 							}
-							//科目列表
-//							if(catalogObj.subList.length == 0){//如果订购套餐里无法获取到科目,那么从广西接口拿科目列表
-//								var sub= data.RspData.sub.list;
-//								var kmselected= data.RspData.sub.selected;
-//								for(var i = 0; i < sub.length; i++) {
-//	                                if (sub[i].subcode==kmselected) {
-//	                                    sub[i].ischeck = 1;
-//	                                }else{
-//	                                    sub[i].ischeck = 0;
-//	                                }
-//	                            }
-//								catalogObj.subList=sub;
-//							}else{
-//								var sub= catalogObj.subList;
-//								var kmselected= data.RspData.sub.selected;
-//								for(var i = 0; i < sub.length; i++) {
-//	                                if (sub[i].subcode==kmselected) {
-//	                                    sub[i].ischeck = 1;
-//	                                }else{
-//	                                    sub[i].ischeck = 0;
-//	                                }
-//	                            }
-//								
-//							}
-//							catalogObj.subList=sub;
 							//教版
 							var mater = data.RspData.mater.list;
 							var materSelected = data.RspData.mater.selected;

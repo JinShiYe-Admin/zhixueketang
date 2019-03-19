@@ -307,7 +307,7 @@ var getCatalog = function(userbus) {
 		//选循环，得到所有的学段
 		for(var i = 0; i < userbus.length; i++) {
 			var tempM = userbus[i];
-			if(JSON.stringify(tempM).indexOf('zxkt') != -1 && tempM.serstat == 1) { //已订购并且没停用的套餐
+			if(tempM.busext!=null && JSON.stringify(tempM).indexOf('zxkt') != -1 && tempM.serstat == 1) { //已订购并且没停用的套餐
 				//对已订购套餐的学段和学段对应的科目进行分组，如果该学段下没有科目，则取广西接口下的科目
 				//				console.log('智学课堂套餐：' + JSON.stringify(tempM.busext));
 				//循环当前的套餐，找到学段字段
@@ -326,8 +326,8 @@ var getCatalog = function(userbus) {
 							var tempArr1 = tempM2.split('|');
 							var tempM4 = {
 								prdSum: tempM2,
-								prdName: tempArr1[1],
-								prdCode: tempArr1[0],
+								pername: tempArr1[1],
+								percode: tempArr1[0],
 								subList: [],
 								subFlag: 0
 							}
@@ -337,12 +337,14 @@ var getCatalog = function(userbus) {
 				}
 			}
 		}
-		prdList = prdList.unique('prdCode');
+		if(prdList.length>0){
+			prdList = prdList.unique('percode');
+		}
 		console.log('prdList:' + JSON.stringify(prdList));
 		//循环科目，对应塞值
 		for(var i = 0; i < userbus.length; i++) {
 			var tempM = userbus[i];
-			if(JSON.stringify(tempM).indexOf('zxkt') != -1 && tempM.serstat == 1) { //已订购并且没停用的套餐
+			if(tempM.busext!=null && JSON.stringify(tempM).indexOf('zxkt') != -1 && tempM.serstat == 1) { //已订购并且没停用的套餐
 				//对已订购套餐的学段和学段对应的科目进行分组，如果该学段下没有科目，则取广西接口下的科目
 				//								console.log('智学课堂套餐：' + JSON.stringify(tempM.busext));
 				//循环已经得到的学段数组
@@ -377,11 +379,22 @@ var getCatalog = function(userbus) {
 									var tempArr1 = tempM2.split('|');
 									var tempM4 = {
 										subSum: tempM2,
-										subName: tempArr1[1],
-										subCode: tempArr1[0]
+										subname: tempArr1[1],
+										subcode: tempArr1[0],
+										
 									}
 									tempPrdModel.subList.push(tempM4);
+									
 								}
+								tempPrdModel.subList.sort(compare('subcode'));
+								for(var m=0;m<tempPrdModel.subList.length;m++){
+									if(m==0){
+										tempPrdModel.subList[m].ischeck=1//是否选中 选中
+									}else{
+										tempPrdModel.subList[m].ischeck=0//是否选中 不选中
+									}
+								}
+								
 							}
 						}
 						if(tempFlag1 == 0) {
@@ -393,12 +406,12 @@ var getCatalog = function(userbus) {
 		}
 		for(var i = 0; i < prdList.length; i++) {
 			var tempM = prdList[i];
-			tempM.subList = tempM.subList.unique('subCode');
+			tempM.subList = tempM.subList.unique('subcode');
 		}
 		console.log('prdList333:' + JSON.stringify(prdList));
 		var catalogObj = {};
 		catalogObj.prdList = prdList;
-		return catalogObj;
+		return catalogObj; 
 	} catch(e) {
 		console.error('对userbus字段进行科目、学段、年级去重时发生异常,' + e);
 		console.error('====================')
