@@ -341,7 +341,7 @@
 								var tempM = data1.RspData.userbus[i];
 								for(var a = 0; a < tempM.funcs.length; a++) {
 									var tempFuncs = tempM.funcs[a];
-									if(tempFuncs.ftype == 'zxkt'&&tempM.serstat == 1) {
+									if(tempFuncs.busext!=null && tempFuncs.ftype == 'zxkt'&&tempM.serstat == 1) {
 										tempArray.push(tempM.servid);
 									}
 								}
@@ -357,6 +357,7 @@
 								contentData.showFlag = -1;
 								tempHead.titleName = '请先订购套餐';
 								contentData.noData = '您还没有订购套餐，请去个人中心设置';
+								mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
 							}
 						} else {
 							personal.userbus = ''; // 绑定的套餐
@@ -372,7 +373,6 @@
 			//获取分册（年级）
 			function getGrdList(catalogObj) {
 				var comData = {};
-				console.log('liushuai:'+JSON.stringify(catalogObj.prdList));
 				if(catalogObj.prdList.length == 0) {
 					contentData.showFlag = 0;
 					tempHead.titleName = '请切换目录';
