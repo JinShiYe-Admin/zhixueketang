@@ -132,7 +132,9 @@
 				}
 			});
 			document.getElementById('returnBtn').addEventListener('tap', function() {
-				mui.fire(plus.webview.currentWebview().opener(), 'refush_count', {});
+				if (orderFlag == 1) {
+					mui.fire(plus.webview.currentWebview().opener(), 'refush_count', {});
+				}
 				console.log('11111');
 				mui.back();
 			});
@@ -142,8 +144,10 @@
 				getOrderList();
 			}
 			window.addEventListener('refreshList', function(data) {
+				orderFlag=1;
 				getOrderList();
 			});
+			var orderFlag = 0;//是否订购套餐，订购成功后，修改此值
 			var personal;
 			var publicParameter;
 			mui.plusReady(function() {
