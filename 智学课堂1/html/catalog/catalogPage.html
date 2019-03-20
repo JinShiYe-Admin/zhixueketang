@@ -439,7 +439,7 @@
 							var subFlag=catalogPage.subFlag;
 							var orderSub=catalogPage.subList;
 							var kmselected= data.RspData.sub.selected;
-							if(subFlag==0){//需要与广西接口的科目列表合并，并去重
+							if(subFlag==1){//需要与广西接口的科目列表合并，并去重
 								var sub= data.RspData.sub.list;//接口里的科目列表
 								var kmselected= data.RspData.sub.selected;
 								var _subList=orderSub.concat(sub);//合并的科目列表

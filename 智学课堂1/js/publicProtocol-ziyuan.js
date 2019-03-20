@@ -329,7 +329,7 @@ var getCatalog = function(userbus) {
 								pername: tempArr1[1],
 								percode: tempArr1[0],
 								subList: [],
-								subFlag: 0
+								subFlag: 0 //0不需要合并广西目录  1需要合并广西目录
 							}
 							prdList.push(tempM4);
 						}
