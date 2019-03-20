@@ -329,17 +329,29 @@
 			console.log('personal:' + JSON.stringify(personal));
 			//获取共用参数
 			var publicParameter = store.get(window.storageKeyName.PUBLICPARAMETER);
-			var catalogObj = store.get(window.storageKeyName.CATALOGOBJ); //滑动菜单选择值对象
 			var catalogPage = store.get(window.storageKeyName.CATALOG); //滑动菜单对象
 			console.log('catalogPage testIndex:'+JSON.stringify(catalogPage));
 			console.log('catalogObj testIndex:'+JSON.stringify(catalogObj));
-			catalogObj = {
+			var catalogObj = {
 				percode: '', //学段代码 
 				subcode: '', //科目代码 
 				matercode:'',//教版代码
 				fasccode: '' //分册代码
 			}
-			var selectDatas; //请求参数
+			
+			if(catalogPage&&catalogPage.prdList.length>0){
+				catalogObj.percode=catalogPage.prdList[0].percode;
+			}
+			if(catalogPage&&catalogPage.grdList.length>0){
+				catalogObj.fasccode=catalogPage.grdList[0].fasccode;
+			}
+			if(catalogPage&&catalogPage.materList.length>0){
+				catalogObj.matercode=catalogPage.materList[0].matercode;
+			}
+			if(catalogPage&&catalogPage.subList.length>0){
+				catalogObj.subcode=catalogPage.subList[0].subcode;
+			}
+			
 			// var test_start;
 			mui.plusReady(function() {
 				toChildPage("子页组卷测试");
@@ -548,12 +560,12 @@
 							//科目列表 ,如果订购套餐无法获取到科目信息，那么从广西接口拿科目列表
 							var newSub=[];
 							var subFlag=catalogPage.subFlag;
-							for(var i=0;i<catalogPage.prdList.length;i++){
-								var item =catalogPage.prdList[i];
-								if (temp.percode==xdselected) {
-									catalogPage.subList=item.subList;
-								} 
-							}
+//							for(var i=0;i<catalogPage.prdList.length;i++){
+//								var item =catalogPage.prdList[i];
+//								if (temp.percode==xdselected) {
+//									catalogPage.subList=item.subList;
+//								} 
+//							}
 							var orderSub=catalogPage.subList;
 							console.log(subFlag+'orderSub:'+JSON.stringify(orderSub))
 							var kmselected= data.RspData.sub.selected;
