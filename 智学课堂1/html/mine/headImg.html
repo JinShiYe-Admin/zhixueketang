@@ -80,7 +80,7 @@
 				personal = store.get(window.storageKeyName.PERSONALINFO);
 				console.log('personal:' + JSON.stringify(personal));
 
-				peopleInfo.peopleHeadImg = setImg(personal.imgurl);
+				peopleInfo.peopleHeadImg = setImg(personal.imgurl,9);
 				peopleInfo.peopleName = personal.utname;
 				if (isPoneAvailable(personal.uid)) {
 					peopleInfo.peoplePhone = personal.uid;

@@ -359,6 +359,9 @@
 								tempHead.titleName = '请先订购套餐';
 								contentData.noData = '您还没有订购套餐，请去个人中心设置';
 								mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
+								setTimeout(function(){//初次进入首页如果没有资源，禁止刷新是不起作用的，需要延时1秒后再禁用
+									mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
+								},1000);
 							}
 						} else {
 							personal.userbus = ''; // 绑定的套餐
@@ -403,7 +406,7 @@
 							} 
 							catalogObj.grdList = fence;  
 							    
-							if(firstPrd.subFlag==0){//需要与广西接口的科目列表合并，并去重
+							if(firstPrd.subFlag==1){//需要与广西接口的科目列表合并，并去重
 								var orderSub=firstPrd.subList;//套餐里的科目列表
 								var sub= data.RspData.sub.list;//接口里的科目列表
 								var kmselected= data.RspData.sub.selected;
@@ -421,7 +424,7 @@
 									newSubList[0].ischeck=1;
 								}
 								catalogObj.subList=newSubList;
-								catalogObj.subFlag=0;   
+								catalogObj.subFlag=1;   
 							}else{//不需要合并广西接口的科目列表
 								var orderSub=firstPrd.subList;
 								var kmselected= data.RspData.sub.selected;
@@ -436,7 +439,7 @@
 									orderSub[0].ischeck=1;
 								} 
 							    catalogObj.subList=orderSub;
-							    catalogObj.subFlag=1;
+							    catalogObj.subFlag=0;
 							}
 							//教版
 							var mater = data.RspData.mater.list;
