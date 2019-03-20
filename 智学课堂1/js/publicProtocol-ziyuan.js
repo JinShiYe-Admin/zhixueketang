@@ -387,11 +387,11 @@ var getCatalog = function(userbus) {
 									
 								}
 								tempPrdModel.subList.sort(compare('subcode'));
-								for(var m=0;m<tempPrdModel.subList.length;m++){
-									if(m==0){
-										tempPrdModel.subList[m].ischeck=1//是否选中 选中
+								for(var n=0;n<tempPrdModel.subList.length;n++){
+									if(n==0){
+										tempPrdModel.subList[n].ischeck=1//是否选中 选中
 									}else{
-										tempPrdModel.subList[m].ischeck=0//是否选中 不选中
+										tempPrdModel.subList[n].ischeck=0//是否选中 不选中
 									}
 								}
 								
