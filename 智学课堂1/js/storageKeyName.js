@@ -49,7 +49,7 @@ var storageKeyName = (function(mod) {
 			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/Data/';//顾工接口
 //			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net:8443/SchoolCommunicationService/';//孔工接口
 //			mod.TEACHERIMG = 'https://zhxy.jiaobaowang.net:8515/schadminwebadmin/upuserimg.ashx?userid='; //老师上传头像
-			mod.ANDROIDUPDATEURL='http://192.168.1.121:8081/app/versionCode.xml';//安卓升级地址
+			mod.ANDROIDUPDATEURL='https://zhxy.jiaobaowang.net:8515/appupdate/zhixueketang/versionCode.xml';//安卓升级地址
 //			mod.WXPAYSERVER='http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/AppServer.aspx';//微信支付地址
 //			mod.ALIPAYSERVER='http://192.168.1.121:8081/app/versionCode.xml';//支付宝支付地址
 //			if(mod.pay==0) {//单商家
