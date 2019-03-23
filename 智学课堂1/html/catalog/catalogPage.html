@@ -437,13 +437,13 @@
 							//科目列表 ,如果订购套餐无法获取到科目信息，那么从广西接口拿科目列表
 							var newSub=[];
 							var subFlag=catalogPage.subFlag;
-							var orderSub=catalogPage.subList;
+							var orderSub=catalogPage.subList||[];
 							var kmselected= data.RspData.sub.selected;
 							if(subFlag==1){//需要与广西接口的科目列表合并，并去重
 								var sub= data.RspData.sub.list;//接口里的科目列表
 								var kmselected= data.RspData.sub.selected;
 								var _subList=orderSub.concat(sub);//合并的科目列表
-								var newSubList=_subList.unique('subcode');
+								var newSubList=_subList.length>0?_subList.unique('subcode'):[]; 
 								newSubList.sort(compare('subcode'));
 								for(var i = 0; i < newSubList.length; i++) {
 	                                if (newSubList[i].subcode==kmselected) {
@@ -452,7 +452,7 @@
 	                                    newSubList[i].ischeck = 0;
 	                                } 
 	                            }
-								if(JSON.stringify(newSubList).indexOf('"ischeck":1')==-1){//如果广西接口传过来的默认勾选值与套餐中的科目勾选值不对应，则默认选中第一个科目
+								if(newSubList.length>0 && JSON.stringify(newSubList).indexOf('"ischeck":1')==-1){//如果广西接口传过来的默认勾选值与套餐中的科目勾选值不对应，则默认选中第一个科目
 									newSubList[0].ischeck=1;
 								}
 								newSub=newSubList;
@@ -464,7 +464,7 @@
 	                                    orderSub[i].ischeck = 0;
 	                                }
 	                            }
-								if(JSON.stringify(orderSub).indexOf('"ischeck":1')==-1){
+								if(orderSub.length>0 && JSON.stringify(orderSub).indexOf('"ischeck":1')==-1){
 									orderSub[0].ischeck=1;
 								} 
 								newSub=orderSub;
