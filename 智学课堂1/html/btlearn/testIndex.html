@@ -573,7 +573,7 @@
 								var sub= data.RspData.sub.list;//接口里的科目列表
 								var kmselected= data.RspData.sub.selected;
 								var _subList=orderSub.concat(sub);//合并的科目列表
-								var newSubList=_subList.unique('subcode');
+								var newSubList=_subList.length>0?_subList.unique('subcode'):[]; 
 								newSubList.sort(compare('subcode'));
 								for(var i = 0; i < newSubList.length; i++) {
 	                                if (newSubList[i].subcode==kmselected) {
