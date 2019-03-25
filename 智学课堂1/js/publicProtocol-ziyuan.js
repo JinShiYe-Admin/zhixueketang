@@ -326,6 +326,7 @@ var getCatalog = function(userbus) {
 							var tempArr1 = tempM2.split('|');
 							var tempM4 = {
 								prdSum: tempM2,
+								perfcode:tempM1.fcode,
 								pername: tempArr1[1],
 								percode: tempArr1[0],
 								subList: [],
@@ -356,7 +357,7 @@ var getCatalog = function(userbus) {
 						var tempM1 = tempM.busext[a];
 						//						console.log('tempM1:' + JSON.stringify(tempM1));
 						//找到学段
-						if(tempM1.itemcode == 'prd' && JSON.stringify(tempM1.itemsons).indexOf(tempPrdModel.prdSum) != -1) {
+						if(tempM1.itemcode == 'prd' && JSON.stringify(tempM1.itemsons).indexOf(tempPrdModel.prdSum) != -1&& JSON.stringify(tempM1.fcode).indexOf(tempPrdModel.perfcode) != -1) {
 							tempFlag++;
 						}
 					}
@@ -367,7 +368,7 @@ var getCatalog = function(userbus) {
 							var tempM1 = tempM.busext[a];
 							//														console.log('tempM1:' + JSON.stringify(tempM1));
 							//找到对应的科目
-							if(tempM1.itemcode == 'sub') {
+							if(tempM1.itemcode == 'sub'&&tempM1.fcode == tempPrdModel.perfcode) {
 								tempFlag1++;
 								//将科目分割成数组
 								var tempArr = tempM1.itemsons.split(',');
