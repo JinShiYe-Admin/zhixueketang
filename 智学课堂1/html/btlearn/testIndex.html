@@ -682,6 +682,7 @@
 			//父——>子页传值方法
 			function toChildPage(text) {
 				console.log(text);
+				catalogPage = store.get(window.storageKeyName.CATALOG); //滑动菜单对象
 				var personalT = store.get(window.storageKeyName.PERSONALINFO);
 				if(personalT.userbus.length > 0) {
 					catalog.showFlag = 1;
