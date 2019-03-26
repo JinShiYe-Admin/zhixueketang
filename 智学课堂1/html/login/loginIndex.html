@@ -178,7 +178,7 @@
 					//登录
 					postDataEncry('Login', enData1, comData1, 0, function(data1) {
 						events.closeWaiting();
-						if(data1.RspCode == 0) {
+						if(data1.RspCode == 0) {   
 							if(data1.RspData.utp == 1) {
 								if(data1.RspData.dpts == null) {
 									data1.RspData.dpts = [];
