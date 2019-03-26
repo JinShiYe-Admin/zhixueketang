@@ -2,7 +2,7 @@
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 1; //0,开发;1,云测试
+	mod.key = 1; //0,开发;1,云测试；2正式
 	mod.pay = 0; //0,单个商家接口;1,多商家接口
 	var exLog = console.log;
 	console.log = function(hint, object) {
@@ -43,15 +43,9 @@ var storageKeyName = (function(mod) {
 			break;
 		case 1: //云测试
 			mod.SCHOOLID = 0;//学校ID
-//			mod.SCHOOLID = 100008;
 			mod.USERTYPE = 2;//用户类型，0老师,1家长,2学生
-//			mod.INTERFACEGU = 'https://boss.zhuxue101.net:444/api/Data/';//顾工接口
 			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/Data/';//顾工接口
-//			mod.INTERFACEKONG = 'https://jbyj.jiaobaowang.net:8443/SchoolCommunicationService/';//孔工接口
-//			mod.TEACHERIMG = 'https://zhxy.jiaobaowang.net:8515/schadminwebadmin/upuserimg.ashx?userid='; //老师上传头像
 			mod.ANDROIDUPDATEURL='https://zhxy.jiaobaowang.net:8515/appupdate/zhixueketang/versionCode.xml';//安卓升级地址
-//			mod.WXPAYSERVER='http://jsypay.jiaobaowang.net/jsypay/wxpay/sys/AppServer.aspx';//微信支付地址
-//			mod.ALIPAYSERVER='http://192.168.1.121:8081/app/versionCode.xml';//支付宝支付地址
 			if(mod.pay==0) {//单商家
 				mod.WXPAYSERVER='http://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/AppServer.aspx';//微信支付地址
 				mod.SEARCHPAYSESULT='http://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/PcQRCode.aspx';//获取支付结果的地址
@@ -59,8 +53,6 @@ var storageKeyName = (function(mod) {
 				mod.WXPAYSERVER='http://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/AppServer.aspx';//微信支付地址
 				mod.SEARCHPAYSESULT='http://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/PcQRCode.aspx';//获取支付结果的地址
 			}
-			//---开发---start---
-//			mod.MAINURL = 'https://jbyc.jiaobaowang.net:8442/api/CloudApi/'; //主url
 			//---开发---end---
 			//---七牛空间和接口---开发---start---
 			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
@@ -71,8 +63,32 @@ var storageKeyName = (function(mod) {
 			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
 			//	---七牛空间和接口---开发---end---
 			//益测益学服务端地址
-			// mod.YCYXHOST = "http://zhxyx.jiaobaowang.net/yiceyixue";
-			// mod.YCYXHOST = "http://192.168.0.125:8080/yiceyixue";
+			mod.YCYXHOST = "http://139.129.252.49:8080/yiceyixue";
+			//资源
+			mod.ZIYUANURL = "https://gxkf.jiaobaowang.net:9443/zxzyapi/api/";
+			break;
+		case 2: //正式
+			mod.SCHOOLID = 0;//学校ID
+			mod.USERTYPE = 2;//用户类型，0老师,1家长,2学生
+			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/Data/';//顾工接口
+			mod.ANDROIDUPDATEURL='https://zhxy.jiaobaowang.net:8515/appupdate/zhixueketang/versionCode.xml';//安卓升级地址
+			if(mod.pay==0) {//单商家
+				mod.WXPAYSERVER='http://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/AppServer.aspx';//微信支付地址
+				mod.SEARCHPAYSESULT='http://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/PcQRCode.aspx';//获取支付结果的地址
+			}else if(mod.pay==1){//多商家
+				mod.WXPAYSERVER='http://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/AppServer.aspx';//微信支付地址
+				mod.SEARCHPAYSESULT='http://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/PcQRCode.aspx';//获取支付结果的地址
+			}
+			//---开发---end---
+			//---七牛空间和接口---开发---start---
+			mod.QNPB = 'https://qn-educds.jiaobaowang.net/'; //公开空间域名
+			mod.QNGETUPLOADTOKEN = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen';
+			mod.QNGETUPTOKENHEADIMGE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传个人头像，群头像，资料头像到七牛的token的url
+			mod.QNGETUPTOKENFILE = 'https://jbyc.jiaobaowang.net:8504/Api/QiNiu/GetUpLoadToKen'; //获取上传文件（云存储）到七牛的token的url
+			mod.QNGETDOWNTOKENFILE = 'http://114.215.222.186:8004/Api/QiNiu/GetAccess'; //获取下载文件（云存储）的token的url，url+七牛文件url
+			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
+			//	---七牛空间和接口---开发---end---
+			//益测益学服务端地址
 			mod.YCYXHOST = "http://139.129.252.49:8080/yiceyixue";
 			//资源
 			mod.ZIYUANURL = "https://gxkf.jiaobaowang.net:9443/zxzyapi/api/";
