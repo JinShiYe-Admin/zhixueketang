@@ -63,9 +63,9 @@ var storageKeyName = (function(mod) {
 			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
 			//	---七牛空间和接口---开发---end---
 			//益测益学服务端地址
-			mod.YCYXHOST = "http://139.129.252.49:8080/yiceyixue";
+			mod.YCYXHOST = "https://gxcs.jiaobaowang.net/yiceyixue";
 			//资源
-			mod.ZIYUANURL = "https://gxkf.jiaobaowang.net:9443/zxzyapi/api/";
+			mod.ZIYUANURL = "https://gxcs.jiaobaowang.net/zxzyapi/api/";
 			break;
 		case 2: //正式
 			mod.SCHOOLID = 0;//学校ID
