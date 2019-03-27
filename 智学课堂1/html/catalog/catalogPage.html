@@ -346,6 +346,11 @@
 								catalogObj.percode=item.percode;
 								catalogPage.subFlag=item.subFlag;
 								catalogPage.subList=item.subList;
+								if(item.subList.length>0){
+									catalogObj.subcode=item.subList[0].subcode
+								}
+								catalogObj.matercode ='';
+								catalogObj.fasccode ='';
 							}else if(lx=='km'){
 								catalogObj.subcode=item.subcode;
 							}else if(lx=='jb'){
@@ -354,8 +359,6 @@
 								catalogObj.fasccode=item.fasccode;
 							}
 							console.log(JSON.stringify(catalogObj));
-							store.set(window.storageKeyName.CATALOGOBJ,catalogObj);
-							store.set(window.storageKeyName.CATALOG,catalogPage);
 							getZiYuanTextbookFunc();
 						}
 					},
@@ -364,6 +367,8 @@
 						var btnArray = ['否', '是'];
 						mui.confirm('确定切换到当前章节？', '提醒', btnArray, function(e) {
 							if (e.index == 1) {
+								store.set(window.storageKeyName.CATALOGOBJ,catalogObj);
+								store.set(window.storageKeyName.CATALOG,catalogPage);
 								var newObj=[];
 								newObj.push(model);
 								newObj.push(catalog.category);
