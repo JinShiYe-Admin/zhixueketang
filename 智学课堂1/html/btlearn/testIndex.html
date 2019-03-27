@@ -420,6 +420,11 @@
 								catalogObj.percode = item.percode;
 								catalogPage.subFlag=item.subFlag;
 								catalogPage.subList=item.subList;
+								if(item.subList.length>0){
+									catalogObj.subcode=item.subList[0].subcode
+								}
+								catalogObj.matercode ='';
+								catalogObj.fasccode ='';
 							} else if(lx == 'km') {
 								catalogObj.subcode = item.subcode;
 							} else if(lx == 'jb') {
