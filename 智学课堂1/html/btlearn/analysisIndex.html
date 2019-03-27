@@ -298,6 +298,9 @@
 			// analysis.alsList = [{"subname":"语文","count":52,"subcode":"01","remark":"-1","avg_score":14},{"subname":"语文","count":52,"subcode":"01","remark":"0","avg_score":14}];
 			//父——>子页传值方法
 			function toChildPage(text) {
+				
+				var zj_percode=store.get(window.storageKeyName.ZJPERCODE);
+				console.log('zj_percode======='+zj_percode);
 				console.log(text);
 				var personalT = store.get(window.storageKeyName.PERSONALINFO);
 				if(personalT.userbus.length > 0) {

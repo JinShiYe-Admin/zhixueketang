@@ -98,6 +98,7 @@ var storageKeyName = (function(mod) {
 }
 	mod.CATALOG = 'catalog';//滑动菜单对象
 	mod.CATALOGOBJ = 'catalogObj';//滑动菜单选择值对象
+	mod.ZJPERCODE = 'zjpercode';//组卷测试 学段选择值对象
 	
 	mod.BADGENUMBER = 'badgeNumber'//app角标
 	mod.PUBLICPARAMETER = 'publicParameter'//共用参数

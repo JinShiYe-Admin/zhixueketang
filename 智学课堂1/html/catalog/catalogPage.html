@@ -416,7 +416,7 @@
 				comData.subcode=catalogObj.subcode;
 				comData.matercode=catalogObj.matercode;
 				comData.fasccode=catalogObj.fasccode;
-				
+				comData.type=1;
 				console.log('comData=='+JSON.stringify(comData));
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {

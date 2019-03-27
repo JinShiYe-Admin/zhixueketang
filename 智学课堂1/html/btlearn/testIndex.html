@@ -427,6 +427,7 @@
 							} else if(lx == 'fc') {
 								catalogObj.fasccode = item.fasccode;
 							}
+							store.set(window.storageKeyName.ZJPERCODE, catalogObj.percode);
 							getZiYuanTextbookFunc();
 						}
 					},
@@ -540,6 +541,7 @@
 			//获取教材
 			function getZiYuanTextbookFunc() {
 				var comData = catalogObj;
+				comData.type=2;
 				console.log('comData==' + JSON.stringify(comData));
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {

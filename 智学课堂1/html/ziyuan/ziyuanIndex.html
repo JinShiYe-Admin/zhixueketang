@@ -170,6 +170,7 @@
 			store.set(window.storageKeyName.CATALOG, null);
 			//重置学段、年级、科目选择值对象
 			store.set(window.storageKeyName.CATALOGOBJ, null);
+			store.set(window.storageKeyName.ZJPERCODE, null);
 
 			mui.init({
 				statusBarBackground: '#00CFBD',
@@ -386,6 +387,7 @@
 				}
 				var firstPrd=catalogObj.prdList[0];
 				comData.percode = catalogObj.prdList[0].percode; //学段代码
+				comData.type=1;
 				console.log('comData==' + JSON.stringify(comData));
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {
@@ -454,6 +456,7 @@
 							catalogObj.materList = mater; 
 							//将获取到的学段、年级、科目保存起来
 							store.set(window.storageKeyName.CATALOG, catalogObj);
+							store.set(window.storageKeyName.ZJPERCODE, catalogObj.prdList[0].percode);
 							console.log('catalogObj:' + JSON.stringify(catalogObj));
 							if(fence.length == 0) {
 								contentData.showFlag = 0;
@@ -486,6 +489,7 @@
 					mui('#contentData').pullRefresh().setStopped(true);//暂时禁止滚动  
 					return 0
 				}
+				comData.type=1;
 				var wd = events.showWaiting();
 				getZiYuanTextbook(comData, function(data) {
 					wd.close();
