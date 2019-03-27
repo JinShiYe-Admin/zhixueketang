@@ -550,6 +550,15 @@
 							catalog.kemuStr='科目：';
 							catalog.jiaobanStr='教版：';
 							catalog.fenceStr='分册：';
+							
+							setTimeout(function(){
+								var swiper = new Swiper('.swiper-container', {
+									slidesPerView: 5, //菜单可见个数
+									spaceBetween: 10, //间隔
+									freeMode: true, //自由滑动模式
+									noSwiping: true, //禁止滑动
+								});
+							},1000);
 						}
 					} else {
 						mui.toast(data.RspTxt);
