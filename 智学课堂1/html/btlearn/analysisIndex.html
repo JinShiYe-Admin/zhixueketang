@@ -184,6 +184,7 @@
 					showFlag: 0, //判断有没有订购套餐，进行显示九宫格，1正常显示，0显示的订购提醒
 					noData: '',
 					serverids:'',//此页面的套餐ids
+					percode:'',//学段id
 					user_name: "",
 					alsList: [],
 					isShowed: false
@@ -305,11 +306,12 @@
 				var personalT = store.get(window.storageKeyName.PERSONALINFO);
 				if(personalT.userbus.length > 0) {
 					analysis.showFlag = 1;
-					if (personalT.userbus == analysis.serverids) {
+					if (personalT.userbus == analysis.serverids&&zj_percode == analysis.percode) {
 						
 					} else{
 						getAnalysisData();
 						analysis.serverids = personalT.userbus;
+						analysis.percode = zj_percode;
 					}
 				} else {
 					analysis.showFlag = 0;
