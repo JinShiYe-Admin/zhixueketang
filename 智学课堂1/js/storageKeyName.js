@@ -2,7 +2,7 @@
 
 var storageKeyName = (function(mod) {
 
-	mod.key = 1; //0,开发;1,云测试；2正式
+	mod.key = 2; //0,开发;1,云测试；2正式
 	mod.pay = 0; //0,单个商家接口;1,多商家接口
 	var exLog = console.log;
 	console.log = function(hint, object) {
@@ -70,8 +70,8 @@ var storageKeyName = (function(mod) {
 		case 2: //正式
 			mod.SCHOOLID = 0;//学校ID
 			mod.USERTYPE = 2;//用户类型，0老师,1家长,2学生
-			mod.INTERFACEGU = 'https://zhxy.jiaobaowang.net:8515/schadminwebapi/api/Data/';//顾工接口
-			mod.ANDROIDUPDATEURL='https://zhxy.jiaobaowang.net:8515/appupdate/zhixueketang/versionCode.xml';//安卓升级地址
+			mod.INTERFACEGU = 'https://boss.zhuxue101.net:444/api/Data/';//顾工接口
+			mod.ANDROIDUPDATEURL='http://boss.zhuxue101.net:8002/zhixueketang/versionCode.xml';//安卓升级地址
 			if(mod.pay==0) {//单商家
 				mod.WXPAYSERVER='http://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/AppServer.aspx';//微信支付地址
 				mod.SEARCHPAYSESULT='http://jsypay.jiaobaowang.net/jsypaym/wxpay/sys/PcQRCode.aspx';//获取支付结果的地址
@@ -89,9 +89,9 @@ var storageKeyName = (function(mod) {
 			mod.QNGETTOKENDELETE = 'http://114.215.222.186:8004/Api/QiNiu/Delete'; //获取批量（或者一个）删除七牛文件的token的url
 			//	---七牛空间和接口---开发---end---
 			//益测益学服务端地址
-			mod.YCYXHOST = "http://139.129.252.49:8080/yiceyixue";
+			mod.YCYXHOST = "https://zyja.zhuxue101.net/yiceyixue";
 			//资源
-			mod.ZIYUANURL = "https://gxkf.jiaobaowang.net:9443/zxzyapi/api/";
+			mod.ZIYUANURL = "https://zyja.zhuxue101.net/zxzyapi/api/";
 			break;
 		default:
 			break;
