@@ -340,12 +340,14 @@
 							var tempArray = []; //判断是否有智学课堂套餐
 							for(var i = 0; i < data1.RspData.userbus.length; i++) {
 								var tempM = data1.RspData.userbus[i];
-								for(var a = 0; a < tempM.funcs.length; a++) {
-									var tempFuncs = tempM.funcs[a];
-									if(tempM.busext!=null && tempFuncs.ftype == 'zxkt'&&tempM.serstat == 1) {
-										tempArray.push(tempM.servid);
-									}
-								}  
+								if(tempM.funcs!=null && tempM.funcs!=''){
+									for(var a = 0; a < tempM.funcs.length; a++) {
+										var tempFuncs = tempM.funcs[a];
+										if(tempM.busext!=null && tempFuncs.ftype == 'zxkt'&&tempM.serstat == 1) {
+											tempArray.push(tempM.servid);
+										}
+									}  
+								}
 							}
 							personal.userbus = tempArray.join('|'); // 绑定的套餐
 							console.log(JSON.stringify(tempArray));
@@ -614,9 +616,15 @@
 
 			window.addEventListener('hideMenu', function(data) {
 				console.log('hideMenu,菜单已关闭')
-				mask.close();
+				mask.close(); 
 				menu.hide();
 				showMenu = false;
+				var wvs = plus.webview.getDisplayWebview();
+				for(var i = 0; i < wvs.length; i++) {
+					wvs[i].setStyle({
+						mask: "none"
+					});
+				}
 			});
 			/**
 			 * 显示菜单菜单
