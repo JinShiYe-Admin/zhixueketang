@@ -781,16 +781,16 @@
 					funclist:funcArray//订购的扩展参数
 				}
 				console.log(JSON.stringify(data));
-//				appPay.UserFeeFunc('UserFee',data,function success(){
-//					mui.toast('套餐订购成功');
-//					//通知套餐详情页面刷新时间
-//					mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {
-//						newEtime:orderDetailData.newEtime
-//					});
-//					mui.back();
-//				},function fail(err){
-//					mui.toast(err);
-//				});
+				appPay.UserFeeFunc('UserFee',data,function success(){
+					mui.toast('套餐订购成功');
+					//通知套餐详情页面刷新时间
+					mui.fire(plus.webview.currentWebview().opener(), 'refreshList', {
+						newEtime:orderDetailData.newEtime
+					});
+					mui.back();
+				},function fail(err){
+					mui.toast(err);
+				});
 			}
  
 			//套餐功能及扩展栏目
